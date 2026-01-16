@@ -513,6 +513,66 @@
             color: var(--ink-brown);
         }
 
+        /* Rest Buttons */
+        .rest-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .rest-btn {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 12px 24px;
+            border: 2px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rest-btn-short {
+            background: linear-gradient(135deg, rgba(139,115,85,0.2), rgba(139,115,85,0.1));
+            border-color: var(--slot-empty);
+            color: var(--ink-brown);
+        }
+
+        .rest-btn-short:hover {
+            background: linear-gradient(135deg, rgba(139,115,85,0.4), rgba(139,115,85,0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139,115,85,0.3);
+        }
+
+        .rest-btn-long {
+            background: linear-gradient(135deg, rgba(30,58,95,0.2), rgba(74,144,194,0.1));
+            border-color: var(--divine-blue);
+            color: var(--divine-blue);
+        }
+
+        .rest-btn-long:hover {
+            background: linear-gradient(135deg, rgba(30,58,95,0.4), rgba(74,144,194,0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30,58,95,0.3);
+        }
+
+        .rest-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Rest confirmation animation */
+        .rest-btn.resting {
+            animation: restPulse 0.6s ease;
+        }
+
+        @keyframes restPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         /* Spell Slots */
         .spell-slots-section {
             background: linear-gradient(135deg, rgba(30,58,95,0.1), rgba(74,144,194,0.05));
@@ -1358,6 +1418,16 @@
                         <div class="cd-ability-name">Scacciare Non Morti</div>
                         <div class="cd-ability-desc">Azione magica: ogni non morto entro 9m che può vederti/sentirti deve effettuare TS Saggezza o è <strong>scacciato per 1 minuto</strong> (fugge, no reazioni).</div>
                     </div>
+
+                    <!-- Rest Buttons -->
+                    <div class="rest-buttons">
+                        <button class="rest-btn rest-btn-short" onclick="shortRest()" title="Recupera Channel Divinity">
+                            ☾ Riposo Breve
+                        </button>
+                        <button class="rest-btn rest-btn-long" onclick="longRest()" title="Recupera tutto (HP, slot, risorse)">
+                            ☀ Riposo Lungo
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Spell Slots -->
@@ -1709,6 +1779,51 @@
             const current = character.spellSlots[level].current;
             character.spellSlots[level].current = index < current ? index : index + 1;
             generateSpellPips();
+            saveCharacter();
+        }
+
+        // Rest Functions
+        function shortRest() {
+            const btn = event.target.closest('.rest-btn');
+            btn.classList.add('resting');
+            setTimeout(() => btn.classList.remove('resting'), 600);
+
+            // Recover Channel Divinity (2 uses)
+            character.channelDivinity.current = character.channelDivinity.max;
+            generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
+
+            saveCharacter();
+        }
+
+        function longRest() {
+            const btn = event.target.closest('.rest-btn');
+            btn.classList.add('resting');
+            setTimeout(() => btn.classList.remove('resting'), 600);
+
+            // Recover all HP
+            character.hp.current = character.hp.max;
+            document.getElementById('hp-current').value = character.hp.current;
+
+            // Recover half hit dice (rounded up, minimum 1)
+            const recoveredDice = Math.max(1, Math.ceil(character.hitDice.max / 2));
+            character.hitDice.current = Math.min(character.hitDice.max, character.hitDice.current + recoveredDice);
+            generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
+
+            // Recover all spell slots
+            for (let level in character.spellSlots) {
+                character.spellSlots[level].current = character.spellSlots[level].max;
+            }
+            generateSpellPips();
+
+            // Recover Channel Divinity
+            character.channelDivinity.current = character.channelDivinity.max;
+            generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
+
+            // Recover Warding Flare
+            const wisMod = Math.floor((parseInt(character.stats.wisdom) || 10 - 10) / 2);
+            character.wardingFlare.current = character.wardingFlare.max;
+            generateWardingFlarePips();
+
             saveCharacter();
         }
 
