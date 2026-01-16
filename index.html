@@ -1421,10 +1421,10 @@
 
                     <!-- Rest Buttons -->
                     <div class="rest-buttons">
-                        <button class="rest-btn rest-btn-short" onclick="shortRest()" title="Recupera Channel Divinity">
+                        <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Recupera Channel Divinity">
                             ☾ Riposo Breve
                         </button>
-                        <button class="rest-btn rest-btn-long" onclick="longRest()" title="Recupera tutto (HP, slot, risorse)">
+                        <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Recupera tutto (HP, slot, risorse)">
                             ☀ Riposo Lungo
                         </button>
                     </div>
@@ -1783,8 +1783,8 @@
         }
 
         // Rest Functions
-        function shortRest() {
-            const btn = event.target.closest('.rest-btn');
+        function shortRest(btn) {
+            // Animation
             btn.classList.add('resting');
             setTimeout(() => btn.classList.remove('resting'), 600);
 
@@ -1793,10 +1793,11 @@
             generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
 
             saveCharacter();
+            console.log('Short rest completed - Channel Divinity restored');
         }
 
-        function longRest() {
-            const btn = event.target.closest('.rest-btn');
+        function longRest(btn) {
+            // Animation
             btn.classList.add('resting');
             setTimeout(() => btn.classList.remove('resting'), 600);
 
@@ -1804,9 +1805,8 @@
             character.hp.current = character.hp.max;
             document.getElementById('hp-current').value = character.hp.current;
 
-            // Recover half hit dice (rounded up, minimum 1)
-            const recoveredDice = Math.max(1, Math.ceil(character.hitDice.max / 2));
-            character.hitDice.current = Math.min(character.hitDice.max, character.hitDice.current + recoveredDice);
+            // Recover all hit dice
+            character.hitDice.current = character.hitDice.max;
             generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
 
             // Recover all spell slots
@@ -1820,11 +1820,11 @@
             generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
 
             // Recover Warding Flare
-            const wisMod = Math.floor((parseInt(character.stats.wisdom) || 10 - 10) / 2);
             character.wardingFlare.current = character.wardingFlare.max;
             generateWardingFlarePips();
 
             saveCharacter();
+            console.log('Long rest completed - All resources restored');
         }
 
         // List Management
