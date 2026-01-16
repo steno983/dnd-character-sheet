@@ -959,6 +959,183 @@
             margin-bottom: 5px;
         }
 
+        /* Dice Rolling Section */
+        .dice-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid var(--gold);
+        }
+
+        .dice-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dice-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dice-btn-attack {
+            background: linear-gradient(135deg, var(--divine-blue), #2a5a8a);
+            color: var(--parchment-light);
+        }
+
+        .dice-btn-attack:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30,58,95,0.4);
+        }
+
+        .dice-btn-damage {
+            background: linear-gradient(135deg, var(--burgundy), #8a2a35);
+            color: var(--parchment-light);
+        }
+
+        .dice-btn-damage:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(107,28,35,0.4);
+        }
+
+        .dice-btn-heal {
+            background: linear-gradient(135deg, #2a8a5a, #35a06a);
+            color: var(--parchment-light);
+        }
+
+        .dice-btn-heal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(42,138,90,0.4);
+        }
+
+        .dice-btn-save {
+            background: linear-gradient(135deg, #8a6a2a, #a07a35);
+            color: var(--parchment-light);
+        }
+
+        .dice-btn .dice-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Dice Result Display */
+        .dice-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #1a1410, #2a1f18);
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            animation: resultSlideIn 0.3s ease;
+        }
+
+        .dice-result.show {
+            display: block;
+        }
+
+        @keyframes resultSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dice-result-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .dice-result-total {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--parchment-light);
+            text-shadow: 0 0 20px rgba(218,165,32,0.5);
+            animation: pulseGlow 0.5s ease;
+        }
+
+        .dice-result-total.crit {
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(218,165,32,0.8);
+        }
+
+        .dice-result-total.critfail {
+            color: #ff6b6b;
+            text-shadow: 0 0 30px rgba(255,107,107,0.8);
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .dice-result-breakdown {
+            font-family: 'Crimson Text', serif;
+            font-size: 0.9rem;
+            color: rgba(245,230,200,0.7);
+            margin-top: 8px;
+        }
+
+        .dice-result-breakdown .die {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 2px;
+        }
+
+        .dice-result-breakdown .die.max {
+            background: rgba(218,165,32,0.3);
+            color: var(--gold);
+        }
+
+        .dice-result-breakdown .die.min {
+            background: rgba(255,107,107,0.2);
+            color: #ff6b6b;
+        }
+
+        .dice-result-type {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            color: rgba(245,230,200,0.5);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Rolling animation */
+        .dice-rolling {
+            display: inline-block;
+            animation: diceRoll 0.5s ease-in-out;
+        }
+
+        @keyframes diceRoll {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.2); }
+            50% { transform: rotate(180deg) scale(1); }
+            75% { transform: rotate(270deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
         /* Save indicator */
         .save-indicator {
             position: fixed;
@@ -1330,6 +1507,17 @@
                     <div class="spell-higher-level-title">A Livelli Superiori</div>
                     <div id="spellHigherLevelText"></div>
                 </div>
+                <div class="dice-section" id="diceSection" style="display: none;">
+                    <div class="dice-buttons" id="diceButtons">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div class="dice-result" id="diceResult">
+                        <div class="dice-result-label" id="diceResultLabel">Risultato</div>
+                        <div class="dice-result-total" id="diceResultTotal">0</div>
+                        <div class="dice-result-breakdown" id="diceResultBreakdown"></div>
+                        <div class="dice-result-type" id="diceResultType"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1661,7 +1849,8 @@
                 components: 'V, S',
                 duration: 'Concentrazione, fino a 1 minuto',
                 description: '<p>Tocchi una creatura consenziente. Una volta prima che l\'incantesimo termini, il bersaglio può tirare un <strong>d4</strong> e aggiungere il risultato a una prova di caratteristica a sua scelta. Può tirare il dado prima o dopo aver effettuato la prova.</p>',
-                domain: false
+                domain: false,
+                dice: { bonus: '1d4', bonusLabel: 'Bonus Prova' }
             },
             'light': {
                 name: 'Light',
@@ -1684,7 +1873,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Indichi una creatura che puoi vedere entro gittata, e il suono di una campana funebre riempie l\'aria intorno ad essa per un istante. Il bersaglio deve superare un <strong>TS Saggezza</strong> o subire <strong>1d8 danni necrotici</strong>. Se al bersaglio mancano punti ferita, subisce invece <strong>1d12 danni necrotici</strong>.</p>',
                 higherLevel: 'I danni aumentano di un dado ai livelli 5 (2d8/2d12), 11 (3d8/3d12) e 17 (4d8/4d12).',
-                domain: false
+                domain: false,
+                dice: { save: 'SAG', damage: '2d8', damageAlt: '2d12', damageAltLabel: 'Se ferito', damageType: 'necrotici' }
             },
             'word-of-radiance': {
                 name: 'Word of Radiance',
@@ -1696,7 +1886,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Fulgore bruciante erutta da te in un\'emanazione di 1,5 metri. Ogni creatura a tua scelta che puoi vedere nell\'area deve superare un <strong>TS Costituzione</strong> o subire <strong>1d6 danni radianti</strong>.</p>',
                 higherLevel: 'I danni aumentano di 1d6 ai livelli 5 (2d6), 11 (3d6) e 17 (4d6).',
-                domain: false
+                domain: false,
+                dice: { save: 'COS', damage: '2d6', damageType: 'radianti' }
             },
 
             // LEVEL 1
@@ -1710,7 +1901,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Una creatura a tua scelta che puoi vedere entro gittata recupera un numero di punti ferita pari a <strong>2d4 + il tuo modificatore di caratteristica da incantatore</strong>.</p><p>Questo incantesimo non ha effetto su costrutti e non morti.</p>',
                 higherLevel: 'La cura aumenta di 2d4 per ogni slot di livello superiore al 1°.',
-                domain: false
+                domain: false,
+                dice: { healing: '2d4', healingMod: true }
             },
             'shield-of-faith': {
                 name: 'Shield of Faith',
@@ -1733,7 +1925,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Una creatura che tocchi recupera un numero di punti ferita pari a <strong>2d8 + il tuo modificatore di caratteristica da incantatore</strong>.</p><p>Questo incantesimo non ha effetto su costrutti e non morti.</p>',
                 higherLevel: 'La cura aumenta di 2d8 per ogni slot di livello superiore al 1°.',
-                domain: false
+                domain: false,
+                dice: { healing: '2d8', healingMod: true }
             },
             'guiding-bolt': {
                 name: 'Guiding Bolt',
@@ -1745,7 +1938,8 @@
                 duration: '1 round',
                 description: '<p>Un lampo di luce saetta verso una creatura a tua scelta entro gittata. Effettua un <strong>attacco con incantesimo a distanza</strong> contro il bersaglio. Se colpisci, il bersaglio subisce <strong>4d6 danni radianti</strong>, e il prossimo tiro per colpire effettuato contro questo bersaglio prima della fine del tuo prossimo turno ha <strong>vantaggio</strong>.</p>',
                 higherLevel: 'I danni aumentano di 1d6 per ogni slot di livello superiore al 1°.',
-                domain: false
+                domain: false,
+                dice: { attack: true, damage: '4d6', damageType: 'radianti' }
             },
             'detect-magic': {
                 name: 'Detect Magic',
@@ -1768,7 +1962,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Mentre tieni le mani con i pollici che si toccano e le dita aperte, una sottile coltre di fiamme si sprigiona dalle tue dita tese. Ogni creatura in un cono di 4,5 metri deve effettuare un <strong>TS Destrezza</strong>. Una creatura subisce <strong>3d6 danni da fuoco</strong> se fallisce il tiro salvezza, o metà dei danni se lo supera.</p><p>Il fuoco incendia qualsiasi oggetto infiammabile nell\'area che non sia indossato o trasportato.</p>',
                 higherLevel: 'I danni aumentano di 1d6 per ogni slot di livello superiore al 1°.',
-                domain: true
+                domain: true,
+                dice: { save: 'DES', damage: '3d6', damageType: 'fuoco' }
             },
             'faerie-fire': {
                 name: 'Faerie Fire',
@@ -1779,7 +1974,8 @@
                 components: 'V',
                 duration: 'Concentrazione, fino a 1 minuto',
                 description: '<p>Ogni oggetto in un cubo di 6 metri entro gittata è delineato da luce blu, verde o viola (a tua scelta). Ogni creatura nell\'area è anch\'essa delineata se fallisce un <strong>TS Destrezza</strong>.</p><p>Per la durata, gli oggetti e le creature affette emettono luce fioca in un raggio di 3 metri. Qualsiasi tiro per colpire contro una creatura o un oggetto affetto ha <strong>vantaggio</strong> se l\'attaccante può vederlo, e la creatura o l\'oggetto affetto non può beneficiare dell\'essere <strong>invisibile</strong>.</p>',
-                domain: true
+                domain: true,
+                dice: { save: 'DES' }
             },
 
             // LEVEL 2
@@ -1804,7 +2000,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Crei <strong>tre raggi di fuoco</strong> e li scagli verso bersagli entro gittata. Puoi scagliarli su un bersaglio solo o su diversi.</p><p>Effettua un <strong>attacco con incantesimo a distanza</strong> per ogni raggio. Se colpisci, il bersaglio subisce <strong>2d6 danni da fuoco</strong>.</p>',
                 higherLevel: 'Crei un raggio aggiuntivo per ogni slot di livello superiore al 2°.',
-                domain: true
+                domain: true,
+                dice: { attack: true, damage: '2d6', damageType: 'fuoco', rays: 3 }
             },
             'see-invisibility': {
                 name: 'See Invisibility',
@@ -1852,7 +2049,8 @@
                 duration: 'Concentrazione, fino a 10 minuti',
                 description: '<p>Evochi spiriti che proteggono te. Volano intorno a te fino a una distanza di 4,5 metri per la durata. Se sei buono o neutrale, la loro forma spettrale appare angelica o fatata (a tua scelta). Se sei malvagio, appaiono demoniaci.</p><p>Quando lanci questo incantesimo, puoi designare qualsiasi numero di creature che puoi vedere per non essere affette da esso. La velocità di una creatura affetta è <strong>dimezzata</strong> nell\'area.</p><p>Quando una creatura entra nell\'area per la prima volta in un turno o vi inizia il suo turno, deve effettuare un <strong>TS Saggezza</strong>, subendo <strong>3d8 danni radianti</strong> (o necrotici se sei malvagio) con un fallimento, o metà danni con un successo.</p>',
                 higherLevel: 'I danni aumentano di 1d8 per ogni slot di livello superiore al 3°.',
-                domain: false
+                domain: false,
+                dice: { save: 'SAG', damage: '3d8', damageType: 'radianti' }
             },
             'daylight': {
                 name: 'Daylight',
@@ -1875,7 +2073,8 @@
                 duration: 'Istantaneo',
                 description: '<p>Un brillante raggio luminoso parte dal tuo dito puntato verso un punto che scegli entro gittata e poi sboccia con un rombo basso in un\'esplosione di fiamme. Ogni creatura in una <strong>sfera con raggio di 6 metri</strong> centrata su quel punto deve effettuare un <strong>TS Destrezza</strong>.</p><p>Un bersaglio subisce <strong>8d6 danni da fuoco</strong> se fallisce il tiro salvezza, o metà danni se lo supera.</p><p>Il fuoco si espande dietro gli angoli. Incendia gli oggetti infiammabili nell\'area che non sono indossati o trasportati.</p>',
                 higherLevel: 'I danni aumentano di 1d6 per ogni slot di livello superiore al 3°.',
-                domain: true
+                domain: true,
+                dice: { save: 'DES', damage: '8d6', damageType: 'fuoco' }
             },
 
             // LEVEL 4
@@ -1889,14 +2088,20 @@
                 duration: 'Concentrazione, fino a 1 minuto',
                 description: '<p>Tenti di mandare una creatura che puoi vedere entro gittata in un altro piano di esistenza. Il bersaglio deve superare un <strong>TS Carisma</strong> o essere bandito.</p><p>Se il bersaglio è <strong>nativo del piano</strong> su cui ti trovi, lo bandisci in un semipiano innocuo. Mentre è lì, il bersaglio è <strong>incapacitato</strong>. Rimane lì fino al termine dell\'incantesimo, momento in cui riappare nello spazio che ha lasciato o nello spazio non occupato più vicino.</p><p>Se il bersaglio è <strong>nativo di un piano diverso</strong> da quello su cui ti trovi, viene bandito con un debole scoppio, tornando al suo piano nativo. Se l\'incantesimo dura per l\'intera durata, il bersaglio <strong>non ritorna</strong>.</p>',
                 higherLevel: 'Puoi bersagliare una creatura aggiuntiva per ogni slot di livello superiore al 4°.',
-                domain: false
+                domain: false,
+                dice: { save: 'CAR' }
             }
         };
+
+        // Current spell for dice rolling
+        let currentSpell = null;
 
         // Modal Functions
         function openSpell(spellId) {
             const spell = spellDatabase[spellId];
             if (!spell) return;
+
+            currentSpell = spell;
 
             document.getElementById('spellModalName').textContent = spell.name;
             document.getElementById('spellModalMeta').textContent = `${spell.level} - ${spell.school}`;
@@ -1917,14 +2122,207 @@
                 higherLevel.style.display = 'none';
             }
 
+            // Setup dice buttons
+            setupDiceButtons(spell);
+
             document.getElementById('spellModal').classList.add('active');
             document.body.style.overflow = 'hidden';
+        }
+
+        function setupDiceButtons(spell) {
+            const diceSection = document.getElementById('diceSection');
+            const diceButtons = document.getElementById('diceButtons');
+            const diceResult = document.getElementById('diceResult');
+
+            diceResult.classList.remove('show');
+            diceButtons.innerHTML = '';
+
+            if (!spell.dice) {
+                diceSection.style.display = 'none';
+                return;
+            }
+
+            diceSection.style.display = 'block';
+            const dice = spell.dice;
+
+            // Attack button
+            if (dice.attack) {
+                const attackBtn = document.createElement('button');
+                attackBtn.className = 'dice-btn dice-btn-attack';
+                attackBtn.innerHTML = '<span class="dice-icon">🎯</span> Tiro per Colpire';
+                attackBtn.onclick = () => rollAttack(dice.rays || 1);
+                diceButtons.appendChild(attackBtn);
+            }
+
+            // Save DC display
+            if (dice.save) {
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'dice-btn dice-btn-save';
+                const spellDC = document.getElementById('spell-dc').textContent;
+                saveBtn.innerHTML = `<span class="dice-icon">🛡️</span> CD ${spellDC} (TS ${dice.save})`;
+                saveBtn.onclick = () => showSaveDC(dice.save);
+                diceButtons.appendChild(saveBtn);
+            }
+
+            // Damage button
+            if (dice.damage) {
+                const dmgBtn = document.createElement('button');
+                dmgBtn.className = 'dice-btn dice-btn-damage';
+                dmgBtn.innerHTML = `<span class="dice-icon">💥</span> Danni (${dice.damage})`;
+                dmgBtn.onclick = () => rollDamage(dice.damage, dice.damageType);
+                diceButtons.appendChild(dmgBtn);
+            }
+
+            // Alt damage (like Toll the Dead)
+            if (dice.damageAlt) {
+                const dmgAltBtn = document.createElement('button');
+                dmgAltBtn.className = 'dice-btn dice-btn-damage';
+                dmgAltBtn.innerHTML = `<span class="dice-icon">💀</span> ${dice.damageAltLabel} (${dice.damageAlt})`;
+                dmgAltBtn.onclick = () => rollDamage(dice.damageAlt, dice.damageType);
+                diceButtons.appendChild(dmgAltBtn);
+            }
+
+            // Healing button
+            if (dice.healing) {
+                const healBtn = document.createElement('button');
+                healBtn.className = 'dice-btn dice-btn-heal';
+                const modText = dice.healingMod ? ' + SAG' : '';
+                healBtn.innerHTML = `<span class="dice-icon">💚</span> Cura (${dice.healing}${modText})`;
+                healBtn.onclick = () => rollHealing(dice.healing, dice.healingMod);
+                diceButtons.appendChild(healBtn);
+            }
+
+            // Bonus roll (like Guidance)
+            if (dice.bonus) {
+                const bonusBtn = document.createElement('button');
+                bonusBtn.className = 'dice-btn dice-btn-attack';
+                bonusBtn.innerHTML = `<span class="dice-icon">✨</span> ${dice.bonusLabel} (${dice.bonus})`;
+                bonusBtn.onclick = () => rollBonus(dice.bonus, dice.bonusLabel);
+                diceButtons.appendChild(bonusBtn);
+            }
+        }
+
+        // Dice rolling functions
+        function rollDice(notation) {
+            // Parse notation like "4d6", "2d8", etc.
+            const match = notation.match(/(\d+)d(\d+)/);
+            if (!match) return { total: 0, rolls: [], max: 0 };
+
+            const count = parseInt(match[1]);
+            const sides = parseInt(match[2]);
+            const rolls = [];
+            let total = 0;
+
+            for (let i = 0; i < count; i++) {
+                const roll = Math.floor(Math.random() * sides) + 1;
+                rolls.push({ value: roll, max: sides });
+                total += roll;
+            }
+
+            return { total, rolls, max: sides };
+        }
+
+        function displayResult(label, total, breakdown, type, extraClass = '') {
+            const resultDiv = document.getElementById('diceResult');
+            const totalDiv = document.getElementById('diceResultTotal');
+
+            document.getElementById('diceResultLabel').textContent = label;
+            totalDiv.textContent = total;
+            totalDiv.className = 'dice-result-total ' + extraClass;
+            document.getElementById('diceResultBreakdown').innerHTML = breakdown;
+            document.getElementById('diceResultType').textContent = type;
+
+            resultDiv.classList.remove('show');
+            void resultDiv.offsetWidth; // Trigger reflow
+            resultDiv.classList.add('show');
+        }
+
+        function rollAttack(rays = 1) {
+            const spellAttack = parseInt(document.getElementById('spell-attack').textContent) || 0;
+            let resultsHtml = '';
+            let allResults = [];
+
+            for (let r = 0; r < rays; r++) {
+                const roll = Math.floor(Math.random() * 20) + 1;
+                const total = roll + spellAttack;
+                const isCrit = roll === 20;
+                const isCritFail = roll === 1;
+
+                let dieClass = '';
+                if (isCrit) dieClass = 'max';
+                if (isCritFail) dieClass = 'min';
+
+                const rayLabel = rays > 1 ? `Raggio ${r + 1}: ` : '';
+                resultsHtml += `${rayLabel}<span class="die ${dieClass}">${roll}</span> + ${spellAttack} = <strong>${total}</strong>${isCrit ? ' CRITICO!' : ''}${isCritFail ? ' FALLIMENTO!' : ''}<br>`;
+                allResults.push({ roll, total, isCrit, isCritFail });
+            }
+
+            const mainResult = allResults[0];
+            let extraClass = '';
+            if (rays === 1) {
+                if (mainResult.isCrit) extraClass = 'crit';
+                if (mainResult.isCritFail) extraClass = 'critfail';
+            }
+
+            const displayTotal = rays === 1 ? mainResult.total : allResults.map(r => r.total).join(' / ');
+            displayResult('Tiro per Colpire', displayTotal, resultsHtml, 'vs CA bersaglio', extraClass);
+        }
+
+        function rollDamage(notation, damageType) {
+            const result = rollDice(notation);
+            const breakdown = result.rolls.map(r => {
+                let cls = '';
+                if (r.value === r.max) cls = 'max';
+                if (r.value === 1) cls = 'min';
+                return `<span class="die ${cls}">${r.value}</span>`;
+            }).join(' + ');
+
+            displayResult('Danni', result.total, breakdown + ` = ${result.total}`, `danni ${damageType}`);
+        }
+
+        function rollHealing(notation, addMod) {
+            const result = rollDice(notation);
+            const wisMod = calculateModifier(parseInt(character.stats.wisdom) || 10);
+
+            let total = result.total;
+            let breakdown = result.rolls.map(r => {
+                let cls = '';
+                if (r.value === r.max) cls = 'max';
+                if (r.value === 1) cls = 'min';
+                return `<span class="die ${cls}">${r.value}</span>`;
+            }).join(' + ');
+
+            if (addMod) {
+                total += wisMod;
+                breakdown += ` + ${wisMod} (SAG)`;
+            }
+
+            breakdown += ` = ${total}`;
+            displayResult('Cura', total, breakdown, 'punti ferita recuperati');
+        }
+
+        function rollBonus(notation, label) {
+            const result = rollDice(notation);
+            const breakdown = result.rolls.map(r => {
+                let cls = '';
+                if (r.value === r.max) cls = 'max';
+                if (r.value === 1) cls = 'min';
+                return `<span class="die ${cls}">${r.value}</span>`;
+            }).join(' + ');
+
+            displayResult(label, '+' + result.total, breakdown, 'da aggiungere alla prova');
+        }
+
+        function showSaveDC(saveType) {
+            const spellDC = document.getElementById('spell-dc').textContent;
+            displayResult('Tiro Salvezza', `CD ${spellDC}`, `Il bersaglio deve effettuare un <strong>TS ${saveType}</strong>`, `Fallimento = effetto pieno / Successo = metà o nessuno`);
         }
 
         function closeSpellModal(event) {
             if (event && event.target !== event.currentTarget) return;
             document.getElementById('spellModal').classList.remove('active');
             document.body.style.overflow = '';
+            currentSpell = null;
         }
 
         // Close modal on Escape key
