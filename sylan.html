@@ -1427,6 +1427,207 @@
             box-shadow: 0 4px 15px rgba(155,109,255,0.4);
         }
 
+        /* Skills Section */
+        .skills-section {
+            background: linear-gradient(135deg, rgba(92,45,145,0.1), rgba(42,74,138,0.05));
+            border: 2px solid var(--arcane-purple);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .skills-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--arcane-purple);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .skill-group {
+            background: rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .skill-group-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: var(--arcane-purple);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(92,45,145,0.3);
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .skill-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-item:hover {
+            background: rgba(92,45,145,0.15);
+            transform: translateX(3px);
+        }
+
+        .skill-item.proficient {
+            background: rgba(155,109,255,0.15);
+        }
+
+        .skill-item.proficient:hover {
+            background: rgba(155,109,255,0.25);
+        }
+
+        .proficiency-dot {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--arcane-purple);
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            margin-right: 0;
+            background-clip: content-box;
+        }
+
+        .proficiency-dot:hover {
+            border-color: var(--slot-filled);
+            transform: scale(1.2);
+        }
+
+        .skill-item.proficient .proficiency-dot {
+            background: var(--slot-filled);
+            box-shadow: 0 0 6px var(--slot-filled);
+        }
+
+        .skill-name {
+            flex: 1;
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            color: var(--ink-brown);
+        }
+
+        .skill-bonus {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--arcane-purple);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* Skill Roll Toast */
+        .skill-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: linear-gradient(135deg, var(--parchment-light), var(--parchment-mid));
+            border: 3px solid var(--arcane-purple);
+            border-radius: 12px;
+            padding: 25px 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 30px rgba(155,109,255,0.3);
+            z-index: 10000;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .skill-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .skill-toast-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--arcane-purple);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .skill-toast-result {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--ink-brown);
+            line-height: 1;
+        }
+
+        .skill-toast-result.crit {
+            color: #2a8a2a;
+            text-shadow: 0 0 10px rgba(42,138,42,0.5);
+        }
+
+        .skill-toast-result.critfail {
+            color: #8a2a2a;
+            text-shadow: 0 0 10px rgba(138,42,42,0.5);
+        }
+
+        .skill-toast-breakdown {
+            font-family: 'Crimson Text', serif;
+            font-size: 1rem;
+            color: var(--ink-light);
+            margin-top: 8px;
+        }
+
+        .skill-toast-breakdown .die {
+            display: inline-block;
+            background: var(--parchment-dark);
+            border: 1px solid var(--arcane-purple);
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin: 0 3px;
+            font-weight: 600;
+        }
+
+        .skill-toast-breakdown .die.max {
+            background: rgba(42,138,42,0.2);
+            border-color: #2a8a2a;
+            color: #2a8a2a;
+        }
+
+        .skill-toast-breakdown .die.min {
+            background: rgba(138,42,42,0.2);
+            border-color: #8a2a2a;
+            color: #8a2a2a;
+        }
+
+        .skill-toast-close {
+            margin-top: 15px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            color: var(--arcane-purple);
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        .skill-toast.show {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -1568,6 +1769,14 @@
                     <div class="combat-stat">
                         <div class="combat-stat-label">Competenza</div>
                         <div class="combat-stat-value">+2</div>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="skills-section">
+                    <div class="skills-title">Abilità</div>
+                    <div class="skills-grid" id="skills-grid">
+                        <!-- Generated by JS -->
                     </div>
                 </div>
 
@@ -1736,6 +1945,14 @@
 
     <div class="save-indicator" id="saveIndicator">✓ Salvato</div>
 
+    <!-- Skill Roll Toast -->
+    <div class="skill-toast" id="skillToast" onclick="closeSkillToast()">
+        <div class="skill-toast-name" id="skillToastName">Abilità</div>
+        <div class="skill-toast-result" id="skillToastResult">0</div>
+        <div class="skill-toast-breakdown" id="skillToastBreakdown"></div>
+        <div class="skill-toast-close">Tocca per chiudere</div>
+    </div>
+
     <!-- Spell Modal -->
     <div class="spell-modal-overlay" id="spellModal" onclick="closeSpellModal(event)">
         <div class="spell-modal" onclick="event.stopPropagation()">
@@ -1821,7 +2038,8 @@
                 1: { current: 4, max: 4 },
                 2: { current: 3, max: 3 }
             },
-            attacks: []
+            attacks: [],
+            skillProficiencies: ['insight', 'investigation', 'history']
         };
 
         // Try to load from localStorage
@@ -1837,6 +2055,44 @@
         if (!character.portent) character.portent = { dice: [0, 0], used: [false, false] };
         if (character.detectMagicUsed === undefined) character.detectMagicUsed = false;
         if (character.mageArmorActive === undefined) character.mageArmorActive = false;
+        if (!character.skillProficiencies) character.skillProficiencies = defaultCharacter.skillProficiencies;
+
+        // Skills Configuration
+        const SKILLS = {
+            // Forza
+            athletics: { name: 'Atletica', stat: 'strength' },
+            // Destrezza
+            acrobatics: { name: 'Acrobazia', stat: 'dexterity' },
+            stealth: { name: 'Furtività', stat: 'dexterity' },
+            sleightOfHand: { name: 'Rapidità di Mano', stat: 'dexterity' },
+            // Intelligenza
+            arcana: { name: 'Arcano', stat: 'intelligence' },
+            investigation: { name: 'Indagare', stat: 'intelligence' },
+            nature: { name: 'Natura', stat: 'intelligence' },
+            religion: { name: 'Religione', stat: 'intelligence' },
+            history: { name: 'Storia', stat: 'intelligence' },
+            // Saggezza
+            animalHandling: { name: 'Addestrare Animali', stat: 'wisdom' },
+            insight: { name: 'Intuizione', stat: 'wisdom' },
+            medicine: { name: 'Medicina', stat: 'wisdom' },
+            perception: { name: 'Percezione', stat: 'wisdom' },
+            survival: { name: 'Sopravvivenza', stat: 'wisdom' },
+            // Carisma
+            deception: { name: 'Inganno', stat: 'charisma' },
+            intimidation: { name: 'Intimidire', stat: 'charisma' },
+            performance: { name: 'Intrattenere', stat: 'charisma' },
+            persuasion: { name: 'Persuasione', stat: 'charisma' }
+        };
+
+        const SKILL_GROUPS = {
+            'Forza': ['athletics'],
+            'Destrezza': ['acrobatics', 'stealth', 'sleightOfHand'],
+            'Intelligenza': ['arcana', 'investigation', 'nature', 'religion', 'history'],
+            'Saggezza': ['animalHandling', 'insight', 'medicine', 'perception', 'survival'],
+            'Carisma': ['deception', 'intimidation', 'performance', 'persuasion']
+        };
+
+        const PROFICIENCY_BONUS = 2; // Level 4
 
         // Utility Functions
         function calculateModifier(score) {
@@ -1856,6 +2112,120 @@
             const indicator = document.getElementById('saveIndicator');
             indicator.classList.add('show');
             setTimeout(() => indicator.classList.remove('show'), 1500);
+        }
+
+        // Skills Functions
+        function calculateSkillBonus(skillKey) {
+            const skill = SKILLS[skillKey];
+            const statScore = parseInt(character.stats[skill.stat]) || 10;
+            const statMod = calculateModifier(statScore);
+            const isProficient = character.skillProficiencies.includes(skillKey);
+            return statMod + (isProficient ? PROFICIENCY_BONUS : 0);
+        }
+
+        function renderSkills() {
+            const container = document.getElementById('skills-grid');
+            container.innerHTML = '';
+
+            for (const [groupName, skillKeys] of Object.entries(SKILL_GROUPS)) {
+                const group = document.createElement('div');
+                group.className = 'skill-group';
+
+                const title = document.createElement('div');
+                title.className = 'skill-group-title';
+                title.textContent = groupName;
+                group.appendChild(title);
+
+                skillKeys.forEach(skillKey => {
+                    const skill = SKILLS[skillKey];
+                    const bonus = calculateSkillBonus(skillKey);
+                    const isProficient = character.skillProficiencies.includes(skillKey);
+
+                    const item = document.createElement('div');
+                    item.className = 'skill-item' + (isProficient ? ' proficient' : '');
+                    item.dataset.skill = skillKey;
+
+                    const dot = document.createElement('span');
+                    dot.className = 'proficiency-dot';
+                    dot.onclick = (e) => { e.stopPropagation(); toggleSkillProficiency(skillKey); };
+
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'skill-name';
+                    nameSpan.textContent = skill.name;
+
+                    const bonusSpan = document.createElement('span');
+                    bonusSpan.className = 'skill-bonus';
+                    bonusSpan.textContent = formatModifier(bonus);
+
+                    item.onclick = () => rollSkillCheck(skillKey);
+                    item.appendChild(dot);
+                    item.appendChild(nameSpan);
+                    item.appendChild(bonusSpan);
+
+                    group.appendChild(item);
+                });
+
+                container.appendChild(group);
+            }
+        }
+
+        function updateSkillBonuses() {
+            const items = document.querySelectorAll('.skill-item');
+            items.forEach(item => {
+                const skillKey = item.dataset.skill;
+                const bonus = calculateSkillBonus(skillKey);
+                const isProficient = character.skillProficiencies.includes(skillKey);
+
+                item.classList.toggle('proficient', isProficient);
+                item.querySelector('.skill-bonus').textContent = formatModifier(bonus);
+            });
+        }
+
+        function rollSkillCheck(skillKey) {
+            const skill = SKILLS[skillKey];
+            const bonus = calculateSkillBonus(skillKey);
+            const roll = Math.floor(Math.random() * 20) + 1;
+            const total = roll + bonus;
+
+            const isCrit = roll === 20;
+            const isCritFail = roll === 1;
+
+            let dieClass = '';
+            if (isCrit) dieClass = 'max';
+            if (isCritFail) dieClass = 'min';
+
+            const toast = document.getElementById('skillToast');
+            const nameEl = document.getElementById('skillToastName');
+            const resultEl = document.getElementById('skillToastResult');
+            const breakdownEl = document.getElementById('skillToastBreakdown');
+
+            nameEl.textContent = skill.name;
+            resultEl.textContent = total;
+            resultEl.className = 'skill-toast-result';
+            if (isCrit) resultEl.classList.add('crit');
+            if (isCritFail) resultEl.classList.add('critfail');
+
+            const bonusStr = bonus >= 0 ? `+ ${bonus}` : `- ${Math.abs(bonus)}`;
+            breakdownEl.innerHTML = `<span class="die ${dieClass}">${roll}</span> ${bonusStr} = ${total}`;
+
+            toast.classList.remove('show');
+            void toast.offsetWidth;
+            toast.classList.add('show');
+        }
+
+        function closeSkillToast() {
+            document.getElementById('skillToast').classList.remove('show');
+        }
+
+        function toggleSkillProficiency(skillKey) {
+            const index = character.skillProficiencies.indexOf(skillKey);
+            if (index > -1) {
+                character.skillProficiencies.splice(index, 1);
+            } else {
+                character.skillProficiencies.push(skillKey);
+            }
+            updateSkillBonuses();
+            saveCharacter();
         }
 
         // Update Functions
@@ -1885,6 +2255,9 @@
 
             // Update AC display
             updateACDisplay();
+
+            // Update skill bonuses
+            updateSkillBonuses();
         }
 
         function updateACDisplay() {
@@ -2155,6 +2528,9 @@
             generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
             generateDetectMagicPip();
             generateSpellPips();
+
+            // Render skills
+            renderSkills();
 
             // Render attacks
             renderAttacks();
