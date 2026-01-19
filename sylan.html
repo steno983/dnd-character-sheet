@@ -157,64 +157,53 @@
 
         /* Main Grid */
         .main-grid {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             position: relative;
             z-index: 1;
         }
 
-        @media (max-width: 700px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Stats Row */
+        .stats-column {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
         }
 
-        /* Stats Column */
-        .stats-column {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        @media (max-width: 600px) {
+            .stats-column {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .stat-block {
             background: linear-gradient(145deg, rgba(92,45,145,0.1), rgba(92,45,145,0.05));
             border: 2px solid var(--arcane-purple);
-            border-radius: 8px;
-            padding: 12px 8px;
+            border-radius: 6px;
+            padding: 6px 4px;
             text-align: center;
             position: relative;
             transition: all 0.3s ease;
         }
 
         .stat-block:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(92,45,145,0.2);
-        }
-
-        .stat-block::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--arcane-blue-light), transparent);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(92,45,145,0.2);
         }
 
         .stat-name {
             font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
+            font-size: 0.55rem;
+            letter-spacing: 1px;
             color: var(--arcane-purple);
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .stat-modifier {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--ink-brown);
             line-height: 1;
@@ -224,18 +213,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 6px;
+            margin-top: 3px;
         }
 
         .stat-score input {
-            width: 40px;
-            height: 30px;
+            width: 32px;
+            height: 24px;
             background: var(--parchment-dark);
             border: 1px solid var(--arcane-purple);
             border-radius: 50%;
             text-align: center;
             font-family: 'Crimson Text', serif;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--ink-brown);
             outline: none;
