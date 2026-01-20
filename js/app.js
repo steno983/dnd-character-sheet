@@ -1,0 +1,855 @@
+// D&D Character Sheet - Main Application Logic
+
+// Global state
+let character = null;
+let characterConfig = null;
+let spellDatabase = null;
+
+// ==================== INITIALIZATION ====================
+
+async function loadCharacter() {
+    // Get character ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const charId = urlParams.get('char') || 'tholgrin';
+
+    try {
+        // Load character configuration
+        const configResponse = await fetch(`data/characters/${charId}.json`);
+        if (!configResponse.ok) throw new Error(`Character ${charId} not found`);
+        characterConfig = await configResponse.json();
+
+        // Load theme CSS
+        loadTheme(characterConfig.theme);
+
+        // Load spell database
+        const spellsResponse = await fetch(`data/${characterConfig.spellsFile}`);
+        if (spellsResponse.ok) {
+            spellDatabase = await spellsResponse.json();
+        }
+
+        // Load character data from localStorage or use defaults
+        const savedData = localStorage.getItem(characterConfig.storageKey);
+        if (savedData) {
+            character = JSON.parse(savedData);
+            // Merge with defaults to ensure all fields exist
+            character = mergeWithDefaults(character, characterConfig.defaults);
+        } else {
+            character = JSON.parse(JSON.stringify(characterConfig.defaults));
+        }
+
+        // Ensure required fields
+        ensureRequiredFields();
+
+        // Initialize UI
+        initializeUI();
+
+    } catch (error) {
+        console.error('Error loading character:', error);
+        document.body.innerHTML = `<div style="color: white; padding: 20px; text-align: center;">
+            <h1>Errore</h1>
+            <p>Impossibile caricare il personaggio: ${error.message}</p>
+            <p>Prova con: <a href="?char=tholgrin" style="color: #daa520;">Tholgrin</a> o <a href="?char=sylan" style="color: #9b6dff;">Sylan</a></p>
+        </div>`;
+    }
+}
+
+function loadTheme(themeName) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `css/themes/${themeName}.css`;
+    document.head.appendChild(link);
+}
+
+function mergeWithDefaults(saved, defaults) {
+    const merged = { ...defaults };
+    for (const key in saved) {
+        if (saved[key] !== null && typeof saved[key] === 'object' && !Array.isArray(saved[key])) {
+            merged[key] = mergeWithDefaults(saved[key], defaults[key] || {});
+        } else {
+            merged[key] = saved[key];
+        }
+    }
+    return merged;
+}
+
+function ensureRequiredFields() {
+    if (!character.stats) character.stats = characterConfig.defaults.stats;
+    if (!character.hp) character.hp = characterConfig.defaults.hp;
+    if (!character.spellSlots) character.spellSlots = {};
+    if (!character.attacks) character.attacks = [];
+
+    // Ensure spell slots from config
+    characterConfig.spellSlots.forEach(slot => {
+        if (!character.spellSlots[slot.level]) {
+            character.spellSlots[slot.level] = { current: slot.max, max: slot.max };
+        }
+    });
+
+    // Class-specific fields
+    if (characterConfig.classFeatures.channelDivinity?.enabled) {
+        if (!character.channelDivinity) {
+            character.channelDivinity = {
+                current: characterConfig.classFeatures.channelDivinity.uses,
+                max: characterConfig.classFeatures.channelDivinity.uses
+            };
+        }
+    }
+
+    if (characterConfig.classFeatures.wardingFlare?.enabled) {
+        if (!character.wardingFlare) {
+            character.wardingFlare = { current: 0, max: 0 };
+        }
+    }
+
+    if (characterConfig.classFeatures.portent?.enabled) {
+        if (!character.portent) {
+            character.portent = { dice: [0, 0], used: [false, false] };
+        }
+    }
+
+    if (characterConfig.classFeatures.mageArmor?.enabled) {
+        if (character.mageArmorActive === undefined) {
+            character.mageArmorActive = false;
+        }
+    }
+
+    if (characterConfig.classFeatures.detectMagic?.enabled) {
+        if (character.detectMagicUsed === undefined) {
+            character.detectMagicUsed = false;
+        }
+    }
+}
+
+function initializeUI() {
+    // Set page title
+    document.title = `Scheda ${characterConfig.class} - ${characterConfig.name}`;
+
+    // Set header
+    document.getElementById('charName').value = character.name;
+    document.getElementById('classLevelText').textContent =
+        `${characterConfig.class} · Livello ${characterConfig.level} · ${characterConfig.subclass}`;
+
+    // Set proficiency bonus display
+    const profBonusEl = document.getElementById('proficiency-bonus');
+    if (profBonusEl) {
+        profBonusEl.textContent = `+${characterConfig.proficiencyBonus}`;
+    }
+
+    // Set hit dice type
+    const hitDiceTitle = document.getElementById('hit-dice-title');
+    if (hitDiceTitle) {
+        hitDiceTitle.textContent = `Dadi Vita (${characterConfig.hitDiceType})`;
+    }
+
+    // Set layout class based on character config
+    const mainGrid = document.getElementById('mainGrid');
+    mainGrid.className = `main-grid ${characterConfig.layout || 'cleric-layout'}`;
+
+    // Set stats layout
+    const statsColumn = document.getElementById('statsColumn');
+    statsColumn.className = `stats-column ${characterConfig.statsLayout || 'vertical'}`;
+
+    // Configure stat blocks for compact layout if needed
+    if (characterConfig.statsLayout === 'horizontal') {
+        document.querySelectorAll('.stat-block').forEach(block => {
+            block.classList.add('compact');
+        });
+        document.querySelectorAll('.stat-name').forEach(name => {
+            name.classList.add('compact');
+        });
+        document.querySelectorAll('.stat-modifier').forEach(mod => {
+            mod.classList.add('compact');
+        });
+        document.querySelectorAll('.stat-score').forEach(score => {
+            score.classList.add('compact');
+        });
+    }
+
+    // Load stat values
+    loadStatValues();
+
+    // Load combat values
+    loadCombatValues();
+
+    // Setup event listeners
+    setupEventListeners();
+
+    // Generate resource pips
+    generateAllPips();
+
+    // Setup class-specific sections
+    setupClassFeatures();
+
+    // Render attacks
+    renderAttacks();
+
+    // Update all modifiers
+    updateModifiers();
+
+    // Setup spell slots from config
+    setupSpellSlots();
+
+    // Render spellbook
+    renderSpellbook();
+
+    // Hide spell levels that don't exist for this character
+    hideUnusedSpellLevels();
+}
+
+// ==================== UTILITY FUNCTIONS ====================
+
+function calculateModifier(score) {
+    return Math.floor((score - 10) / 2);
+}
+
+function formatModifier(mod) {
+    return mod >= 0 ? `+${mod}` : `${mod}`;
+}
+
+function saveCharacter() {
+    localStorage.setItem(characterConfig.storageKey, JSON.stringify(character));
+    showSaveIndicator();
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+// ==================== STAT MANAGEMENT ====================
+
+function loadStatValues() {
+    document.getElementById('str-score').value = character.stats.strength;
+    document.getElementById('dex-score').value = character.stats.dexterity;
+    document.getElementById('con-score').value = character.stats.constitution;
+    document.getElementById('int-score').value = character.stats.intelligence;
+    document.getElementById('wis-score').value = character.stats.wisdom;
+    document.getElementById('cha-score').value = character.stats.charisma;
+}
+
+function loadCombatValues() {
+    document.getElementById('hp-current').value = character.hp.current;
+    document.getElementById('hp-max').value = character.hp.max;
+    document.getElementById('hp-temp').value = character.hp.temp;
+
+    const acDisplay = document.getElementById('armor-class-display');
+    const acInput = document.getElementById('armor-class');
+    if (acDisplay) {
+        updateACDisplay();
+    } else if (acInput) {
+        acInput.value = character.armorClass;
+    }
+
+    document.getElementById('speed').value = character.speed;
+}
+
+function updateModifiers() {
+    const stats = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+    const statNames = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+
+    stats.forEach((stat, i) => {
+        const score = parseInt(character.stats[statNames[i]]) || 10;
+        const mod = calculateModifier(score);
+        document.getElementById(`${stat}-mod`).textContent = formatModifier(mod);
+    });
+
+    // Update initiative
+    const dexMod = calculateModifier(character.stats.dexterity || 10);
+    const alertBonus = characterConfig.classFeatures.alert?.bonus || 0;
+    document.getElementById('initiative').textContent = formatModifier(dexMod + alertBonus);
+
+    // Update spellcasting
+    const spellAbility = characterConfig.spellcastingAbility;
+    const spellMod = calculateModifier(character.stats[spellAbility] || 10);
+    const proficiency = characterConfig.proficiencyBonus;
+
+    document.getElementById('spell-dc').textContent = 8 + proficiency + spellMod;
+    document.getElementById('spell-attack').textContent = formatModifier(proficiency + spellMod);
+
+    // Update AC if wizard with mage armor
+    if (characterConfig.classFeatures.mageArmor?.enabled) {
+        updateACDisplay();
+    }
+
+    // Update Warding Flare uses if enabled
+    if (characterConfig.classFeatures.wardingFlare?.enabled) {
+        const wisMod = calculateModifier(character.stats.wisdom || 10);
+        const wfMax = Math.max(1, wisMod);
+        if (character.wardingFlare.max !== wfMax) {
+            character.wardingFlare.max = wfMax;
+            character.wardingFlare.current = Math.min(character.wardingFlare.current, wfMax);
+            saveCharacter();
+        }
+        generateWardingFlarePips();
+    }
+
+    // Update skill bonuses if skills are enabled
+    if (typeof updateSkillBonuses === 'function') {
+        updateSkillBonuses();
+    }
+}
+
+function updateACDisplay() {
+    const acDisplay = document.getElementById('armor-class-display');
+    if (!acDisplay) return;
+
+    const dexMod = calculateModifier(character.stats.dexterity || 10);
+    let ac;
+
+    if (characterConfig.classFeatures.mageArmor?.enabled && character.mageArmorActive) {
+        ac = 13 + dexMod;
+    } else {
+        ac = 10 + dexMod;
+    }
+
+    acDisplay.textContent = ac;
+}
+
+// ==================== EVENT LISTENERS ====================
+
+function setupEventListeners() {
+    // Character name
+    document.getElementById('charName').addEventListener('input', (e) => {
+        character.name = e.target.value;
+        saveCharacter();
+    });
+
+    // Stats
+    const statInputs = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+    const statNames = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+    statInputs.forEach((stat, i) => {
+        document.getElementById(`${stat}-score`).addEventListener('input', (e) => {
+            character.stats[statNames[i]] = parseInt(e.target.value) || 10;
+            updateModifiers();
+            saveCharacter();
+        });
+    });
+
+    // HP
+    document.getElementById('hp-current').addEventListener('input', (e) => {
+        character.hp.current = parseInt(e.target.value) || 0;
+        saveCharacter();
+    });
+    document.getElementById('hp-max').addEventListener('input', (e) => {
+        character.hp.max = parseInt(e.target.value) || 0;
+        saveCharacter();
+    });
+    document.getElementById('hp-temp').addEventListener('input', (e) => {
+        character.hp.temp = parseInt(e.target.value) || 0;
+        saveCharacter();
+    });
+
+    // Armor Class (if editable)
+    const acInput = document.getElementById('armor-class');
+    if (acInput) {
+        acInput.addEventListener('input', (e) => {
+            character.armorClass = parseInt(e.target.value) || 10;
+            saveCharacter();
+        });
+    }
+
+    // Speed
+    document.getElementById('speed').addEventListener('input', (e) => {
+        character.speed = parseInt(e.target.value) || 30;
+        saveCharacter();
+    });
+
+    // Close modals on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeSpellModal();
+            const portentModal = document.getElementById('portentModal');
+            if (portentModal) portentModal.classList.remove('active');
+        }
+    });
+}
+
+// ==================== PIP GENERATION ====================
+
+function generateAllPips() {
+    // Hit dice
+    const hitDiceContainer = document.getElementById('hit-dice-pips');
+    if (hitDiceContainer) {
+        generatePips(hitDiceContainer, character.hitDice?.current || 0, character.hitDice?.max || characterConfig.level, 'hitDice');
+    }
+
+    // Channel Divinity
+    if (characterConfig.classFeatures.channelDivinity?.enabled) {
+        const cdContainer = document.getElementById('channel-divinity-pips');
+        if (cdContainer) {
+            generatePips(cdContainer, character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
+        }
+    }
+
+    // Detect Magic (racial)
+    if (characterConfig.classFeatures.detectMagic?.enabled) {
+        generateDetectMagicPip();
+    }
+
+    // Spell slots
+    generateSpellPips();
+
+    // Warding Flare
+    if (characterConfig.classFeatures.wardingFlare?.enabled) {
+        generateWardingFlarePips();
+    }
+}
+
+function generatePips(container, current, max, type) {
+    container.innerHTML = '';
+    for (let i = 0; i < max; i++) {
+        const pip = document.createElement('div');
+        pip.className = `pip ${i < current ? 'filled' : ''}`;
+        pip.onclick = () => togglePip(type, i);
+        container.appendChild(pip);
+    }
+}
+
+function generateSpellPips() {
+    document.querySelectorAll('.spell-slots-pips').forEach(container => {
+        const level = container.dataset.level;
+        const max = parseInt(container.dataset.max);
+        const current = character.spellSlots[level]?.current || 0;
+
+        container.innerHTML = '';
+        for (let i = 0; i < max; i++) {
+            const pip = document.createElement('div');
+            pip.className = `spell-pip ${i < current ? 'filled' : ''}`;
+            pip.onclick = () => toggleSpellSlot(level, i);
+            container.appendChild(pip);
+        }
+    });
+}
+
+function generateWardingFlarePips() {
+    const container = document.getElementById('warding-flare-pips');
+    if (!container) return;
+
+    container.innerHTML = '';
+    for (let i = 0; i < character.wardingFlare.max; i++) {
+        const pip = document.createElement('div');
+        pip.className = `pip ${i < character.wardingFlare.current ? 'filled' : ''}`;
+        pip.style.borderColor = '#e09422';
+        pip.onclick = () => toggleWardingFlare(i);
+        container.appendChild(pip);
+    }
+}
+
+function generateDetectMagicPip() {
+    const container = document.getElementById('detect-magic-pips');
+    if (!container) return;
+
+    container.innerHTML = '';
+    const pip = document.createElement('div');
+    pip.className = `pip ${!character.detectMagicUsed ? 'filled' : ''}`;
+    pip.onclick = () => {
+        character.detectMagicUsed = !character.detectMagicUsed;
+        generateDetectMagicPip();
+        saveCharacter();
+    };
+    container.appendChild(pip);
+}
+
+// ==================== PIP TOGGLING ====================
+
+function togglePip(type, index) {
+    if (type === 'hitDice') {
+        if (!character.hitDice) character.hitDice = { current: 0, max: characterConfig.level };
+        character.hitDice.current = index < character.hitDice.current ? index : index + 1;
+        generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
+    } else if (type === 'channelDivinity') {
+        character.channelDivinity.current = index < character.channelDivinity.current ? index : index + 1;
+        generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
+    }
+    saveCharacter();
+}
+
+function toggleSpellSlot(level, index) {
+    const current = character.spellSlots[level].current;
+    character.spellSlots[level].current = index < current ? index : index + 1;
+    generateSpellPips();
+    saveCharacter();
+}
+
+function toggleWardingFlare(index) {
+    const current = character.wardingFlare.current;
+    character.wardingFlare.current = index < current ? index : index + 1;
+    generateWardingFlarePips();
+    saveCharacter();
+}
+
+// ==================== REST FUNCTIONS ====================
+
+function shortRest(btn) {
+    btn.classList.add('resting');
+    setTimeout(() => btn.classList.remove('resting'), 600);
+
+    // Recover Channel Divinity if cleric
+    if (characterConfig.classFeatures.channelDivinity?.enabled &&
+        characterConfig.classFeatures.channelDivinity?.resetOn === 'shortRest') {
+        character.channelDivinity.current = character.channelDivinity.max;
+        generatePips(document.getElementById('channel-divinity-pips'),
+            character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
+    }
+
+    saveCharacter();
+    console.log('Short rest completed');
+}
+
+function longRest(btn) {
+    btn.classList.add('resting');
+    setTimeout(() => btn.classList.remove('resting'), 600);
+
+    // Recover all HP
+    character.hp.current = character.hp.max;
+    document.getElementById('hp-current').value = character.hp.current;
+
+    // Recover all hit dice
+    if (!character.hitDice) character.hitDice = { current: 0, max: characterConfig.level };
+    character.hitDice.current = character.hitDice.max;
+    generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
+
+    // Recover all spell slots
+    for (let level in character.spellSlots) {
+        character.spellSlots[level].current = character.spellSlots[level].max;
+    }
+    generateSpellPips();
+
+    // Recover Channel Divinity if cleric
+    if (characterConfig.classFeatures.channelDivinity?.enabled) {
+        character.channelDivinity.current = character.channelDivinity.max;
+        generatePips(document.getElementById('channel-divinity-pips'),
+            character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
+    }
+
+    // Recover Warding Flare if cleric
+    if (characterConfig.classFeatures.wardingFlare?.enabled) {
+        character.wardingFlare.current = character.wardingFlare.max;
+        generateWardingFlarePips();
+    }
+
+    // Recover Detect Magic daily use if wizard
+    if (characterConfig.classFeatures.detectMagic?.enabled) {
+        character.detectMagicUsed = false;
+        generateDetectMagicPip();
+    }
+
+    // Show Portent modal for wizard
+    if (characterConfig.classFeatures.portent?.enabled) {
+        setTimeout(() => showPortentModal(), 700);
+    }
+
+    saveCharacter();
+    console.log('Long rest completed - All resources restored');
+}
+
+// ==================== ATTACKS MANAGEMENT ====================
+
+function renderAttacks() {
+    const container = document.getElementById('attacks-list');
+    if (!container) return;
+
+    container.innerHTML = character.attacks.map((attack, i) => `
+        <div class="attack-item">
+            <input type="text" value="${attack.name || ''}" onchange="updateAttack(${i}, 'name', this.value)" placeholder="Nome arma">
+            <input type="text" value="${attack.bonus || ''}" onchange="updateAttack(${i}, 'bonus', this.value)" placeholder="+X">
+            <input type="text" value="${attack.damage || ''}" onchange="updateAttack(${i}, 'damage', this.value)" placeholder="1d8+X">
+            <button class="remove-btn" onclick="removeAttack(${i})">×</button>
+        </div>
+    `).join('');
+}
+
+function addAttack() {
+    character.attacks.push({ name: '', bonus: '', damage: '' });
+    renderAttacks();
+    saveCharacter();
+}
+
+function updateAttack(index, field, value) {
+    character.attacks[index][field] = value;
+    saveCharacter();
+}
+
+function removeAttack(index) {
+    character.attacks.splice(index, 1);
+    renderAttacks();
+    saveCharacter();
+}
+
+// ==================== CLASS FEATURES SETUP ====================
+
+function setupClassFeatures() {
+    // Show/hide class-specific sections
+    const sections = {
+        'channel-divinity-section': characterConfig.classFeatures.channelDivinity?.enabled,
+        'warding-flare-section': characterConfig.classFeatures.wardingFlare?.enabled,
+        'portent-section': characterConfig.classFeatures.portent?.enabled,
+        'mage-armor-section': characterConfig.classFeatures.mageArmor?.enabled,
+        'abilities-section': characterConfig.classFeatures.abilities?.length > 0,
+        'skills-section': characterConfig.classFeatures.skills?.enabled
+    };
+
+    for (const [sectionId, enabled] of Object.entries(sections)) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            if (enabled) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        }
+    }
+
+    // Show/hide Channel Divinity resource box
+    const cdBox = document.getElementById('channel-divinity-box');
+    if (cdBox) {
+        if (characterConfig.classFeatures.channelDivinity?.enabled) {
+            cdBox.classList.remove('hidden');
+        } else {
+            cdBox.classList.add('hidden');
+        }
+    }
+
+    // Show/hide Detect Magic box
+    const dmBox = document.getElementById('detect-magic-box');
+    if (dmBox) {
+        if (characterConfig.classFeatures.detectMagic?.enabled) {
+            dmBox.classList.remove('hidden');
+        } else {
+            dmBox.classList.add('hidden');
+        }
+    }
+
+    // Hide standalone rest buttons if abilities section is shown
+    const restButtonsStandalone = document.getElementById('rest-buttons-standalone');
+    if (restButtonsStandalone) {
+        if (characterConfig.classFeatures.abilities?.length > 0) {
+            restButtonsStandalone.style.display = 'none';
+        } else {
+            restButtonsStandalone.style.display = 'flex';
+        }
+    }
+
+    // Setup Mage Armor toggle
+    if (characterConfig.classFeatures.mageArmor?.enabled) {
+        const toggle = document.getElementById('mageArmorToggle');
+        const label = document.getElementById('mageArmorLabel');
+        const desc = document.getElementById('mage-armor-desc');
+        if (toggle && character.mageArmorActive) {
+            toggle.classList.add('active');
+            label.textContent = 'Attiva';
+        }
+        if (desc && characterConfig.classFeatures.mageArmor.description) {
+            desc.innerHTML = characterConfig.classFeatures.mageArmor.description;
+        }
+    }
+
+    // Setup Portent
+    if (characterConfig.classFeatures.portent?.enabled) {
+        const desc = document.getElementById('portent-desc');
+        if (desc && characterConfig.classFeatures.portent.description) {
+            desc.innerHTML = characterConfig.classFeatures.portent.description;
+        }
+        setupPortentListeners();
+        updatePortentDisplay();
+    }
+
+    // Setup Warding Flare description
+    if (characterConfig.classFeatures.wardingFlare?.enabled) {
+        const desc = document.getElementById('warding-flare-desc');
+        if (desc && characterConfig.classFeatures.wardingFlare.description) {
+            desc.innerHTML = characterConfig.classFeatures.wardingFlare.description;
+        }
+    }
+
+    // Setup Channel Divinity abilities
+    if (characterConfig.classFeatures.channelDivinity?.enabled) {
+        const abilitiesContainer = document.getElementById('channel-divinity-abilities');
+        if (abilitiesContainer && characterConfig.classFeatures.channelDivinity.abilities) {
+            abilitiesContainer.innerHTML = characterConfig.classFeatures.channelDivinity.abilities.map(ability => `
+                <div class="cd-ability">
+                    <div class="cd-ability-name">${ability.name}</div>
+                    <div class="cd-ability-desc">${ability.description}</div>
+                </div>
+            `).join('');
+        }
+    }
+
+    // Setup skills if enabled
+    if (characterConfig.classFeatures.skills?.enabled && typeof renderSkills === 'function') {
+        renderSkills();
+    }
+
+    // Render abilities
+    if (characterConfig.classFeatures.abilities?.length > 0) {
+        renderAbilities();
+    }
+}
+
+function setupSpellSlots() {
+    const container = document.getElementById('spell-slots-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+    characterConfig.spellSlots.forEach(slot => {
+        const row = document.createElement('div');
+        row.className = 'spell-level-row';
+        row.innerHTML = `
+            <span class="spell-level-label">${slot.level}° Livello</span>
+            <div class="spell-slots-pips" data-level="${slot.level}" data-max="${slot.max}"></div>
+        `;
+        container.appendChild(row);
+    });
+}
+
+function renderAbilities() {
+    const container = document.getElementById('abilities-list');
+    if (!container || !characterConfig.classFeatures.abilities) return;
+
+    container.innerHTML = characterConfig.classFeatures.abilities.map(ability => `
+        <div class="ability-item">
+            <div class="ability-name">${ability.name}</div>
+            <div class="ability-desc">${ability.description}</div>
+        </div>
+    `).join('');
+}
+
+// ==================== MAGE ARMOR ====================
+
+function toggleMageArmor() {
+    character.mageArmorActive = !character.mageArmorActive;
+    const toggle = document.getElementById('mageArmorToggle');
+    const label = document.getElementById('mageArmorLabel');
+
+    if (character.mageArmorActive) {
+        toggle.classList.add('active');
+        label.textContent = 'Attiva';
+    } else {
+        toggle.classList.remove('active');
+        label.textContent = 'Inattiva';
+    }
+
+    updateACDisplay();
+    saveCharacter();
+}
+
+// ==================== PORTENT ====================
+
+function setupPortentListeners() {
+    document.getElementById('portent1')?.addEventListener('input', (e) => {
+        character.portent.dice[0] = Math.min(20, Math.max(0, parseInt(e.target.value) || 0));
+        saveCharacter();
+    });
+    document.getElementById('portent2')?.addEventListener('input', (e) => {
+        character.portent.dice[1] = Math.min(20, Math.max(0, parseInt(e.target.value) || 0));
+        saveCharacter();
+    });
+}
+
+function updatePortentDisplay() {
+    for (let i = 0; i < 2; i++) {
+        const input = document.getElementById(`portent${i + 1}`);
+        const btn = document.getElementById(`portent${i + 1}Btn`);
+
+        if (input) input.value = character.portent.dice[i] || 0;
+
+        if (btn) {
+            if (character.portent.used[i]) {
+                input?.classList.add('used');
+                btn.classList.add('used');
+                btn.textContent = 'Usato';
+            } else {
+                input?.classList.remove('used');
+                btn.classList.remove('used');
+                btn.textContent = 'Usa';
+            }
+        }
+    }
+}
+
+function usePortent(index) {
+    character.portent.used[index] = !character.portent.used[index];
+    updatePortentDisplay();
+    saveCharacter();
+}
+
+function showPortentModal() {
+    const modal = document.getElementById('portentModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.getElementById('portentModal1').value = '';
+        document.getElementById('portentModal2').value = '';
+        document.getElementById('portentModal1')?.focus();
+    }
+}
+
+function confirmPortent() {
+    const val1 = parseInt(document.getElementById('portentModal1').value) || 0;
+    const val2 = parseInt(document.getElementById('portentModal2').value) || 0;
+
+    character.portent.dice = [
+        Math.min(20, Math.max(1, val1)),
+        Math.min(20, Math.max(1, val2))
+    ];
+    character.portent.used = [false, false];
+
+    document.getElementById('portentModal').classList.remove('active');
+    updatePortentDisplay();
+    saveCharacter();
+}
+
+// ==================== SPELLBOOK ====================
+
+function renderSpellbook() {
+    if (!characterConfig.spells || !spellDatabase) return;
+
+    // Cantrips
+    renderSpellCategory('cantrips-grid', characterConfig.spells.cantrips, 'cantrip');
+
+    // Spell levels
+    for (let level = 1; level <= 9; level++) {
+        const key = `level${level}`;
+        const gridId = `level${level}-grid`;
+        if (characterConfig.spells[key]) {
+            renderSpellCategory(gridId, characterConfig.spells[key], '');
+        }
+    }
+}
+
+function hideUnusedSpellLevels() {
+    // Hide spell levels that the character doesn't have
+    for (let level = 1; level <= 9; level++) {
+        const key = `level${level}`;
+        const categoryEl = document.getElementById(`level${level}-category`);
+        if (categoryEl) {
+            if (!characterConfig.spells[key] || characterConfig.spells[key].length === 0) {
+                categoryEl.style.display = 'none';
+            }
+        }
+    }
+}
+
+function renderSpellCategory(containerId, spellIds, extraClass) {
+    const container = document.getElementById(containerId);
+    if (!container || !spellIds) return;
+
+    container.innerHTML = spellIds.map(spellId => {
+        const spell = spellDatabase[spellId];
+        if (!spell) return '';
+
+        let classes = ['spell-chip'];
+        if (extraClass) classes.push(extraClass);
+        if (spell.domain) classes.push('domain');
+        if (spell.racial) classes.push('racial');
+
+        const suffix = spell.domain ? ' ✦' : (spell.racial ? ' ✦' : '');
+
+        return `<span class="${classes.join(' ')}" onclick="openSpell('${spellId}')">${spell.name}${suffix}</span>`;
+    }).join('');
+}
+
+// ==================== START ====================
+
+// Load character when DOM is ready
+document.addEventListener('DOMContentLoaded', loadCharacter);

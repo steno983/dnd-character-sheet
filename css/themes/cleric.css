@@ -1,0 +1,70 @@
+/* Cleric Theme - Burgundy/Gold Divine */
+:root {
+    /* Parchment */
+    --parchment-light: #f5e6c8;
+    --parchment-mid: #e8d4a8;
+    --parchment-dark: #d4c098;
+
+    /* Ink */
+    --ink-brown: #2c1810;
+    --ink-light: #4a3728;
+
+    /* Primary Colors (Burgundy) */
+    --primary: #6b1c23;
+    --primary-dark: #4a1218;
+    --primary-light: #8a2a35;
+    --primary-tint: rgba(107,28,35,0.1);
+    --primary-tint-light: rgba(107,28,35,0.05);
+    --primary-shadow: rgba(107,28,35,0.3);
+    --primary-hover: rgba(107,28,35,0.4);
+    --primary-hover-light: rgba(107,28,35,0.2);
+    --primary-border: rgba(107,28,35,0.3);
+
+    /* Accent Colors (Gold) */
+    --gold: #b8860b;
+    --gold-light: #daa520;
+    --accent: #b8860b;
+    --accent-light: #daa520;
+    --accent-glow: rgba(218,165,32,0.5);
+
+    /* Background */
+    --bg-dark: #1a1410;
+    --bg-gradient: #2a1f18;
+
+    /* Sheet */
+    --sheet-shadow: rgba(139,115,85,0.3);
+
+    /* Resource Colors (Divine Blue) */
+    --resource-color: #1e3a5f;
+    --resource-color-light: #2a4a7a;
+    --resource-tint: rgba(30,58,95,0.1);
+    --resource-tint-light: rgba(74,144,194,0.05);
+    --resource-filled: #4a90c2;
+
+    /* Spell Slots */
+    --slot-empty: #8b7355;
+    --slot-filled: #daa520;
+    --slot-filled-dark: #b8860b;
+    --slot-glow: rgba(218,165,32,0.5);
+
+    /* HP Pattern */
+    --hp-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z' fill='%23daa520' opacity='0.05'/%3E%3C/svg%3E");
+
+    /* Spell Modal */
+    --spell-border: rgba(30,58,95,0.3);
+    --spell-stat-bg: rgba(30,58,95,0.08);
+
+    /* Attack Background */
+    --attack-bg: rgba(107,28,35,0.08);
+
+    /* Dice */
+    --dice-btn-shadow: rgba(30,58,95,0.4);
+    --dice-result-glow: rgba(218,165,32,0.5);
+    --die-max-bg: rgba(218,165,32,0.3);
+
+    /* Skills */
+    --skill-hover: rgba(107,28,35,0.15);
+    --skill-proficient: rgba(218,165,32,0.15);
+    --skill-proficient-hover: rgba(218,165,32,0.25);
+    --skill-toast-glow: rgba(218,165,32,0.3);
+}

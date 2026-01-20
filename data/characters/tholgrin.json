@@ -1,0 +1,82 @@
+{
+  "id": "tholgrin",
+  "name": "Tholgrin",
+  "class": "Chierico",
+  "level": 7,
+  "subclass": "Dominio della Luce",
+  "theme": "cleric",
+  "layout": "cleric-layout",
+  "statsLayout": "vertical",
+  "storageKey": "dnd-cleric-7-light",
+  "spellsFile": "spells/cleric.json",
+
+  "proficiencyBonus": 3,
+  "spellcastingAbility": "wisdom",
+  "hitDiceType": "d8",
+
+  "defaults": {
+    "name": "Tholgrin",
+    "stats": {
+      "strength": 15,
+      "dexterity": 10,
+      "constitution": 16,
+      "intelligence": 10,
+      "wisdom": 16,
+      "charisma": 10
+    },
+    "hp": { "current": 77, "max": 77, "temp": 0 },
+    "armorClass": 19,
+    "speed": 30,
+    "hitDice": { "current": 7, "max": 7 },
+    "attacks": [],
+    "skillProficiencies": []
+  },
+
+  "spellSlots": [
+    { "level": 1, "max": 4 },
+    { "level": 2, "max": 3 },
+    { "level": 3, "max": 3 },
+    { "level": 4, "max": 1 }
+  ],
+
+  "classFeatures": {
+    "channelDivinity": {
+      "enabled": true,
+      "uses": 2,
+      "resetOn": "shortRest",
+      "abilities": [
+        {
+          "name": "Fulgore dell'Alba",
+          "description": "Come azione, presenti il tuo simbolo sacro e ogni oscurità magica entro 9 metri da te viene dissolta. Ogni creatura ostile entro 9 metri deve effettuare un <strong>TS Costituzione</strong>, subendo <strong>2d10 + livello</strong> danni radianti con un fallimento, o metà danni con un successo."
+        },
+        {
+          "name": "Scintilla Divina",
+          "description": "Come azione, puoi toccare il tuo simbolo sacro per far scaturire una <strong>scintilla di luce divina</strong>. Una creatura a tua scelta entro 9 metri subisce <strong>2d8 danni radianti</strong>. Puoi spendere slot incantesimo per aumentare i danni."
+        },
+        {
+          "name": "Scacciare Non Morti",
+          "description": "Come azione, presenti il tuo simbolo sacro. Ogni non morto entro 9 metri che puo vederti o sentirti deve effettuare un <strong>TS Saggezza</strong>. Se fallisce, e <strong>scacciato</strong> per 1 minuto o fino a quando subisce danni."
+        }
+      ]
+    },
+    "wardingFlare": {
+      "enabled": true,
+      "usesBasedOn": "wisdom",
+      "description": "Quando una creatura entro 9 metri da te che puoi vedere attacca te o un'altra creatura, puoi usare la tua reazione per imporre <strong>svantaggio</strong> al tiro per colpire."
+    },
+    "portent": { "enabled": false },
+    "mageArmor": { "enabled": false },
+    "detectMagic": { "enabled": false },
+    "alert": { "enabled": false },
+    "skills": { "enabled": false },
+    "abilities": []
+  },
+
+  "spells": {
+    "cantrips": ["guidance", "light", "toll-the-dead", "word-of-radiance"],
+    "level1": ["healing-word", "shield-of-faith", "cure-wounds", "guiding-bolt", "detect-magic", "burning-hands", "faerie-fire"],
+    "level2": ["find-traps", "scorching-ray", "see-invisibility"],
+    "level3": ["create-food-and-water", "dispel-magic", "spirit-guardians", "daylight", "fireball"],
+    "level4": ["banishment"]
+  }
+}

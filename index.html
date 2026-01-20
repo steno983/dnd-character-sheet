@@ -3,1236 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scheda Chierico - D&D 5e 2024</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --parchment-light: #f5e6c8;
-            --parchment-mid: #e8d4a8;
-            --parchment-dark: #d4c098;
-            --ink-brown: #2c1810;
-            --ink-light: #4a3728;
-            --burgundy: #6b1c23;
-            --burgundy-dark: #4a1218;
-            --gold: #b8860b;
-            --gold-light: #daa520;
-            --divine-blue: #1e3a5f;
-            --divine-glow: #4a90c2;
-            --slot-empty: #8b7355;
-            --slot-filled: #daa520;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Crimson Text', Georgia, serif;
-            background: #1a1410;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            background-image:
-                radial-gradient(ellipse at top, #2a1f18 0%, #1a1410 50%),
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-        }
-
-        .character-sheet {
-            width: 100%;
-            max-width: 900px;
-            background:
-                linear-gradient(135deg, var(--parchment-light) 0%, var(--parchment-mid) 50%, var(--parchment-dark) 100%);
-            border-radius: 8px;
-            padding: 40px;
-            position: relative;
-            box-shadow:
-                0 0 0 3px var(--burgundy-dark),
-                0 0 0 6px var(--gold),
-                0 0 0 9px var(--burgundy-dark),
-                0 20px 60px rgba(0,0,0,0.5),
-                inset 0 0 100px rgba(139,115,85,0.3);
-        }
-
-        .character-sheet::before {
-            content: '';
-            position: absolute;
-            inset: 15px;
-            border: 2px solid var(--burgundy);
-            border-radius: 4px;
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
-        .character-sheet::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23paper)' opacity='0.15'/%3E%3C/svg%3E");
-            pointer-events: none;
-            border-radius: 8px;
-        }
-
-        /* Corner Flourishes */
-        .corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            opacity: 0.6;
-        }
-        .corner svg { width: 100%; height: 100%; fill: var(--burgundy); }
-        .corner-tl { top: 20px; left: 20px; }
-        .corner-tr { top: 20px; right: 20px; transform: scaleX(-1); }
-        .corner-bl { bottom: 20px; left: 20px; transform: scaleY(-1); }
-        .corner-br { bottom: 20px; right: 20px; transform: scale(-1); }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-decoration {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
-
-        .header-line {
-            height: 2px;
-            width: 80px;
-            background: linear-gradient(90deg, transparent, var(--burgundy), transparent);
-        }
-
-        .divine-symbol {
-            width: 40px;
-            height: 40px;
-            fill: var(--gold);
-            filter: drop-shadow(0 0 8px rgba(218,165,32,0.5));
-        }
-
-        .character-name {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--ink-brown);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: 3px;
-            margin-bottom: 5px;
-        }
-
-        .character-name input {
-            font-family: inherit;
-            font-size: inherit;
-            font-weight: inherit;
-            color: inherit;
-            background: transparent;
-            border: none;
-            border-bottom: 2px dashed var(--burgundy);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-            outline: none;
-            letter-spacing: inherit;
-        }
-
-        .character-name input::placeholder {
-            color: var(--ink-light);
-            opacity: 0.5;
-        }
-
-        .class-level {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            color: var(--burgundy);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (max-width: 700px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Stats Column */
-        .stats-column {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .stat-block {
-            background: linear-gradient(145deg, rgba(107,28,35,0.1), rgba(107,28,35,0.05));
-            border: 2px solid var(--burgundy);
-            border-radius: 8px;
-            padding: 12px 8px;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .stat-block:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(107,28,35,0.2);
-        }
-
-        .stat-block::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        }
-
-        .stat-name {
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: var(--burgundy);
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .stat-modifier {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--ink-brown);
-            line-height: 1;
-        }
-
-        .stat-score {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 6px;
-        }
-
-        .stat-score input {
-            width: 40px;
-            height: 30px;
-            background: var(--parchment-dark);
-            border: 1px solid var(--burgundy);
-            border-radius: 50%;
-            text-align: center;
-            font-family: 'Crimson Text', serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--ink-brown);
-            outline: none;
-        }
-
-        .stat-score input:focus {
-            box-shadow: 0 0 0 2px var(--gold);
-        }
-
-        /* Combat Column */
-        .combat-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Combat Stats Row */
-        .combat-stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 15px;
-        }
-
-        .combat-stat {
-            background: linear-gradient(145deg, var(--parchment-mid), var(--parchment-dark));
-            border: 2px solid var(--ink-light);
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .combat-stat-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            letter-spacing: 1px;
-            color: var(--ink-light);
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .combat-stat-value {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--ink-brown);
-        }
-
-        .combat-stat-value input {
-            font-family: inherit;
-            font-size: inherit;
-            font-weight: inherit;
-            color: inherit;
-            background: transparent;
-            border: none;
-            border-bottom: 1px dashed var(--ink-light);
-            width: 50px;
-            text-align: center;
-            outline: none;
-        }
-
-        /* HP Section */
-        .hp-section {
-            background: linear-gradient(135deg, var(--burgundy-dark) 0%, var(--burgundy) 100%);
-            border-radius: 10px;
-            padding: 20px;
-            color: var(--parchment-light);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hp-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z' fill='%23daa520' opacity='0.05'/%3E%3C/svg%3E");
-            background-size: 60px;
-            opacity: 0.3;
-        }
-
-        .hp-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            text-align: center;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .hp-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            position: relative;
-        }
-
-        .hp-box {
-            text-align: center;
-        }
-
-        .hp-box-label {
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-
-        .hp-box-value {
-            background: rgba(0,0,0,0.3);
-            border: 2px solid var(--gold);
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .hp-box-value input {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--parchment-light);
-            background: transparent;
-            border: none;
-            width: 100%;
-            text-align: center;
-            outline: none;
-        }
-
-        .hp-box-value input::placeholder {
-            color: rgba(245,230,200,0.3);
-        }
-
-        /* Resources Section */
-        .resources-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .resource-box {
-            background: linear-gradient(145deg, rgba(30,58,95,0.15), rgba(30,58,95,0.05));
-            border: 2px solid var(--divine-blue);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .resource-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            color: var(--divine-blue);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .resource-pips {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .pip {
-            width: 28px;
-            height: 28px;
-            border: 2px solid var(--divine-blue);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: var(--parchment-light);
-            position: relative;
-        }
-
-        .pip.filled {
-            background: var(--divine-glow);
-            box-shadow: 0 0 10px var(--divine-glow), inset 0 0 5px rgba(255,255,255,0.5);
-        }
-
-        .pip:hover {
-            transform: scale(1.1);
-        }
-
-        /* Warding Flare Section */
-        .warding-flare-section {
-            background: linear-gradient(135deg, rgba(255,200,100,0.2), rgba(255,165,0,0.1));
-            border: 2px solid #e09422;
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        .wf-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .wf-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            color: #c07000;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .wf-uses {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .wf-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            color: #c07000;
-            text-transform: uppercase;
-        }
-
-        .wf-abilities {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .warding-flare-section .cd-ability {
-            border-left-color: #e09422;
-        }
-
-        /* Channel Divinity Abilities */
-        .channel-divinity-section {
-            background: linear-gradient(135deg, rgba(218,165,32,0.15), rgba(184,134,11,0.08));
-            border: 2px solid var(--gold);
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        .cd-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            color: var(--gold);
-            text-align: center;
-            margin-bottom: 12px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .cd-ability {
-            background: rgba(255,255,255,0.4);
-            border-radius: 6px;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            border-left: 3px solid var(--gold);
-        }
-
-        .cd-ability:last-child {
-            margin-bottom: 0;
-        }
-
-        .cd-ability-name {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--burgundy);
-            margin-bottom: 4px;
-        }
-
-        .cd-ability-desc {
-            font-size: 0.8rem;
-            color: var(--ink-light);
-            line-height: 1.4;
-        }
-
-        .cd-ability-desc strong {
-            color: var(--ink-brown);
-        }
-
-        /* Rest Buttons */
-        .rest-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 15px;
-        }
-
-        .rest-btn {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 12px 24px;
-            border: 2px solid;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .rest-btn-short {
-            background: linear-gradient(135deg, rgba(139,115,85,0.2), rgba(139,115,85,0.1));
-            border-color: var(--slot-empty);
-            color: var(--ink-brown);
-        }
-
-        .rest-btn-short:hover {
-            background: linear-gradient(135deg, rgba(139,115,85,0.4), rgba(139,115,85,0.2));
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139,115,85,0.3);
-        }
-
-        .rest-btn-long {
-            background: linear-gradient(135deg, rgba(30,58,95,0.2), rgba(74,144,194,0.1));
-            border-color: var(--divine-blue);
-            color: var(--divine-blue);
-        }
-
-        .rest-btn-long:hover {
-            background: linear-gradient(135deg, rgba(30,58,95,0.4), rgba(74,144,194,0.2));
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30,58,95,0.3);
-        }
-
-        .rest-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Rest confirmation animation */
-        .rest-btn.resting {
-            animation: restPulse 0.6s ease;
-        }
-
-        @keyframes restPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* Spell Slots */
-        .spell-slots-section {
-            background: linear-gradient(135deg, rgba(30,58,95,0.1), rgba(74,144,194,0.05));
-            border: 2px solid var(--divine-blue);
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        .spell-slots-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            color: var(--divine-blue);
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .spell-level-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 6px;
-        }
-
-        .spell-level-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            color: var(--divine-blue);
-            min-width: 80px;
-        }
-
-        .spell-slots-pips {
-            display: flex;
-            gap: 6px;
-        }
-
-        .spell-pip {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--divine-blue);
-            border-radius: 4px;
-            cursor: pointer;
-            background: var(--parchment-light);
-            transition: all 0.2s ease;
-        }
-
-        .spell-pip.filled {
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
-            box-shadow: 0 0 8px rgba(218,165,32,0.5);
-        }
-
-        .spell-pip:hover {
-            transform: scale(1.1);
-        }
-
-        /* Spellcasting Stats */
-        .spellcasting-stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--divine-blue);
-        }
-
-        .spell-stat {
-            text-align: center;
-        }
-
-        .spell-stat-label {
-            font-size: 0.65rem;
-            color: var(--divine-blue);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .spell-stat-value {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--ink-brown);
-        }
-
-        /* Lists Section */
-        .lists-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 600px) {
-            .lists-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .list-box {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid var(--ink-light);
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .list-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            color: var(--burgundy);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--burgundy);
-        }
-
-        .list-items {
-            min-height: 100px;
-        }
-
-        .list-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-            padding: 6px 8px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .list-item input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            font-family: 'Crimson Text', serif;
-            font-size: 0.9rem;
-            color: var(--ink-brown);
-            outline: none;
-        }
-
-        .list-item .remove-btn {
-            background: none;
-            border: none;
-            color: var(--burgundy);
-            cursor: pointer;
-            font-size: 1.2rem;
-            line-height: 1;
-            opacity: 0.5;
-            transition: opacity 0.2s;
-        }
-
-        .list-item .remove-btn:hover {
-            opacity: 1;
-        }
-
-        .add-btn {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            margin-top: 10px;
-            background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark));
-            border: none;
-            border-radius: 4px;
-            color: var(--parchment-light);
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .add-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(107,28,35,0.3);
-        }
-
-        /* Attacks Section */
-        .attacks-section {
-            margin-top: 10px;
-        }
-
-        .attack-item {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr auto;
-            gap: 10px;
-            margin-bottom: 8px;
-            padding: 10px;
-            background: rgba(107,28,35,0.08);
-            border-radius: 6px;
-            border: 1px solid var(--burgundy);
-        }
-
-        .attack-item input {
-            background: rgba(255,255,255,0.5);
-            border: 1px solid var(--ink-light);
-            border-radius: 4px;
-            padding: 6px 10px;
-            font-family: 'Crimson Text', serif;
-            font-size: 0.85rem;
-            color: var(--ink-brown);
-            outline: none;
-        }
-
-        .attack-item input:focus {
-            border-color: var(--burgundy);
-        }
-
-        .attack-item input::placeholder {
-            color: var(--ink-light);
-            opacity: 0.6;
-        }
-
-        /* Spellbook Section */
-        .spellbook-section {
-            background: linear-gradient(135deg, rgba(30,58,95,0.12), rgba(74,144,194,0.06));
-            border: 2px solid var(--divine-blue);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 15px;
-        }
-
-        .spellbook-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            color: var(--divine-blue);
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .spell-category {
-            margin-bottom: 15px;
-        }
-
-        .spell-category:last-child {
-            margin-bottom: 0;
-        }
-
-        .spell-category-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            color: var(--divine-blue);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid rgba(30,58,95,0.3);
-        }
-
-        .spell-category-title.domain {
-            color: #c07000;
-            border-bottom-color: rgba(192,112,0,0.3);
-        }
-
-        .spells-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .spell-chip {
-            background: rgba(255,255,255,0.5);
-            border: 1px solid var(--divine-blue);
-            border-radius: 15px;
-            padding: 5px 12px;
-            font-family: 'Crimson Text', serif;
-            font-size: 0.85rem;
-            color: var(--ink-brown);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .spell-chip:hover {
-            background: var(--divine-blue);
-            color: var(--parchment-light);
-            transform: translateY(-1px);
-        }
-
-        .spell-chip.domain {
-            border-color: #c07000;
-            background: rgba(255,200,100,0.2);
-        }
-
-        .spell-chip.domain:hover {
-            background: #c07000;
-        }
-
-        .spell-chip.cantrip {
-            border-style: dashed;
-        }
-
-        /* Spell Modal */
-        .spell-modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            backdrop-filter: blur(3px);
-        }
-
-        .spell-modal-overlay.active {
-            display: flex;
-        }
-
-        .spell-modal {
-            background: linear-gradient(135deg, var(--parchment-light) 0%, var(--parchment-mid) 100%);
-            border-radius: 12px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow:
-                0 0 0 3px var(--divine-blue),
-                0 0 0 6px var(--gold),
-                0 25px 50px rgba(0,0,0,0.5);
-            position: relative;
-            animation: modalSlideIn 0.3s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .spell-modal-header {
-            background: linear-gradient(135deg, var(--divine-blue), #2a4a7a);
-            color: var(--parchment-light);
-            padding: 20px;
-            border-radius: 12px 12px 0 0;
-            position: relative;
-        }
-
-        .spell-modal-header.domain {
-            background: linear-gradient(135deg, #c07000, #e09422);
-        }
-
-        .spell-modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: var(--parchment-light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-            line-height: 1;
-        }
-
-        .spell-modal-close:hover {
-            opacity: 1;
-        }
-
-        .spell-modal-name {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-        }
-
-        .spell-modal-meta {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-style: italic;
-        }
-
-        .spell-modal-body {
-            padding: 20px;
-        }
-
-        .spell-stat-row {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .spell-stat-item {
-            background: rgba(30,58,95,0.08);
-            border-radius: 6px;
-            padding: 8px 12px;
-        }
-
-        .spell-stat-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            letter-spacing: 1px;
-            color: var(--divine-blue);
-            text-transform: uppercase;
-        }
-
-        .spell-stat-value {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.95rem;
-            color: var(--ink-brown);
-            font-weight: 600;
-        }
-
-        .spell-description {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--ink-brown);
-        }
-
-        .spell-description p {
-            margin-bottom: 10px;
-        }
-
-        .spell-description p:last-child {
-            margin-bottom: 0;
-        }
-
-        .spell-description strong {
-            color: var(--burgundy);
-        }
-
-        .spell-higher-level {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--divine-blue);
-        }
-
-        .spell-higher-level-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            color: var(--divine-blue);
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        /* Dice Rolling Section */
-        .dice-section {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 2px solid var(--gold);
-        }
-
-        .dice-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .dice-btn {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px 16px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .dice-btn-attack {
-            background: linear-gradient(135deg, var(--divine-blue), #2a5a8a);
-            color: var(--parchment-light);
-        }
-
-        .dice-btn-attack:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(30,58,95,0.4);
-        }
-
-        .dice-btn-damage {
-            background: linear-gradient(135deg, var(--burgundy), #8a2a35);
-            color: var(--parchment-light);
-        }
-
-        .dice-btn-damage:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(107,28,35,0.4);
-        }
-
-        .dice-btn-heal {
-            background: linear-gradient(135deg, #2a8a5a, #35a06a);
-            color: var(--parchment-light);
-        }
-
-        .dice-btn-heal:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(42,138,90,0.4);
-        }
-
-        .dice-btn-save {
-            background: linear-gradient(135deg, #8a6a2a, #a07a35);
-            color: var(--parchment-light);
-        }
-
-        .dice-btn .dice-icon {
-            font-size: 1.1rem;
-        }
-
-        /* Dice Result Display */
-        .dice-result {
-            margin-top: 15px;
-            padding: 15px;
-            background: linear-gradient(135deg, #1a1410, #2a1f18);
-            border-radius: 10px;
-            text-align: center;
-            display: none;
-            animation: resultSlideIn 0.3s ease;
-        }
-
-        .dice-result.show {
-            display: block;
-        }
-
-        @keyframes resultSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dice-result-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .dice-result-total {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--parchment-light);
-            text-shadow: 0 0 20px rgba(218,165,32,0.5);
-            animation: pulseGlow 0.5s ease;
-        }
-
-        .dice-result-total.crit {
-            color: var(--gold);
-            text-shadow: 0 0 30px rgba(218,165,32,0.8);
-        }
-
-        .dice-result-total.critfail {
-            color: #ff6b6b;
-            text-shadow: 0 0 30px rgba(255,107,107,0.8);
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .dice-result-breakdown {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.9rem;
-            color: rgba(245,230,200,0.7);
-            margin-top: 8px;
-        }
-
-        .dice-result-breakdown .die {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin: 2px;
-        }
-
-        .dice-result-breakdown .die.max {
-            background: rgba(218,165,32,0.3);
-            color: var(--gold);
-        }
-
-        .dice-result-breakdown .die.min {
-            background: rgba(255,107,107,0.2);
-            color: #ff6b6b;
-        }
-
-        .dice-result-type {
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            color: rgba(245,230,200,0.5);
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Rolling animation */
-        .dice-rolling {
-            display: inline-block;
-            animation: diceRoll 0.5s ease-in-out;
-        }
-
-        @keyframes diceRoll {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(90deg) scale(1.2); }
-            50% { transform: rotate(180deg) scale(1); }
-            75% { transform: rotate(270deg) scale(1.2); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-
-        /* Save indicator */
-        .save-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--burgundy);
-            color: var(--parchment-light);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .save-indicator.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--parchment-dark);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--burgundy);
-            border-radius: 4px;
-        }
-    </style>
+    <title>Scheda Personaggio D&D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
 </head>
 <body>
     <div class="character-sheet">
@@ -1254,21 +27,22 @@
         <header class="header">
             <div class="header-decoration">
                 <div class="header-line"></div>
-                <svg class="divine-symbol" viewBox="0 0 100 100">
-                    <path d="M50 5 L55 40 L90 45 L60 55 L65 95 L50 65 L35 95 L40 55 L10 45 L45 40 Z"/>
+                <svg class="header-symbol" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="3"/>
+                    <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M75 25 L25 75" stroke="currentColor" stroke-width="2"/>
                 </svg>
                 <div class="header-line"></div>
             </div>
             <div class="character-name">
                 <input type="text" id="charName" placeholder="Nome del Personaggio">
             </div>
-            <div class="class-level">Chierico · Livello 7 · Light Domain</div>
+            <div class="class-level" id="classLevelText">Classe · Livello · Sottoclasse</div>
         </header>
 
         <!-- Main Content -->
-        <div class="main-grid">
+        <div class="main-grid" id="mainGrid">
             <!-- Stats Column -->
-            <div class="stats-column">
+            <div class="stats-column" id="statsColumn">
                 <div class="stat-block" data-stat="strength">
                     <div class="stat-name">Forza</div>
                     <div class="stat-modifier" id="str-mod">+0</div>
@@ -1344,123 +118,130 @@
                 <div class="combat-stats-row">
                     <div class="combat-stat">
                         <div class="combat-stat-label">Classe Armatura</div>
-                        <div class="combat-stat-value">
-                            <input type="number" id="armor-class" value="10">
-                        </div>
+                        <div class="combat-stat-value" id="armor-class-display">10</div>
                     </div>
                     <div class="combat-stat">
                         <div class="combat-stat-label">Iniziativa</div>
                         <div class="combat-stat-value" id="initiative">+0</div>
                     </div>
                     <div class="combat-stat">
-                        <div class="combat-stat-label">Velocità</div>
+                        <div class="combat-stat-label">Velocita</div>
                         <div class="combat-stat-value">
-                            <input type="number" id="speed" value="30">ft
+                            <input type="number" id="speed" value="30">m
                         </div>
                     </div>
                     <div class="combat-stat">
                         <div class="combat-stat-label">Competenza</div>
-                        <div class="combat-stat-value">+3</div>
+                        <div class="combat-stat-value" id="proficiency-bonus">+2</div>
                     </div>
+                </div>
+
+                <!-- Skills Section (Wizard) -->
+                <div class="skills-section class-feature-section hidden" id="skills-section">
+                    <div class="skills-title">Abilita</div>
+                    <div class="skills-grid" id="skills-grid"></div>
                 </div>
 
                 <!-- Resources -->
                 <div class="resources-section">
                     <div class="resource-box">
-                        <div class="resource-title">Dadi Vita (d8)</div>
-                        <div class="resource-pips" id="hit-dice-pips">
-                            <!-- Generated by JS -->
-                        </div>
+                        <div class="resource-title" id="hit-dice-title">Dadi Vita (d8)</div>
+                        <div class="resource-pips" id="hit-dice-pips"></div>
                     </div>
-                    <div class="resource-box">
-                        <div class="resource-title">Channel Divinity (2/rest)</div>
-                        <div class="resource-pips" id="channel-divinity-pips">
-                            <!-- Generated by JS -->
-                        </div>
+                    <div class="resource-box" id="channel-divinity-box">
+                        <div class="resource-title">Channel Divinity</div>
+                        <div class="resource-pips" id="channel-divinity-pips"></div>
+                    </div>
+                    <div class="resource-box hidden" id="detect-magic-box">
+                        <div class="resource-title">Individuazione Magico</div>
+                        <div class="resource-pips" id="detect-magic-pips"></div>
+                        <div style="font-size: 0.7rem; color: var(--ink-light); margin-top: 5px;">1/giorno (razza)</div>
                     </div>
                 </div>
 
-                <!-- Warding Flare -->
-                <div class="warding-flare-section">
+                <!-- Warding Flare Section (Cleric) -->
+                <div class="class-feature-section warding-flare-section hidden" id="warding-flare-section">
                     <div class="wf-header">
-                        <div class="wf-title">Bagliore Protettivo</div>
+                        <div class="wf-title">BAGLIORE PROTETTIVO</div>
                         <div class="wf-uses">
-                            <span class="wf-label">Usi (mod SAG):</span>
-                            <div class="resource-pips" id="warding-flare-pips">
-                                <!-- Generated by JS -->
-                            </div>
+                            <div class="resource-pips" id="warding-flare-pips"></div>
                         </div>
                     </div>
-                    <div class="wf-abilities">
-                        <div class="cd-ability">
-                            <div class="cd-ability-name">Bagliore Protettivo</div>
-                            <div class="cd-ability-desc"><strong>Reazione</strong>: quando una creatura entro 9m effettua un tiro per colpire, imponi <strong>svantaggio</strong> all'attacco. Ripristino: riposo lungo.</div>
-                        </div>
-                        <div class="cd-ability">
-                            <div class="cd-ability-name">Bagliore Protettivo Migliorato</div>
-                            <div class="cd-ability-desc">Quando usi Bagliore Protettivo, puoi dare al bersaglio dell'attacco <strong>2d6 + mod SAG PF temporanei</strong>. Ripristino: riposo breve o lungo.</div>
-                        </div>
-                    </div>
+                    <div class="wf-desc" id="warding-flare-desc"></div>
                 </div>
 
-                <!-- Channel Divinity Abilities -->
-                <div class="channel-divinity-section">
-                    <div class="cd-title">Incanalare Divinità (2/riposo)</div>
-                    <div class="cd-ability">
-                        <div class="cd-ability-name">Fulgore dell'Alba</div>
-                        <div class="cd-ability-desc">Azione magica: emanazione 9m, dissolve oscurità magica. Ogni creatura a tua scelta effettua TS Costituzione o subisce <strong>2d10 + 7 danni radianti</strong> (dimezzati con successo).</div>
+                <!-- Channel Divinity Section (Cleric) -->
+                <div class="class-feature-section channel-divinity-section hidden" id="channel-divinity-section">
+                    <div class="cd-title">INCANALARE DIVINITA</div>
+                    <div id="channel-divinity-abilities"></div>
+                </div>
+
+                <!-- Mage Armor Section (Wizard) -->
+                <div class="class-feature-section mage-armor-section hidden" id="mage-armor-section">
+                    <div class="ma-header">
+                        <div class="ma-title">Armatura Magica</div>
+                        <div class="ma-toggle">
+                            <div class="toggle-switch" id="mageArmorToggle" onclick="toggleMageArmor()"></div>
+                            <span class="ma-label" id="mageArmorLabel">Inattiva</span>
+                        </div>
                     </div>
-                    <div class="cd-ability">
-                        <div class="cd-ability-name">Scintilla Divina</div>
-                        <div class="cd-ability-desc">Azione magica: tocca una creatura. Puoi <strong>curare 1d8 + mod SAG PF</strong> oppure infliggere <strong>1d8 + mod SAG danni radianti</strong> (TS COS per dimezzare).</div>
+                    <div class="ma-desc" id="mage-armor-desc"></div>
+                </div>
+
+                <!-- Portent Section (Wizard) -->
+                <div class="class-feature-section portent-section hidden" id="portent-section">
+                    <div class="portent-header">
+                        <div class="portent-title">Portento</div>
                     </div>
-                    <div class="cd-ability">
-                        <div class="cd-ability-name">Scacciare Non Morti</div>
-                        <div class="cd-ability-desc">Azione magica: ogni non morto entro 9m che può vederti/sentirti deve effettuare TS Saggezza o è <strong>scacciato per 1 minuto</strong> (fugge, no reazioni).</div>
+                    <div class="portent-dice" id="portentDice">
+                        <div class="portent-die">
+                            <div class="portent-die-label">Dado 1</div>
+                            <input type="number" class="portent-die-input" id="portent1" min="1" max="20" value="0">
+                            <button class="portent-use-btn" id="portent1Btn" onclick="usePortent(0)">Usa</button>
+                        </div>
+                        <div class="portent-die">
+                            <div class="portent-die-label">Dado 2</div>
+                            <input type="number" class="portent-die-input" id="portent2" min="1" max="20" value="0">
+                            <button class="portent-use-btn" id="portent2Btn" onclick="usePortent(1)">Usa</button>
+                        </div>
                     </div>
+                    <div class="portent-desc" id="portent-desc"></div>
+                </div>
+
+                <!-- Special Abilities Section -->
+                <div class="class-feature-section abilities-section hidden" id="abilities-section">
+                    <div class="abilities-title">Abilita Speciali</div>
+                    <div id="abilities-list"></div>
 
                     <!-- Rest Buttons -->
                     <div class="rest-buttons">
-                        <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Recupera Channel Divinity">
-                            ☾ Riposo Breve
+                        <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Riposo Breve">
+                            &#9790; Riposo Breve
                         </button>
-                        <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Recupera tutto (HP, slot, risorse)">
-                            ☀ Riposo Lungo
+                        <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Riposo Lungo">
+                            &#9728; Riposo Lungo
                         </button>
                     </div>
+                </div>
+
+                <!-- Rest Buttons (if no abilities section) -->
+                <div class="rest-buttons" id="rest-buttons-standalone">
+                    <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Riposo Breve">
+                        &#9790; Riposo Breve
+                    </button>
+                    <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Riposo Lungo">
+                        &#9728; Riposo Lungo
+                    </button>
                 </div>
 
                 <!-- Spell Slots -->
                 <div class="spell-slots-section">
-                    <div class="spell-slots-title">✦ Slot Incantesimi ✦</div>
-                    <div class="spell-level-row">
-                        <span class="spell-level-label">1° Livello</span>
-                        <div class="spell-slots-pips" data-level="1" data-max="4">
-                            <!-- Generated by JS -->
-                        </div>
-                    </div>
-                    <div class="spell-level-row">
-                        <span class="spell-level-label">2° Livello</span>
-                        <div class="spell-slots-pips" data-level="2" data-max="3">
-                            <!-- Generated by JS -->
-                        </div>
-                    </div>
-                    <div class="spell-level-row">
-                        <span class="spell-level-label">3° Livello</span>
-                        <div class="spell-slots-pips" data-level="3" data-max="3">
-                            <!-- Generated by JS -->
-                        </div>
-                    </div>
-                    <div class="spell-level-row">
-                        <span class="spell-level-label">4° Livello</span>
-                        <div class="spell-slots-pips" data-level="4" data-max="1">
-                            <!-- Generated by JS -->
-                        </div>
-                    </div>
+                    <div class="spell-slots-title">&#10022; Slot Incantesimi &#10022;</div>
+                    <div id="spell-slots-container"></div>
                     <div class="spellcasting-stats">
                         <div class="spell-stat">
                             <div class="spell-stat-label">CD Incantesimi</div>
-                            <div class="spell-stat-value" id="spell-dc">8</div>
+                            <div class="spell-stat-value" id="spell-dc">10</div>
                         </div>
                         <div class="spell-stat">
                             <div class="spell-stat-label">Bonus Attacco</div>
@@ -1476,72 +257,53 @@
                     <!-- Cantrips -->
                     <div class="spell-category">
                         <div class="spell-category-title">Trucchetti</div>
-                        <div class="spells-grid">
-                            <span class="spell-chip cantrip" onclick="openSpell('guidance')">Guida</span>
-                            <span class="spell-chip cantrip" onclick="openSpell('light')">Luce</span>
-                            <span class="spell-chip cantrip" onclick="openSpell('toll-the-dead')">Rintocco dei Morti</span>
-                            <span class="spell-chip cantrip" onclick="openSpell('word-of-radiance')">Parola Radiosa</span>
-                        </div>
+                        <div class="spells-grid" id="cantrips-grid"></div>
                     </div>
 
                     <!-- Level 1 -->
                     <div class="spell-category">
                         <div class="spell-category-title">1° Livello</div>
-                        <div class="spells-grid">
-                            <span class="spell-chip" onclick="openSpell('healing-word')">Parola Guaritrice</span>
-                            <span class="spell-chip" onclick="openSpell('shield-of-faith')">Scudo della Fede</span>
-                            <span class="spell-chip" onclick="openSpell('cure-wounds')">Cura Ferite</span>
-                            <span class="spell-chip" onclick="openSpell('guiding-bolt')">Dardo Traente</span>
-                            <span class="spell-chip" onclick="openSpell('detect-magic')">Individua Magia</span>
-                            <span class="spell-chip domain" onclick="openSpell('burning-hands')">Mani Brucianti ✦</span>
-                            <span class="spell-chip domain" onclick="openSpell('faerie-fire')">Fuoco Fatuo ✦</span>
-                        </div>
+                        <div class="spells-grid" id="level1-grid"></div>
                     </div>
 
                     <!-- Level 2 -->
                     <div class="spell-category">
                         <div class="spell-category-title">2° Livello</div>
-                        <div class="spells-grid">
-                            <span class="spell-chip" onclick="openSpell('find-traps')">Trova Trappole</span>
-                            <span class="spell-chip domain" onclick="openSpell('scorching-ray')">Raggio Rovente ✦</span>
-                            <span class="spell-chip domain" onclick="openSpell('see-invisibility')">Vedi Invisibilità ✦</span>
-                        </div>
+                        <div class="spells-grid" id="level2-grid"></div>
                     </div>
 
                     <!-- Level 3 -->
-                    <div class="spell-category">
+                    <div class="spell-category" id="level3-category">
                         <div class="spell-category-title">3° Livello</div>
-                        <div class="spells-grid">
-                            <span class="spell-chip" onclick="openSpell('create-food-and-water')">Crea Cibo e Acqua</span>
-                            <span class="spell-chip" onclick="openSpell('dispel-magic')">Dissolvi Magie</span>
-                            <span class="spell-chip" onclick="openSpell('spirit-guardians')">Guardiani Spirituali</span>
-                            <span class="spell-chip domain" onclick="openSpell('daylight')">Luce del Giorno ✦</span>
-                            <span class="spell-chip domain" onclick="openSpell('fireball')">Palla di Fuoco ✦</span>
-                        </div>
+                        <div class="spells-grid" id="level3-grid"></div>
                     </div>
 
                     <!-- Level 4 -->
-                    <div class="spell-category">
+                    <div class="spell-category" id="level4-category">
                         <div class="spell-category-title">4° Livello</div>
-                        <div class="spells-grid">
-                            <span class="spell-chip" onclick="openSpell('banishment')">Esilio</span>
-                        </div>
+                        <div class="spells-grid" id="level4-grid"></div>
                     </div>
                 </div>
 
                 <!-- Attacks Section -->
                 <div class="list-box attacks-section">
                     <div class="list-title">Attacchi</div>
-                    <div id="attacks-list">
-                        <!-- Generated by JS -->
-                    </div>
+                    <div id="attacks-list"></div>
                     <button class="add-btn" onclick="addAttack()">+ Aggiungi Attacco</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="save-indicator" id="saveIndicator">✓ Salvato</div>
+    <div class="save-indicator" id="saveIndicator">&#10003; Salvato</div>
+
+    <!-- Skill Roll Toast -->
+    <div class="skill-toast" id="skillToast" onclick="closeSkillToast()">
+        <div class="skill-toast-name" id="skillToastName">Abilita</div>
+        <div class="skill-toast-result" id="skillToastResult">0</div>
+        <div class="skill-toast-breakdown" id="skillToastBreakdown"></div>
+        <div class="skill-toast-close">Tocca per chiudere</div>
+    </div>
 
     <!-- Spell Modal -->
     <div class="spell-modal-overlay" id="spellModal" onclick="closeSpellModal(event)">
@@ -1578,9 +340,7 @@
                     <div id="spellHigherLevelText"></div>
                 </div>
                 <div class="dice-section" id="diceSection" style="display: none;">
-                    <div class="dice-buttons" id="diceButtons">
-                        <!-- Generated by JS -->
-                    </div>
+                    <div class="dice-buttons" id="diceButtons"></div>
                     <div class="dice-result" id="diceResult">
                         <div class="dice-result-label" id="diceResultLabel">Risultato</div>
                         <div class="dice-result-total" id="diceResultTotal">0</div>
@@ -1592,861 +352,22 @@
         </div>
     </div>
 
-    <script>
-        // Character Data Structure - Level 7 Light Domain Cleric
-        const defaultCharacter = {
-            name: 'Tholgrin',
-            stats: {
-                strength: 15,
-                dexterity: 10,
-                constitution: 16,
-                intelligence: 10,
-                wisdom: 16,
-                charisma: 10
-            },
-            hp: { current: 77, max: 77, temp: 0 },
-            armorClass: 19,
-            speed: 30,
-            hitDice: { current: 7, max: 7 },
-            channelDivinity: { current: 2, max: 2 },
-            spellSlots: {
-                1: { current: 4, max: 4 },
-                2: { current: 3, max: 3 },
-                3: { current: 3, max: 3 },
-                4: { current: 1, max: 1 }
-            },
-            cantrips: [],
-            spells: [],
-            attacks: [],
-            wardingFlare: { current: 0, max: 0 }
-        };
-
-        // Try to load from new key, fallback to old key, then default
-        let character = JSON.parse(localStorage.getItem('dnd-cleric-7-light'));
-        if (!character) {
-            // Try migrating from old key
-            const oldData = localStorage.getItem('dnd-cleric-6');
-            if (oldData) {
-                character = JSON.parse(oldData);
-                // Migrate hit dice to level 7
-                if (character.hitDice) {
-                    character.hitDice.max = 7;
-                    character.hitDice.current = Math.min(character.hitDice.current, 7);
-                }
-            } else {
-                character = JSON.parse(JSON.stringify(defaultCharacter));
-            }
-        }
-
-        // Ensure all required fields exist (backward compatibility)
-        if (!character.stats) {
-            character.stats = defaultCharacter.stats;
-        }
-        if (!character.wardingFlare) {
-            character.wardingFlare = { current: 0, max: 0 };
-        }
-        if (!character.spellSlots) {
-            character.spellSlots = defaultCharacter.spellSlots;
-        }
-        if (!character.spellSlots[4]) {
-            character.spellSlots[4] = { current: 1, max: 1 };
-        }
-        if (!character.hitDice) {
-            character.hitDice = { current: 7, max: 7 };
-        }
-
-        // Utility Functions
-        function calculateModifier(score) {
-            return Math.floor((score - 10) / 2);
-        }
-
-        function formatModifier(mod) {
-            return mod >= 0 ? `+${mod}` : `${mod}`;
-        }
-
-        function saveCharacter() {
-            localStorage.setItem('dnd-cleric-7-light', JSON.stringify(character));
-            showSaveIndicator();
-        }
-
-        function showSaveIndicator() {
-            const indicator = document.getElementById('saveIndicator');
-            indicator.classList.add('show');
-            setTimeout(() => indicator.classList.remove('show'), 1500);
-        }
-
-        // Update Functions
-        function updateModifiers() {
-            const stats = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-            const statNames = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-
-            // Ensure stats object exists
-            if (!character.stats) {
-                character.stats = {};
-            }
-
-            stats.forEach((stat, i) => {
-                // Ensure valid number, default to 10
-                const score = parseInt(character.stats[statNames[i]]) || 10;
-                character.stats[statNames[i]] = score; // Sync back
-                const mod = calculateModifier(score);
-                document.getElementById(`${stat}-mod`).textContent = formatModifier(mod);
-            });
-
-            // Update initiative (DEX mod)
-            const dexMod = calculateModifier(parseInt(character.stats.dexterity) || 10);
-            document.getElementById('initiative').textContent = formatModifier(dexMod);
-
-            // Update spellcasting (WIS based)
-            const wisMod = calculateModifier(parseInt(character.stats.wisdom) || 10);
-            const proficiency = 3; // Level 7
-            document.getElementById('spell-dc').textContent = 8 + proficiency + wisMod;
-            document.getElementById('spell-attack').textContent = formatModifier(proficiency + wisMod);
-
-            // Update Warding Flare uses (based on WIS mod, min 1)
-            const wfMax = Math.max(1, wisMod);
-            if (character.wardingFlare.max !== wfMax) {
-                character.wardingFlare.max = wfMax;
-                character.wardingFlare.current = Math.min(character.wardingFlare.current, wfMax);
-                saveCharacter();
-            }
-            generateWardingFlarePips();
-        }
-
-        function generateWardingFlarePips() {
-            const container = document.getElementById('warding-flare-pips');
-            if (!container) return;
-
-            const max = character.wardingFlare.max;
-            const current = character.wardingFlare.current;
-
-            container.innerHTML = '';
-            for (let i = 0; i < max; i++) {
-                const pip = document.createElement('div');
-                pip.className = `pip ${i < current ? 'filled' : ''}`;
-                pip.style.borderColor = '#e09422';
-                pip.onclick = () => toggleWardingFlare(i);
-                container.appendChild(pip);
-            }
-        }
-
-        function toggleWardingFlare(index) {
-            const current = character.wardingFlare.current;
-            character.wardingFlare.current = index < current ? index : index + 1;
-            generateWardingFlarePips();
-            saveCharacter();
-        }
-
-        // Generate Pips
-        function generatePips(container, current, max, type) {
-            container.innerHTML = '';
-            for (let i = 0; i < max; i++) {
-                const pip = document.createElement('div');
-                pip.className = `pip ${i < current ? 'filled' : ''}`;
-                pip.onclick = () => togglePip(type, i);
-                container.appendChild(pip);
-            }
-        }
-
-        function generateSpellPips() {
-            document.querySelectorAll('.spell-slots-pips').forEach(container => {
-                const level = container.dataset.level;
-                const max = parseInt(container.dataset.max);
-                const current = character.spellSlots[level].current;
-
-                container.innerHTML = '';
-                for (let i = 0; i < max; i++) {
-                    const pip = document.createElement('div');
-                    pip.className = `spell-pip ${i < current ? 'filled' : ''}`;
-                    pip.onclick = () => toggleSpellSlot(level, i);
-                    container.appendChild(pip);
-                }
-            });
-        }
-
-        function togglePip(type, index) {
-            if (type === 'hitDice') {
-                character.hitDice.current = index < character.hitDice.current ? index : index + 1;
-                generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
-            } else if (type === 'channelDivinity') {
-                character.channelDivinity.current = index < character.channelDivinity.current ? index : index + 1;
-                generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
-            }
-            saveCharacter();
-        }
-
-        function toggleSpellSlot(level, index) {
-            const current = character.spellSlots[level].current;
-            character.spellSlots[level].current = index < current ? index : index + 1;
-            generateSpellPips();
-            saveCharacter();
-        }
-
-        // Rest Functions
-        function shortRest(btn) {
-            // Animation
-            btn.classList.add('resting');
-            setTimeout(() => btn.classList.remove('resting'), 600);
-
-            // Recover Channel Divinity (2 uses)
-            character.channelDivinity.current = character.channelDivinity.max;
-            generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
-
-            saveCharacter();
-            console.log('Short rest completed - Channel Divinity restored');
-        }
-
-        function longRest(btn) {
-            // Animation
-            btn.classList.add('resting');
-            setTimeout(() => btn.classList.remove('resting'), 600);
-
-            // Recover all HP
-            character.hp.current = character.hp.max;
-            document.getElementById('hp-current').value = character.hp.current;
-
-            // Recover all hit dice
-            character.hitDice.current = character.hitDice.max;
-            generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
-
-            // Recover all spell slots
-            for (let level in character.spellSlots) {
-                character.spellSlots[level].current = character.spellSlots[level].max;
-            }
-            generateSpellPips();
-
-            // Recover Channel Divinity
-            character.channelDivinity.current = character.channelDivinity.max;
-            generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
-
-            // Recover Warding Flare
-            character.wardingFlare.current = character.wardingFlare.max;
-            generateWardingFlarePips();
-
-            saveCharacter();
-            console.log('Long rest completed - All resources restored');
-        }
-
-        // List Management
-        function renderList(type) {
-            const container = document.getElementById(`${type}-list`);
-            const items = character[type];
-
-            container.innerHTML = items.map((item, i) => `
-                <div class="list-item">
-                    <input type="text" value="${item}" onchange="updateListItem('${type}', ${i}, this.value)" placeholder="...">
-                    <button class="remove-btn" onclick="removeListItem('${type}', ${i})">×</button>
-                </div>
-            `).join('');
-        }
-
-        function addListItem(type) {
-            character[type].push('');
-            renderList(type);
-            saveCharacter();
-        }
-
-        function updateListItem(type, index, value) {
-            character[type][index] = value;
-            saveCharacter();
-        }
-
-        function removeListItem(type, index) {
-            character[type].splice(index, 1);
-            renderList(type);
-            saveCharacter();
-        }
-
-        // Attacks Management
-        function renderAttacks() {
-            const container = document.getElementById('attacks-list');
-            container.innerHTML = character.attacks.map((attack, i) => `
-                <div class="attack-item">
-                    <input type="text" value="${attack.name || ''}" onchange="updateAttack(${i}, 'name', this.value)" placeholder="Nome arma">
-                    <input type="text" value="${attack.bonus || ''}" onchange="updateAttack(${i}, 'bonus', this.value)" placeholder="+X">
-                    <input type="text" value="${attack.damage || ''}" onchange="updateAttack(${i}, 'damage', this.value)" placeholder="1d8+X">
-                    <button class="remove-btn" onclick="removeAttack(${i})">×</button>
-                </div>
-            `).join('');
-        }
-
-        function addAttack() {
-            character.attacks.push({ name: '', bonus: '', damage: '' });
-            renderAttacks();
-            saveCharacter();
-        }
-
-        function updateAttack(index, field, value) {
-            character.attacks[index][field] = value;
-            saveCharacter();
-        }
-
-        function removeAttack(index) {
-            character.attacks.splice(index, 1);
-            renderAttacks();
-            saveCharacter();
-        }
-
-        // Initialize
-        function init() {
-            // Load values into inputs
-            document.getElementById('charName').value = character.name;
-            document.getElementById('str-score').value = character.stats.strength;
-            document.getElementById('dex-score').value = character.stats.dexterity;
-            document.getElementById('con-score').value = character.stats.constitution;
-            document.getElementById('int-score').value = character.stats.intelligence;
-            document.getElementById('wis-score').value = character.stats.wisdom;
-            document.getElementById('cha-score').value = character.stats.charisma;
-            document.getElementById('hp-current').value = character.hp.current;
-            document.getElementById('hp-max').value = character.hp.max;
-            document.getElementById('hp-temp').value = character.hp.temp;
-            document.getElementById('armor-class').value = character.armorClass;
-            document.getElementById('speed').value = character.speed;
-
-            // Setup event listeners
-            document.getElementById('charName').addEventListener('input', (e) => {
-                character.name = e.target.value;
-                saveCharacter();
-            });
-
-            const statInputs = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-            const statNames = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-            statInputs.forEach((stat, i) => {
-                document.getElementById(`${stat}-score`).addEventListener('input', (e) => {
-                    character.stats[statNames[i]] = parseInt(e.target.value) || 10;
-                    updateModifiers();
-                    saveCharacter();
-                });
-            });
-
-            document.getElementById('hp-current').addEventListener('input', (e) => {
-                character.hp.current = parseInt(e.target.value) || 0;
-                saveCharacter();
-            });
-            document.getElementById('hp-max').addEventListener('input', (e) => {
-                character.hp.max = parseInt(e.target.value) || 0;
-                saveCharacter();
-            });
-            document.getElementById('hp-temp').addEventListener('input', (e) => {
-                character.hp.temp = parseInt(e.target.value) || 0;
-                saveCharacter();
-            });
-            document.getElementById('armor-class').addEventListener('input', (e) => {
-                character.armorClass = parseInt(e.target.value) || 10;
-                saveCharacter();
-            });
-            document.getElementById('speed').addEventListener('input', (e) => {
-                character.speed = parseInt(e.target.value) || 30;
-                saveCharacter();
-            });
-
-            // Generate pips
-            generatePips(document.getElementById('hit-dice-pips'), character.hitDice.current, character.hitDice.max, 'hitDice');
-            generatePips(document.getElementById('channel-divinity-pips'), character.channelDivinity.current, character.channelDivinity.max, 'channelDivinity');
-            generateSpellPips();
-
-            // Render attacks
-            renderAttacks();
-
-            // Update modifiers
-            updateModifiers();
-        }
-
-        // ==================== SPELL DATABASE ====================
-        const spellDatabase = {
-            // CANTRIPS
-            'guidance': {
-                name: 'Guidance',
-                level: 'Trucchetto',
-                school: 'Divinazione',
-                castingTime: 'Azione',
-                range: 'Contatto',
-                components: 'V, S',
-                duration: 'Concentrazione, fino a 1 minuto',
-                description: '<p>Tocchi una creatura consenziente. Una volta prima che l\'incantesimo termini, il bersaglio può tirare un <strong>d4</strong> e aggiungere il risultato a una prova di caratteristica a sua scelta. Può tirare il dado prima o dopo aver effettuato la prova.</p>',
-                domain: false,
-                dice: { bonus: '1d4', bonusLabel: 'Bonus Prova' }
-            },
-            'light': {
-                name: 'Light',
-                level: 'Trucchetto',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: 'Contatto',
-                components: 'V, M (una lucciola o muschio fosforescente)',
-                duration: '1 ora',
-                description: '<p>Tocchi un oggetto che non superi i 3 metri in nessuna dimensione. Fino al termine dell\'incantesimo, l\'oggetto emette <strong>luce intensa in un raggio di 6 metri</strong> e luce fioca per altri 6 metri. La luce può essere di qualsiasi colore a tua scelta.</p><p>Coprire completamente l\'oggetto con qualcosa di opaco blocca la luce. L\'incantesimo termina se lo lanci di nuovo o lo congedi con un\'azione.</p>',
-                domain: false
-            },
-            'toll-the-dead': {
-                name: 'Toll the Dead',
-                level: 'Trucchetto',
-                school: 'Necromanzia',
-                castingTime: 'Azione',
-                range: '18 metri',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Indichi una creatura che puoi vedere entro gittata, e il suono di una campana funebre riempie l\'aria intorno ad essa per un istante. Il bersaglio deve superare un <strong>TS Saggezza</strong> o subire <strong>1d8 danni necrotici</strong>. Se al bersaglio mancano punti ferita, subisce invece <strong>1d12 danni necrotici</strong>.</p>',
-                higherLevel: 'I danni aumentano di un dado ai livelli 5 (2d8/2d12), 11 (3d8/3d12) e 17 (4d8/4d12).',
-                domain: false,
-                dice: { save: 'SAG', damage: '2d8', damageAlt: '2d12', damageAltLabel: 'Se ferito', damageType: 'necrotici' }
-            },
-            'word-of-radiance': {
-                name: 'Word of Radiance',
-                level: 'Trucchetto',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: 'Personale (emanazione 1,5m)',
-                components: 'V, M (un simbolo sacro)',
-                duration: 'Istantaneo',
-                description: '<p>Fulgore bruciante erutta da te in un\'emanazione di 1,5 metri. Ogni creatura a tua scelta che puoi vedere nell\'area deve superare un <strong>TS Costituzione</strong> o subire <strong>1d6 danni radianti</strong>.</p>',
-                higherLevel: 'I danni aumentano di 1d6 ai livelli 5 (2d6), 11 (3d6) e 17 (4d6).',
-                domain: false,
-                dice: { save: 'COS', damage: '2d6', damageType: 'radianti' }
-            },
-
-            // LEVEL 1
-            'healing-word': {
-                name: 'Healing Word',
-                level: '1° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione bonus',
-                range: '18 metri',
-                components: 'V',
-                duration: 'Istantaneo',
-                description: '<p>Una creatura a tua scelta che puoi vedere entro gittata recupera un numero di punti ferita pari a <strong>2d4 + il tuo modificatore di caratteristica da incantatore</strong>.</p><p>Questo incantesimo non ha effetto su costrutti e non morti.</p>',
-                higherLevel: 'La cura aumenta di 2d4 per ogni slot di livello superiore al 1°.',
-                domain: false,
-                dice: { healing: '2d4', healingMod: true }
-            },
-            'shield-of-faith': {
-                name: 'Shield of Faith',
-                level: '1° livello',
-                school: 'Abiurazione',
-                castingTime: 'Azione bonus',
-                range: '18 metri',
-                components: 'V, S, M (un piccolo pezzo di pergamena con testo sacro)',
-                duration: 'Concentrazione, fino a 10 minuti',
-                description: '<p>Un campo scintillante appare e circonda una creatura a tua scelta entro gittata, garantendole un bonus di <strong>+2 alla CA</strong> per la durata.</p>',
-                domain: false
-            },
-            'cure-wounds': {
-                name: 'Cure Wounds',
-                level: '1° livello',
-                school: 'Abiurazione',
-                castingTime: 'Azione',
-                range: 'Contatto',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Una creatura che tocchi recupera un numero di punti ferita pari a <strong>2d8 + il tuo modificatore di caratteristica da incantatore</strong>.</p><p>Questo incantesimo non ha effetto su costrutti e non morti.</p>',
-                higherLevel: 'La cura aumenta di 2d8 per ogni slot di livello superiore al 1°.',
-                domain: false,
-                dice: { healing: '2d8', healingMod: true }
-            },
-            'guiding-bolt': {
-                name: 'Guiding Bolt',
-                level: '1° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: '36 metri',
-                components: 'V, S',
-                duration: '1 round',
-                description: '<p>Un lampo di luce saetta verso una creatura a tua scelta entro gittata. Effettua un <strong>attacco con incantesimo a distanza</strong> contro il bersaglio. Se colpisci, il bersaglio subisce <strong>4d6 danni radianti</strong>, e il prossimo tiro per colpire effettuato contro questo bersaglio prima della fine del tuo prossimo turno ha <strong>vantaggio</strong>.</p>',
-                higherLevel: 'I danni aumentano di 1d6 per ogni slot di livello superiore al 1°.',
-                domain: false,
-                dice: { attack: true, damage: '4d6', damageType: 'radianti' }
-            },
-            'detect-magic': {
-                name: 'Detect Magic',
-                level: '1° livello',
-                school: 'Divinazione (rituale)',
-                castingTime: 'Azione',
-                range: 'Personale',
-                components: 'V, S',
-                duration: 'Concentrazione, fino a 10 minuti',
-                description: '<p>Per la durata, percepisci la presenza di magia entro 9 metri da te. Se percepisci magia in questo modo, puoi usare la tua azione per vedere una debole aura attorno a qualsiasi creatura o oggetto visibile nell\'area che porta magia, e impari la sua <strong>scuola di magia</strong>, se presente.</p><p>La visione può penetrare la maggior parte delle barriere, ma è bloccata da 30 cm di pietra, 2,5 cm di metallo comune, una sottile lamina di piombo, o 90 cm di legno o terra.</p>',
-                domain: false
-            },
-            'burning-hands': {
-                name: 'Burning Hands',
-                level: '1° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: 'Personale (cono 4,5m)',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Mentre tieni le mani con i pollici che si toccano e le dita aperte, una sottile coltre di fiamme si sprigiona dalle tue dita tese. Ogni creatura in un cono di 4,5 metri deve effettuare un <strong>TS Destrezza</strong>. Una creatura subisce <strong>3d6 danni da fuoco</strong> se fallisce il tiro salvezza, o metà dei danni se lo supera.</p><p>Il fuoco incendia qualsiasi oggetto infiammabile nell\'area che non sia indossato o trasportato.</p>',
-                higherLevel: 'I danni aumentano di 1d6 per ogni slot di livello superiore al 1°.',
-                domain: true,
-                dice: { save: 'DES', damage: '3d6', damageType: 'fuoco' }
-            },
-            'faerie-fire': {
-                name: 'Faerie Fire',
-                level: '1° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: '18 metri',
-                components: 'V',
-                duration: 'Concentrazione, fino a 1 minuto',
-                description: '<p>Ogni oggetto in un cubo di 6 metri entro gittata è delineato da luce blu, verde o viola (a tua scelta). Ogni creatura nell\'area è anch\'essa delineata se fallisce un <strong>TS Destrezza</strong>.</p><p>Per la durata, gli oggetti e le creature affette emettono luce fioca in un raggio di 3 metri. Qualsiasi tiro per colpire contro una creatura o un oggetto affetto ha <strong>vantaggio</strong> se l\'attaccante può vederlo, e la creatura o l\'oggetto affetto non può beneficiare dell\'essere <strong>invisibile</strong>.</p>',
-                domain: true,
-                dice: { save: 'DES' }
-            },
-
-            // LEVEL 2
-            'find-traps': {
-                name: 'Find Traps',
-                level: '2° livello',
-                school: 'Divinazione',
-                castingTime: 'Azione',
-                range: '36 metri',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Percepisci la presenza di qualsiasi trappola entro gittata che sia nella tua linea di vista. Una trappola, per lo scopo di questo incantesimo, include qualsiasi cosa che infliggerebbe un effetto improvviso o inaspettato che considereresti dannoso o indesiderato.</p><p>Questo incantesimo rivela semplicemente che una trappola è presente. Non impari la posizione di ogni trappola, ma impari la natura generale del pericolo posto da una trappola che percepisci.</p>',
-                domain: false
-            },
-            'scorching-ray': {
-                name: 'Scorching Ray',
-                level: '2° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: '36 metri',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Crei <strong>tre raggi di fuoco</strong> e li scagli verso bersagli entro gittata. Puoi scagliarli su un bersaglio solo o su diversi.</p><p>Effettua un <strong>attacco con incantesimo a distanza</strong> per ogni raggio. Se colpisci, il bersaglio subisce <strong>2d6 danni da fuoco</strong>.</p>',
-                higherLevel: 'Crei un raggio aggiuntivo per ogni slot di livello superiore al 2°.',
-                domain: true,
-                dice: { attack: true, damage: '2d6', damageType: 'fuoco', rays: 3 }
-            },
-            'see-invisibility': {
-                name: 'See Invisibility',
-                level: '2° livello',
-                school: 'Divinazione',
-                castingTime: 'Azione',
-                range: 'Personale',
-                components: 'V, S, M (un pizzico di talco e argento in polvere)',
-                duration: '1 ora',
-                description: '<p>Per la durata, vedi creature e oggetti <strong>invisibili</strong> come se fossero visibili, e puoi vedere nel Piano Etereo. Le creature e gli oggetti eterei appaiono spettrali e traslucidi.</p>',
-                domain: true
-            },
-
-            // LEVEL 3
-            'create-food-and-water': {
-                name: 'Create Food and Water',
-                level: '3° livello',
-                school: 'Evocazione',
-                castingTime: 'Azione',
-                range: '9 metri',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Crei 22,5 kg di cibo e 120 litri di acqua sul terreno o in contenitori entro gittata, sufficienti a sostentare fino a <strong>quindici umanoidi o cinque cavalcature</strong> per 24 ore.</p><p>Il cibo è blando ma nutriente, e va a male se non viene consumato entro 24 ore. L\'acqua è pulita e non va a male.</p>',
-                domain: false
-            },
-            'dispel-magic': {
-                name: 'Dispel Magic',
-                level: '3° livello',
-                school: 'Abiurazione',
-                castingTime: 'Azione',
-                range: '36 metri',
-                components: 'V, S',
-                duration: 'Istantaneo',
-                description: '<p>Scegli una creatura, un oggetto o un effetto magico entro gittata. Qualsiasi incantesimo di 3° livello o inferiore sul bersaglio termina.</p><p>Per ogni incantesimo di 4° livello o superiore sul bersaglio, effettua una prova di caratteristica usando la tua caratteristica da incantatore. La CD è pari a <strong>10 + il livello dell\'incantesimo</strong>. Con un successo, l\'incantesimo termina.</p>',
-                higherLevel: 'Termini automaticamente gli effetti di un incantesimo sul bersaglio se il livello dell\'incantesimo è uguale o inferiore al livello dello slot che usi.',
-                domain: false
-            },
-            'spirit-guardians': {
-                name: 'Spirit Guardians',
-                level: '3° livello',
-                school: 'Evocazione',
-                castingTime: 'Azione',
-                range: 'Personale (emanazione 4,5m)',
-                components: 'V, S, M (un simbolo sacro)',
-                duration: 'Concentrazione, fino a 10 minuti',
-                description: '<p>Evochi spiriti che proteggono te. Volano intorno a te fino a una distanza di 4,5 metri per la durata. Se sei buono o neutrale, la loro forma spettrale appare angelica o fatata (a tua scelta). Se sei malvagio, appaiono demoniaci.</p><p>Quando lanci questo incantesimo, puoi designare qualsiasi numero di creature che puoi vedere per non essere affette da esso. La velocità di una creatura affetta è <strong>dimezzata</strong> nell\'area.</p><p>Quando una creatura entra nell\'area per la prima volta in un turno o vi inizia il suo turno, deve effettuare un <strong>TS Saggezza</strong>, subendo <strong>3d8 danni radianti</strong> (o necrotici se sei malvagio) con un fallimento, o metà danni con un successo.</p>',
-                higherLevel: 'I danni aumentano di 1d8 per ogni slot di livello superiore al 3°.',
-                domain: false,
-                dice: { save: 'SAG', damage: '3d8', damageType: 'radianti' }
-            },
-            'daylight': {
-                name: 'Daylight',
-                level: '3° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: '18 metri',
-                components: 'V, S',
-                duration: '1 ora',
-                description: '<p>Una sfera di luce con un raggio di 18 metri si espande da un punto che scegli entro gittata. La sfera è <strong>luce intensa</strong> e emana luce fioca per ulteriori 18 metri.</p><p>Se il punto che scegli è un oggetto che stai tenendo o che non è indossato o trasportato, la luce emana dall\'oggetto e si muove con esso.</p><p>Coprire completamente la fonte della luce con un oggetto opaco blocca la luce.</p><p>Se qualsiasi parte dell\'area di questo incantesimo si sovrappone a un\'area di oscurità creata da un incantesimo di 3° livello o inferiore, l\'incantesimo che ha creato l\'oscurità viene <strong>dissolto</strong>.</p>',
-                domain: true
-            },
-            'fireball': {
-                name: 'Fireball',
-                level: '3° livello',
-                school: 'Invocazione',
-                castingTime: 'Azione',
-                range: '45 metri',
-                components: 'V, S, M (una piccola palla di guano di pipistrello e zolfo)',
-                duration: 'Istantaneo',
-                description: '<p>Un brillante raggio luminoso parte dal tuo dito puntato verso un punto che scegli entro gittata e poi sboccia con un rombo basso in un\'esplosione di fiamme. Ogni creatura in una <strong>sfera con raggio di 6 metri</strong> centrata su quel punto deve effettuare un <strong>TS Destrezza</strong>.</p><p>Un bersaglio subisce <strong>8d6 danni da fuoco</strong> se fallisce il tiro salvezza, o metà danni se lo supera.</p><p>Il fuoco si espande dietro gli angoli. Incendia gli oggetti infiammabili nell\'area che non sono indossati o trasportati.</p>',
-                higherLevel: 'I danni aumentano di 1d6 per ogni slot di livello superiore al 3°.',
-                domain: true,
-                dice: { save: 'DES', damage: '8d6', damageType: 'fuoco' }
-            },
-
-            // LEVEL 4
-            'banishment': {
-                name: 'Banishment',
-                level: '4° livello',
-                school: 'Abiurazione',
-                castingTime: 'Azione',
-                range: '18 metri',
-                components: 'V, S, M (un oggetto sgradevole al bersaglio)',
-                duration: 'Concentrazione, fino a 1 minuto',
-                description: '<p>Tenti di mandare una creatura che puoi vedere entro gittata in un altro piano di esistenza. Il bersaglio deve superare un <strong>TS Carisma</strong> o essere bandito.</p><p>Se il bersaglio è <strong>nativo del piano</strong> su cui ti trovi, lo bandisci in un semipiano innocuo. Mentre è lì, il bersaglio è <strong>incapacitato</strong>. Rimane lì fino al termine dell\'incantesimo, momento in cui riappare nello spazio che ha lasciato o nello spazio non occupato più vicino.</p><p>Se il bersaglio è <strong>nativo di un piano diverso</strong> da quello su cui ti trovi, viene bandito con un debole scoppio, tornando al suo piano nativo. Se l\'incantesimo dura per l\'intera durata, il bersaglio <strong>non ritorna</strong>.</p>',
-                higherLevel: 'Puoi bersagliare una creatura aggiuntiva per ogni slot di livello superiore al 4°.',
-                domain: false,
-                dice: { save: 'CAR' }
-            }
-        };
-
-        // Current spell for dice rolling
-        let currentSpell = null;
-
-        // Modal Functions
-        function openSpell(spellId) {
-            const spell = spellDatabase[spellId];
-            if (!spell) return;
-
-            currentSpell = spell;
-
-            document.getElementById('spellModalName').textContent = spell.name;
-            document.getElementById('spellModalMeta').textContent = `${spell.level} - ${spell.school}`;
-            document.getElementById('spellCastingTime').textContent = spell.castingTime;
-            document.getElementById('spellRange').textContent = spell.range;
-            document.getElementById('spellComponents').textContent = spell.components;
-            document.getElementById('spellDuration').textContent = spell.duration;
-            document.getElementById('spellDescription').innerHTML = spell.description;
-
-            const header = document.getElementById('spellModalHeader');
-            header.className = spell.domain ? 'spell-modal-header domain' : 'spell-modal-header';
-
-            const higherLevel = document.getElementById('spellHigherLevel');
-            if (spell.higherLevel) {
-                document.getElementById('spellHigherLevelText').textContent = spell.higherLevel;
-                higherLevel.style.display = 'block';
-            } else {
-                higherLevel.style.display = 'none';
-            }
-
-            // Setup dice buttons
-            setupDiceButtons(spell);
-
-            document.getElementById('spellModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function setupDiceButtons(spell) {
-            const diceSection = document.getElementById('diceSection');
-            const diceButtons = document.getElementById('diceButtons');
-            const diceResult = document.getElementById('diceResult');
-
-            diceResult.classList.remove('show');
-            diceButtons.innerHTML = '';
-
-            if (!spell.dice) {
-                diceSection.style.display = 'none';
-                return;
-            }
-
-            diceSection.style.display = 'block';
-            const dice = spell.dice;
-
-            // Attack button
-            if (dice.attack) {
-                const attackBtn = document.createElement('button');
-                attackBtn.className = 'dice-btn dice-btn-attack';
-                attackBtn.innerHTML = '<span class="dice-icon">🎯</span> Tiro per Colpire';
-                attackBtn.onclick = () => rollAttack(dice.rays || 1);
-                diceButtons.appendChild(attackBtn);
-            }
-
-            // Save DC display
-            if (dice.save) {
-                const saveBtn = document.createElement('button');
-                saveBtn.className = 'dice-btn dice-btn-save';
-                const spellDC = document.getElementById('spell-dc').textContent;
-                saveBtn.innerHTML = `<span class="dice-icon">🛡️</span> CD ${spellDC} (TS ${dice.save})`;
-                saveBtn.onclick = () => showSaveDC(dice.save);
-                diceButtons.appendChild(saveBtn);
-            }
-
-            // Damage button
-            if (dice.damage) {
-                const dmgBtn = document.createElement('button');
-                dmgBtn.className = 'dice-btn dice-btn-damage';
-                dmgBtn.innerHTML = `<span class="dice-icon">💥</span> Danni (${dice.damage})`;
-                dmgBtn.onclick = () => rollDamage(dice.damage, dice.damageType);
-                diceButtons.appendChild(dmgBtn);
-            }
-
-            // Alt damage (like Toll the Dead)
-            if (dice.damageAlt) {
-                const dmgAltBtn = document.createElement('button');
-                dmgAltBtn.className = 'dice-btn dice-btn-damage';
-                dmgAltBtn.innerHTML = `<span class="dice-icon">💀</span> ${dice.damageAltLabel} (${dice.damageAlt})`;
-                dmgAltBtn.onclick = () => rollDamage(dice.damageAlt, dice.damageType);
-                diceButtons.appendChild(dmgAltBtn);
-            }
-
-            // Healing button
-            if (dice.healing) {
-                const healBtn = document.createElement('button');
-                healBtn.className = 'dice-btn dice-btn-heal';
-                const modText = dice.healingMod ? ' + SAG' : '';
-                healBtn.innerHTML = `<span class="dice-icon">💚</span> Cura (${dice.healing}${modText})`;
-                healBtn.onclick = () => rollHealing(dice.healing, dice.healingMod);
-                diceButtons.appendChild(healBtn);
-            }
-
-            // Bonus roll (like Guidance)
-            if (dice.bonus) {
-                const bonusBtn = document.createElement('button');
-                bonusBtn.className = 'dice-btn dice-btn-attack';
-                bonusBtn.innerHTML = `<span class="dice-icon">✨</span> ${dice.bonusLabel} (${dice.bonus})`;
-                bonusBtn.onclick = () => rollBonus(dice.bonus, dice.bonusLabel);
-                diceButtons.appendChild(bonusBtn);
-            }
-        }
-
-        // Dice rolling functions
-        function rollDice(notation) {
-            // Parse notation like "4d6", "2d8", etc.
-            const match = notation.match(/(\d+)d(\d+)/);
-            if (!match) return { total: 0, rolls: [], max: 0 };
-
-            const count = parseInt(match[1]);
-            const sides = parseInt(match[2]);
-            const rolls = [];
-            let total = 0;
-
-            for (let i = 0; i < count; i++) {
-                const roll = Math.floor(Math.random() * sides) + 1;
-                rolls.push({ value: roll, max: sides });
-                total += roll;
-            }
-
-            return { total, rolls, max: sides };
-        }
-
-        function displayResult(label, total, breakdown, type, extraClass = '') {
-            const resultDiv = document.getElementById('diceResult');
-            const totalDiv = document.getElementById('diceResultTotal');
-
-            document.getElementById('diceResultLabel').textContent = label;
-            totalDiv.textContent = total;
-            totalDiv.className = 'dice-result-total ' + extraClass;
-            document.getElementById('diceResultBreakdown').innerHTML = breakdown;
-            document.getElementById('diceResultType').textContent = type;
-
-            resultDiv.classList.remove('show');
-            void resultDiv.offsetWidth; // Trigger reflow
-            resultDiv.classList.add('show');
-        }
-
-        function rollAttack(rays = 1) {
-            const spellAttack = parseInt(document.getElementById('spell-attack').textContent) || 0;
-            let resultsHtml = '';
-            let allResults = [];
-
-            for (let r = 0; r < rays; r++) {
-                const roll = Math.floor(Math.random() * 20) + 1;
-                const total = roll + spellAttack;
-                const isCrit = roll === 20;
-                const isCritFail = roll === 1;
-
-                let dieClass = '';
-                if (isCrit) dieClass = 'max';
-                if (isCritFail) dieClass = 'min';
-
-                const rayLabel = rays > 1 ? `Raggio ${r + 1}: ` : '';
-                resultsHtml += `${rayLabel}<span class="die ${dieClass}">${roll}</span> + ${spellAttack} = <strong>${total}</strong>${isCrit ? ' CRITICO!' : ''}${isCritFail ? ' FALLIMENTO!' : ''}<br>`;
-                allResults.push({ roll, total, isCrit, isCritFail });
-            }
-
-            const mainResult = allResults[0];
-            let extraClass = '';
-            if (rays === 1) {
-                if (mainResult.isCrit) extraClass = 'crit';
-                if (mainResult.isCritFail) extraClass = 'critfail';
-            }
-
-            const displayTotal = rays === 1 ? mainResult.total : allResults.map(r => r.total).join(' / ');
-            displayResult('Tiro per Colpire', displayTotal, resultsHtml, 'vs CA bersaglio', extraClass);
-        }
-
-        function rollDamage(notation, damageType) {
-            const result = rollDice(notation);
-            const breakdown = result.rolls.map(r => {
-                let cls = '';
-                if (r.value === r.max) cls = 'max';
-                if (r.value === 1) cls = 'min';
-                return `<span class="die ${cls}">${r.value}</span>`;
-            }).join(' + ');
-
-            displayResult('Danni', result.total, breakdown + ` = ${result.total}`, `danni ${damageType}`);
-        }
-
-        function rollHealing(notation, addMod) {
-            const result = rollDice(notation);
-            const wisMod = calculateModifier(parseInt(character.stats.wisdom) || 10);
-
-            let total = result.total;
-            let breakdown = result.rolls.map(r => {
-                let cls = '';
-                if (r.value === r.max) cls = 'max';
-                if (r.value === 1) cls = 'min';
-                return `<span class="die ${cls}">${r.value}</span>`;
-            }).join(' + ');
-
-            if (addMod) {
-                total += wisMod;
-                breakdown += ` + ${wisMod} (SAG)`;
-            }
-
-            breakdown += ` = ${total}`;
-            displayResult('Cura', total, breakdown, 'punti ferita recuperati');
-        }
-
-        function rollBonus(notation, label) {
-            const result = rollDice(notation);
-            const breakdown = result.rolls.map(r => {
-                let cls = '';
-                if (r.value === r.max) cls = 'max';
-                if (r.value === 1) cls = 'min';
-                return `<span class="die ${cls}">${r.value}</span>`;
-            }).join(' + ');
-
-            displayResult(label, '+' + result.total, breakdown, 'da aggiungere alla prova');
-        }
-
-        function showSaveDC(saveType) {
-            const spellDC = document.getElementById('spell-dc').textContent;
-            displayResult('Tiro Salvezza', `CD ${spellDC}`, `Il bersaglio deve effettuare un <strong>TS ${saveType}</strong>`, `Fallimento = effetto pieno / Successo = metà o nessuno`);
-        }
-
-        function closeSpellModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('spellModal').classList.remove('active');
-            document.body.style.overflow = '';
-            currentSpell = null;
-        }
-
-        // Close modal on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeSpellModal();
-        });
-
-        // Start
-        init();
-    </script>
+    <!-- Portent Modal (for Long Rest) -->
+    <div class="portent-modal-overlay" id="portentModal">
+        <div class="portent-modal">
+            <h3>Nuovo Giorno - Portento</h3>
+            <p>Tira 2d20 e inserisci i risultati per i tuoi dadi Portento:</p>
+            <div class="portent-modal-dice">
+                <input type="number" class="portent-modal-input" id="portentModal1" min="1" max="20" placeholder="?">
+                <input type="number" class="portent-modal-input" id="portentModal2" min="1" max="20" placeholder="?">
+            </div>
+            <button class="portent-modal-btn" onclick="confirmPortent()">Conferma</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/spells.js"></script>
+    <script src="js/skills.js"></script>
 </body>
 </html>

@@ -1,0 +1,88 @@
+{
+  "id": "sylan",
+  "name": "Sylan D'Thuranni",
+  "class": "Mago",
+  "level": 4,
+  "subclass": "Scuola di Divinazione",
+  "theme": "wizard",
+  "layout": "wizard-layout",
+  "statsLayout": "horizontal",
+  "storageKey": "dnd-wizard-4-divination",
+  "spellsFile": "spells/wizard.json",
+
+  "proficiencyBonus": 2,
+  "spellcastingAbility": "intelligence",
+  "hitDiceType": "d6",
+
+  "defaults": {
+    "name": "Sylan D'Thuranni",
+    "stats": {
+      "strength": 8,
+      "dexterity": 16,
+      "constitution": 14,
+      "intelligence": 18,
+      "wisdom": 8,
+      "charisma": 10
+    },
+    "hp": { "current": 26, "max": 26, "temp": 0 },
+    "armorClass": 13,
+    "speed": 9,
+    "hitDice": { "current": 4, "max": 4 },
+    "attacks": [],
+    "skillProficiencies": ["insight", "investigation", "history"]
+  },
+
+  "spellSlots": [
+    { "level": 1, "max": 4 },
+    { "level": 2, "max": 3 }
+  ],
+
+  "classFeatures": {
+    "channelDivinity": { "enabled": false },
+    "wardingFlare": { "enabled": false },
+    "portent": {
+      "enabled": true,
+      "diceCount": 2,
+      "description": "Quando finisci un riposo lungo, tira <strong>2d20</strong> e registra i risultati. Puoi sostituire qualsiasi tiro per colpire, tiro salvezza o prova di caratteristica (tuo o di una creatura che puoi vedere) con uno di questi risultati."
+    },
+    "mageArmor": {
+      "enabled": true,
+      "baseAC": 13,
+      "description": "Quando attiva, la CA diventa <strong>13 + mod DES</strong>. Durata: 8 ore, non richiede concentrazione."
+    },
+    "detectMagic": {
+      "enabled": true,
+      "usesPerDay": 1,
+      "source": "razza"
+    },
+    "alert": {
+      "enabled": true,
+      "bonus": 5
+    },
+    "skills": { "enabled": true },
+    "abilities": [
+      {
+        "name": "Retaggio Fatato (Elfo)",
+        "description": "<strong>Vantaggio</strong> ai TS contro essere affascinato. <strong>Non puoi essere addormentato</strong> magicamente."
+      },
+      {
+        "name": "Allerta (Talento)",
+        "description": "<strong>+5 all'iniziativa</strong> (gia incluso). Non puoi essere sorpreso mentre sei cosciente. Creature nascoste non hanno vantaggio ai tiri per colpire contro di te."
+      },
+      {
+        "name": "Contaminazione Fatata (Talento)",
+        "description": "+1 INT (gia incluso). Conosci <strong>Misty Step</strong> e <strong>Individuazione del Magico</strong> (1/giorno senza slot)."
+      },
+      {
+        "name": "Marchio dei Thuranni (Eberron)",
+        "description": "Dragonmark della Casa Thuranni (Marchio dell'Ombra). <strong>+1d4</strong> alle prove di Furtivita e Performance. Conosci il trucchetto <strong>Illusione Minore</strong>. Puoi lanciare <strong>Invisibilita</strong> 1/riposo lungo."
+      }
+    ]
+  },
+
+  "spells": {
+    "cantrips": ["minor-illusion", "mage-hand", "mind-sliver", "fire-bolt", "prestidigitation", "toll-the-dead"],
+    "level1": ["disguise-self", "silvery-barbs", "mage-armor", "grease", "detect-magic"],
+    "level2": ["pass-without-trace", "detect-thoughts", "mind-spike", "web", "misty-step"]
+  }
+}
