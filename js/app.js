@@ -296,13 +296,19 @@ function updateACDisplay() {
     const acDisplay = document.getElementById('armor-class-display');
     if (!acDisplay) return;
 
-    const dexMod = calculateModifier(character.stats.dexterity || 10);
     let ac;
 
-    if (characterConfig.classFeatures.mageArmor?.enabled && character.mageArmorActive) {
-        ac = 13 + dexMod;
+    if (characterConfig.classFeatures.mageArmor?.enabled) {
+        // Mage: calculate AC based on Mage Armor toggle
+        const dexMod = calculateModifier(character.stats.dexterity || 10);
+        if (character.mageArmorActive) {
+            ac = 13 + dexMod;
+        } else {
+            ac = 10 + dexMod;
+        }
     } else {
-        ac = 10 + dexMod;
+        // Other classes: use fixed armor class value
+        ac = character.armorClass || 10;
     }
 
     acDisplay.textContent = ac;
