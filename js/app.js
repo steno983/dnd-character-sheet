@@ -174,6 +174,9 @@ function initializeUI() {
     // Setup event listeners
     setupEventListeners();
 
+    // Setup spell slots from config (must be before generateAllPips)
+    setupSpellSlots();
+
     // Generate resource pips
     generateAllPips();
 
@@ -185,9 +188,6 @@ function initializeUI() {
 
     // Update all modifiers
     updateModifiers();
-
-    // Setup spell slots from config
-    setupSpellSlots();
 
     // Render spellbook
     renderSpellbook();
