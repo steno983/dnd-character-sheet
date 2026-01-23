@@ -75,6 +75,8 @@ function mergeWithDefaults(saved, defaults) {
 function ensureRequiredFields() {
     if (!character.stats) character.stats = characterConfig.defaults.stats;
     if (!character.hp) character.hp = characterConfig.defaults.hp;
+    if (character.armorClass === undefined) character.armorClass = characterConfig.defaults.armorClass;
+    if (character.speed === undefined) character.speed = characterConfig.defaults.speed;
     if (!character.spellSlots) character.spellSlots = {};
     if (!character.attacks) character.attacks = [];
 
