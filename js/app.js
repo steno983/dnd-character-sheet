@@ -941,6 +941,59 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// ==================== BACKUP MANAGEMENT ====================
+
+function downloadBackup() {
+    const data = JSON.stringify(character, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const date = new Date().toISOString().split('T')[0];
+    a.download = `${characterConfig.id}-backup-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showSaveIndicator();
+}
+
+function importBackup(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+
+            // Merge imported data with current character
+            character = mergeWithDefaults(importedData, characterConfig.defaults);
+
+            // Ensure required fields exist
+            ensureRequiredFields();
+
+            // Save to localStorage
+            saveCharacter();
+
+            // Reload UI
+            loadStatValues();
+            loadCombatValues();
+            updateModifiers();
+            generateAllPips();
+            renderAttacks();
+
+            // Reset file input
+            event.target.value = '';
+
+            alert('Backup importato con successo!');
+
+        } catch (error) {
+            console.error('Error importing backup:', error);
+            alert('Errore durante l\'importazione del backup. Verifica che il file sia valido.');
+        }
+    };
+    reader.readAsText(file);
+}
+
 // ==================== START ====================
 
 // Load character when DOM is ready
