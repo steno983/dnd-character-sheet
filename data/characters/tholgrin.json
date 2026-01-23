@@ -42,7 +42,7 @@
   "classFeatures": {
     "channelDivinity": {
       "enabled": true,
-      "uses": 2,
+      "uses": 3,
       "resetOn": "shortRest",
       "abilities": [
         {
