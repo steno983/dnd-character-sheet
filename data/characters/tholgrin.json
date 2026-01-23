@@ -29,7 +29,7 @@
     "speed": 30,
     "hitDice": { "current": 7, "max": 7 },
     "attacks": [],
-    "skillProficiencies": []
+    "skillProficiencies": ["persuasion", "religion"]
   },
 
   "spellSlots": [
@@ -68,7 +68,7 @@
     "mageArmor": { "enabled": false },
     "detectMagic": { "enabled": false },
     "alert": { "enabled": false },
-    "skills": { "enabled": false },
+    "skills": { "enabled": true },
     "abilities": []
   },
 
