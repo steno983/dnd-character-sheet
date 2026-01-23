@@ -29,7 +29,7 @@
     "speed": 30,
     "hitDice": { "current": 7, "max": 7 },
     "attacks": [],
-    "skillProficiencies": ["persuasion", "religion"]
+    "skillProficiencies": ["persuasion", "religion", "arcana", "history", "insight"]
   },
 
   "spellSlots": [
