@@ -23,6 +23,12 @@
             <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
         </div>
 
+        <!-- Page Toggle -->
+        <div class="page-toggle">
+            <button class="toggle-btn active" id="toggleSheet" onclick="showSheet()">Scheda</button>
+            <button class="toggle-btn" id="toggleNotes" onclick="showNotes()">Note</button>
+        </div>
+
         <!-- Header -->
         <header class="header">
             <div class="header-decoration">
@@ -292,6 +298,18 @@
                     <button class="add-btn" onclick="addAttack()">+ Aggiungi Attacco</button>
                 </div>
             </div>
+        </div>
+
+        <!-- Notes Page (hidden by default) -->
+        <div id="notesPage" class="notes-page hidden">
+            <div class="notes-header">
+                <h2 class="notes-title">Note della Sessione</h2>
+            </div>
+            <div class="note-form">
+                <textarea id="noteInput" class="note-textarea" placeholder="Scrivi una nuova nota..." rows="3"></textarea>
+                <button class="note-add-btn" onclick="addNote()">Aggiungi Nota</button>
+            </div>
+            <div class="notes-list" id="notesList"></div>
         </div>
     </div>
 

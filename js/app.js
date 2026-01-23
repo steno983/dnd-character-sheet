@@ -120,6 +120,11 @@ function ensureRequiredFields() {
             character.detectMagicUsed = false;
         }
     }
+
+    // Notes
+    if (!character.notes) {
+        character.notes = [];
+    }
 }
 
 function initializeUI() {
@@ -855,6 +860,85 @@ function renderSpellCategory(containerId, spellIds, extraClass) {
 
         return `<span class="${classes.join(' ')}" onclick="openSpell('${spellId}')">${spell.name}${suffix}</span>`;
     }).join('');
+}
+
+// ==================== NOTES MANAGEMENT ====================
+
+function showSheet() {
+    document.getElementById('mainGrid').classList.remove('hidden');
+    document.querySelector('.header').classList.remove('hidden');
+    document.getElementById('notesPage').classList.add('hidden');
+    document.getElementById('toggleSheet').classList.add('active');
+    document.getElementById('toggleNotes').classList.remove('active');
+}
+
+function showNotes() {
+    document.getElementById('mainGrid').classList.add('hidden');
+    document.querySelector('.header').classList.add('hidden');
+    document.getElementById('notesPage').classList.remove('hidden');
+    document.getElementById('toggleSheet').classList.remove('active');
+    document.getElementById('toggleNotes').classList.add('active');
+    renderNotes();
+}
+
+function renderNotes() {
+    const container = document.getElementById('notesList');
+    if (!container) return;
+
+    if (!character.notes || character.notes.length === 0) {
+        container.innerHTML = '<div class="notes-empty">Nessuna nota ancora. Aggiungi la tua prima nota!</div>';
+        return;
+    }
+
+    // Sort by date descending (newest first)
+    const sortedNotes = [...character.notes].sort((a, b) => b.id - a.id);
+
+    container.innerHTML = sortedNotes.map(note => `
+        <div class="note-item">
+            <div class="note-header">
+                <span class="note-date">${note.date}</span>
+                <button class="note-delete-btn" onclick="deleteNote(${note.id})" title="Elimina nota">&times;</button>
+            </div>
+            <div class="note-content">${escapeHtml(note.content)}</div>
+        </div>
+    `).join('');
+}
+
+function addNote() {
+    const input = document.getElementById('noteInput');
+    const content = input.value.trim();
+
+    if (!content) return;
+
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('it-IT', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    const newNote = {
+        id: Date.now(),
+        date: dateStr,
+        content: content
+    };
+
+    character.notes.push(newNote);
+    input.value = '';
+    saveCharacter();
+    renderNotes();
+}
+
+function deleteNote(id) {
+    character.notes = character.notes.filter(note => note.id !== id);
+    saveCharacter();
+    renderNotes();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // ==================== START ====================
