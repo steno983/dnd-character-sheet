@@ -84,8 +84,10 @@ function setupDiceButtons(spell) {
     if (dice.damage) {
         const dmgBtn = document.createElement('button');
         dmgBtn.className = 'dice-btn dice-btn-damage';
-        dmgBtn.innerHTML = `<span class="dice-icon">&#128165;</span> Danni (${dice.damage})`;
-        dmgBtn.onclick = () => rollDamage(dice.damage, dice.damageType);
+        const abilityLabel = characterConfig.spellcastingAbility === 'wisdom' ? 'SAG' : 'INT';
+        const modText = dice.damageMod ? ` + ${abilityLabel}` : '';
+        dmgBtn.innerHTML = `<span class="dice-icon">&#128165;</span> Danni (${dice.damage}${modText})`;
+        dmgBtn.onclick = () => rollDamage(dice.damage, dice.damageType, dice.damageMod);
         diceButtons.appendChild(dmgBtn);
     }
 
@@ -93,8 +95,10 @@ function setupDiceButtons(spell) {
     if (dice.damageAlt) {
         const dmgAltBtn = document.createElement('button');
         dmgAltBtn.className = 'dice-btn dice-btn-damage';
-        dmgAltBtn.innerHTML = `<span class="dice-icon">&#128128;</span> ${dice.damageAltLabel} (${dice.damageAlt})`;
-        dmgAltBtn.onclick = () => rollDamage(dice.damageAlt, dice.damageType);
+        const abilityLabel = characterConfig.spellcastingAbility === 'wisdom' ? 'SAG' : 'INT';
+        const modText = dice.damageMod ? ` + ${abilityLabel}` : '';
+        dmgAltBtn.innerHTML = `<span class="dice-icon">&#128128;</span> ${dice.damageAltLabel} (${dice.damageAlt}${modText})`;
+        dmgAltBtn.onclick = () => rollDamage(dice.damageAlt, dice.damageType, dice.damageMod);
         diceButtons.appendChild(dmgAltBtn);
     }
 
@@ -185,16 +189,25 @@ function rollAttack(rays = 1) {
     displayResult('Tiro per Colpire', displayTotal, resultsHtml, 'vs CA bersaglio', extraClass);
 }
 
-function rollDamage(notation, damageType) {
+function rollDamage(notation, damageType, addMod) {
     const result = rollDice(notation);
-    const breakdown = result.rolls.map(r => {
+    let breakdown = result.rolls.map(r => {
         let cls = '';
         if (r.value === r.max) cls = 'max';
         if (r.value === 1) cls = 'min';
         return `<span class="die ${cls}">${r.value}</span>`;
     }).join(' + ');
 
-    displayResult('Danni', result.total, breakdown + ` = ${result.total}`, `danni ${damageType}`);
+    let total = result.total;
+    if (addMod) {
+        const spellAbility = characterConfig.spellcastingAbility;
+        const spellMod = calculateModifier(parseInt(character.stats[spellAbility]) || 10);
+        const abilityLabel = spellAbility === 'wisdom' ? 'SAG' : 'INT';
+        total += spellMod;
+        breakdown += ` + ${spellMod} (${abilityLabel})`;
+    }
+
+    displayResult('Danni', total, breakdown + ` = ${total}`, `danni ${damageType}`);
 }
 
 function rollHealing(notation, addMod) {

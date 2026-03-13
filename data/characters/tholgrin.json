@@ -54,8 +54,8 @@
           "description": "Come azione, puoi toccare il tuo simbolo sacro per far scaturire una <strong>scintilla di luce divina</strong>. Una creatura a tua scelta entro 9 metri subisce <strong>2d8 danni radianti</strong>. Puoi spendere slot incantesimo per aumentare i danni."
         },
         {
-          "name": "Scacciare Non Morti",
-          "description": "Come azione, presenti il tuo simbolo sacro. Ogni non morto entro 9 metri che puo vederti o sentirti deve effettuare un <strong>TS Saggezza</strong>. Se fallisce, e <strong>scacciato</strong> per 1 minuto o fino a quando subisce danni."
+          "name": "Bruciare i Non Morti",
+          "description": "Come azione, presenti il tuo simbolo sacro. Ogni non morto entro 9 metri che puo vederti o sentirti deve effettuare un <strong>TS Saggezza</strong>. Se fallisce, e <strong>scacciato</strong> per 1 minuto o fino a quando subisce danni.<br><br><strong>Livello 5 — Bruciare i Non Morti:</strong> Ogni volta che usi scacciare non morti, puoi tirare un numero di <strong>d8 pari al modificatore di Saggezza</strong> (minimo 1d8) e sommarli. Ogni non morto che fallisce il TS subisce <strong>danni radianti</strong> pari alla somma dei tiri. I danni non interrompono l'effetto di scacciare non morti."
         }
       ]
     },
@@ -69,7 +69,12 @@
     "detectMagic": { "enabled": false },
     "alert": { "enabled": false },
     "skills": { "enabled": true },
-    "abilities": []
+    "abilities": [
+      {
+        "name": "Incantesimi Potenti (Lv. 7)",
+        "description": "Aggiunge il <strong>modificatore di Saggezza</strong> al danno che infligge con qualsiasi trucchetto da chierico. (Già incluso nei tiri danno dei cantrip)"
+      }
+    ]
   },
 
   "inventory": [

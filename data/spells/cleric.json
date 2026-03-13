@@ -36,7 +36,7 @@
     "higherLevel": "I danni aumentano di un dado ai livelli 5 (2d8/2d12), 11 (3d8/3d12) e 17 (4d8/4d12).",
     "domain": false,
     "type": "damage",
-    "dice": { "save": "SAG", "damage": "2d8", "damageAlt": "2d12", "damageAltLabel": "Se ferito", "damageType": "necrotici" }
+    "dice": { "save": "SAG", "damage": "2d8", "damageAlt": "2d12", "damageAltLabel": "Se ferito", "damageType": "necrotici", "damageMod": true }
   },
   "word-of-radiance": {
     "name": "Word of Radiance",
@@ -50,7 +50,7 @@
     "higherLevel": "I danni aumentano di 1d6 ai livelli 5 (2d6), 11 (3d6) e 17 (4d6).",
     "domain": false,
     "type": "damage",
-    "dice": { "save": "COS", "damage": "2d6", "damageType": "radianti" }
+    "dice": { "save": "COS", "damage": "2d6", "damageType": "radianti", "damageMod": true }
   },
   "healing-word": {
     "name": "Healing Word",
