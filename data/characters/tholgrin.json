@@ -72,6 +72,46 @@
     "abilities": []
   },
 
+  "inventory": [
+    {
+      "id": "shield-plus-1",
+      "name": "Scudo +1",
+      "rarity": "Non comune",
+      "attunement": true,
+      "description": "Questo scudo magico conferisce <strong>+2 alla CA</strong> (gia incluso nel valore). Funge anche da <strong>catalizzatore da chierico</strong> per il lancio di incantesimi.",
+      "charges": null
+    },
+    {
+      "id": "necklace-of-prayer-beads",
+      "name": "Collana delle Preghiere",
+      "rarity": "Raro",
+      "attunement": true,
+      "description": "Questa collana ha <strong>3 perle</strong>, ciascuna contenente un incantesimo. Puoi usare un'azione bonus per lanciare l'incantesimo dalla perla. Le perle si ricaricano dopo un <strong>riposo lungo</strong>.",
+      "charges": {
+        "type": "individual",
+        "resetOn": "longRest",
+        "items": [
+          { "name": "Spirit Guardians" },
+          { "name": "Wind Walk", "description": "6° livello, Trasmutazione. Tu e fino a 10 creature consenzienti assumete forma gassosa per 8 ore. In questa forma avete velocità di volo di 90 metri. Potete tornare alla forma normale e viceversa come azione bonus." },
+          { "name": "Branding Smite" }
+        ]
+      }
+    },
+    {
+      "id": "ring-of-the-ram",
+      "name": "Anello dell'Ariete",
+      "rarity": "Raro",
+      "attunement": true,
+      "description": "L'anello ha <strong>3 cariche</strong>. Puoi spendere da 1 a 3 cariche per attaccare una creatura visibile entro <strong>18 metri</strong>. Tiro per colpire: <strong>+7</strong>. Per ogni carica spesa: <strong>2d10 danni da forza</strong> e il bersaglio viene spinto di <strong>1,5 metri</strong>. In alternativa, puoi spendere cariche per rompere un oggetto (prova di Forza con <strong>+5 per carica</strong>). Recupera <strong>1d3 cariche all'alba</strong>.",
+      "charges": {
+        "type": "pips",
+        "max": 3,
+        "resetOn": "longRest",
+        "resetAmount": "1d3"
+      }
+    }
+  ],
+
   "spells": {
     "cantrips": ["guidance", "light", "toll-the-dead", "word-of-radiance"],
     "level1": ["healing-word", "shield-of-faith", "cure-wounds", "guiding-bolt", "detect-magic", "burning-hands", "faerie-fire"],

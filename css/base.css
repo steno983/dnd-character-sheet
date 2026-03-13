@@ -1095,12 +1095,12 @@ body {
     box-shadow: 0 4px 12px var(--primary-shadow);
 }
 
-/* Inventory Section */
-.inventory-section {
+/* Generic Inventory Section */
+.generic-inventory-section {
     margin-top: 15px;
 }
 
-.inventory-section .list-title {
+.generic-inventory-section .list-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1257,6 +1257,206 @@ body {
     color: var(--ink-light);
     font-style: italic;
     font-size: 0.9rem;
+}
+
+/* Magic Items Inventory Section */
+.magic-inventory-section {
+    background: linear-gradient(135deg, rgba(139,115,85,0.15), rgba(107,85,60,0.08));
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.inventory-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.inventory-item {
+    background: rgba(255,255,255,0.4);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--accent);
+    transition: all 0.2s ease;
+}
+
+.inventory-item:last-child {
+    margin-bottom: 0;
+}
+
+.inventory-item:hover {
+    background: rgba(255,255,255,0.55);
+}
+
+.inventory-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.inventory-item-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.inventory-item-badges {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.inventory-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.inventory-badge.rarity {
+    background: rgba(184,134,11,0.15);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.inventory-badge.attunement {
+    background: rgba(107,28,35,0.1);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.inventory-item-body {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--accent);
+}
+
+.inventory-item-body.open {
+    display: block;
+}
+
+.inventory-item-desc {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    line-height: 1.5;
+}
+
+.inventory-item-desc strong {
+    color: var(--ink-brown);
+}
+
+.inventory-charges {
+    margin-top: 12px;
+}
+
+.inventory-charges-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.inventory-charges-pips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.inventory-pip {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--parchment-light);
+}
+
+.inventory-pip.filled {
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(184,134,11,0.5), inset 0 0 4px rgba(255,255,255,0.4);
+}
+
+.inventory-pip:hover {
+    transform: scale(1.15);
+}
+
+.inventory-spell-charges {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inventory-spell-charge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.inventory-spell-charge:hover {
+    background: rgba(255,255,255,0.5);
+}
+
+.inventory-spell-charge.used {
+    opacity: 0.45;
+}
+
+.inventory-spell-dot {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    background: var(--parchment-light);
+}
+
+.inventory-spell-charge:not(.used) .inventory-spell-dot {
+    background: var(--accent);
+    box-shadow: 0 0 6px rgba(184,134,11,0.5);
+}
+
+.inventory-spell-name {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.85rem;
+    color: var(--ink-brown);
+}
+
+.inventory-spell-charge.used .inventory-spell-name {
+    text-decoration: line-through;
+}
+
+.inventory-spell-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.inventory-spell-desc {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+    font-style: italic;
 }
 
 /* Skills Section */

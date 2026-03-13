@@ -126,9 +126,24 @@ function ensureRequiredFields() {
         character.notes = [];
     }
 
-    // Inventory
+    // Generic Inventory
     if (!character.items) {
         character.items = [];
+    }
+
+    // Magic Items inventory charges
+    if (characterConfig.inventory) {
+        if (!character.inventoryCharges) character.inventoryCharges = {};
+        characterConfig.inventory.forEach(item => {
+            if (item.charges) {
+                if (item.charges.type === 'pips' && character.inventoryCharges[item.id] === undefined) {
+                    character.inventoryCharges[item.id] = item.charges.max;
+                }
+                if (item.charges.type === 'individual' && !character.inventoryCharges[item.id]) {
+                    character.inventoryCharges[item.id] = item.charges.items.map(() => false);
+                }
+            }
+        });
     }
 }
 
@@ -195,8 +210,8 @@ function initializeUI() {
     // Setup class-specific sections
     setupClassFeatures();
 
-    // Render attacks
-    renderAttacks();
+    // Render inventory
+    renderInventory();
 
     // Render inventory
     renderInventory();
@@ -556,6 +571,27 @@ function longRest(btn) {
         generateDetectMagicPip();
     }
 
+    // Recover inventory charges
+    if (characterConfig.inventory) {
+        characterConfig.inventory.forEach(item => {
+            if (item.charges) {
+                if (item.charges.type === 'pips') {
+                    if (item.charges.resetAmount === '1d3') {
+                        // Ring of the Ram: recover 1d3 charges
+                        const current = character.inventoryCharges[item.id] || 0;
+                        const roll = Math.floor(Math.random() * 3) + 1;
+                        character.inventoryCharges[item.id] = Math.min(item.charges.max, current + roll);
+                    } else {
+                        character.inventoryCharges[item.id] = item.charges.max;
+                    }
+                } else if (item.charges.type === 'individual') {
+                    character.inventoryCharges[item.id] = item.charges.items.map(() => false);
+                }
+            }
+        });
+        renderInventory();
+    }
+
     // Show Portent modal for wizard
     if (characterConfig.classFeatures.portent?.enabled) {
         setTimeout(() => showPortentModal(), 700);
@@ -565,36 +601,89 @@ function longRest(btn) {
     console.log('Long rest completed - All resources restored');
 }
 
-// ==================== ATTACKS MANAGEMENT ====================
+// ==================== INVENTORY MANAGEMENT ====================
 
-function renderAttacks() {
-    const container = document.getElementById('attacks-list');
-    if (!container) return;
+function renderInventory() {
+    const container = document.getElementById('magic-inventory-list');
+    if (!container || !characterConfig.inventory) return;
 
-    container.innerHTML = character.attacks.map((attack, i) => `
-        <div class="attack-item">
-            <input type="text" value="${attack.name || ''}" onchange="updateAttack(${i}, 'name', this.value)" placeholder="Nome arma">
-            <input type="text" value="${attack.bonus || ''}" onchange="updateAttack(${i}, 'bonus', this.value)" placeholder="+X">
-            <input type="text" value="${attack.damage || ''}" onchange="updateAttack(${i}, 'damage', this.value)" placeholder="1d8+X">
-            <button class="remove-btn" onclick="removeAttack(${i})">×</button>
-        </div>
-    `).join('');
+    container.innerHTML = characterConfig.inventory.map(item => {
+        let chargesHtml = '';
+
+        if (item.charges) {
+            if (item.charges.type === 'pips') {
+                const current = character.inventoryCharges[item.id] || 0;
+                const max = item.charges.max;
+                let pipsHtml = '';
+                for (let i = 0; i < max; i++) {
+                    pipsHtml += `<div class="inventory-pip ${i < current ? 'filled' : ''}" onclick="toggleInventoryPip('${item.id}', ${i}, ${max})"></div>`;
+                }
+                chargesHtml = `
+                    <div class="inventory-charges">
+                        <div class="inventory-charges-label">Cariche</div>
+                        <div class="inventory-charges-pips">${pipsHtml}</div>
+                    </div>`;
+            } else if (item.charges.type === 'individual') {
+                const states = character.inventoryCharges[item.id] || [];
+                const spellsHtml = item.charges.items.map((spell, i) => `
+                    <div class="inventory-spell-charge ${states[i] ? 'used' : ''}" onclick="toggleInventorySpell('${item.id}', ${i})">
+                        <div class="inventory-spell-dot"></div>
+                        <div class="inventory-spell-info">
+                            <span class="inventory-spell-name">${spell.name}</span>
+                            ${spell.description ? `<span class="inventory-spell-desc">${spell.description}</span>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+                chargesHtml = `
+                    <div class="inventory-charges">
+                        <div class="inventory-charges-label">Incantesimi</div>
+                        <div class="inventory-spell-charges">${spellsHtml}</div>
+                    </div>`;
+            }
+        }
+
+        return `
+            <div class="inventory-item" id="inv-${item.id}">
+                <div class="inventory-item-header" onclick="toggleInventoryBody('${item.id}')">
+                    <span class="inventory-item-name">${item.name}</span>
+                    <div class="inventory-item-badges">
+                        <span class="inventory-badge rarity">${item.rarity}</span>
+                        ${item.attunement ? '<span class="inventory-badge attunement">Sintonia</span>' : ''}
+                    </div>
+                </div>
+                <div class="inventory-item-body" id="inv-body-${item.id}">
+                    <div class="inventory-item-desc">${item.description}</div>
+                    ${chargesHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
-function addAttack() {
-    character.attacks.push({ name: '', bonus: '', damage: '' });
-    renderAttacks();
+function toggleInventoryBody(itemId) {
+    const body = document.getElementById(`inv-body-${itemId}`);
+    if (body) body.classList.toggle('open');
+}
+
+function toggleInventoryPip(itemId, index, max) {
+    event.stopPropagation();
+    const current = character.inventoryCharges[itemId] || 0;
+    character.inventoryCharges[itemId] = index < current ? index : index + 1;
+    renderInventory();
+    // Reopen the body since we re-rendered
+    const body = document.getElementById(`inv-body-${itemId}`);
+    if (body) body.classList.add('open');
     saveCharacter();
 }
 
-function updateAttack(index, field, value) {
-    character.attacks[index][field] = value;
-    saveCharacter();
-}
-
-function removeAttack(index) {
-    character.attacks.splice(index, 1);
-    renderAttacks();
+function toggleInventorySpell(itemId, index) {
+    event.stopPropagation();
+    if (!character.inventoryCharges[itemId]) return;
+    character.inventoryCharges[itemId][index] = !character.inventoryCharges[itemId][index];
+    renderInventory();
+    // Reopen the body since we re-rendered
+    const body = document.getElementById(`inv-body-${itemId}`);
+    if (body) body.classList.add('open');
     saveCharacter();
 }
 
