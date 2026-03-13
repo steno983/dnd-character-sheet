@@ -10,7 +10,8 @@ function openSpell(spellId) {
 
     currentSpell = spell;
 
-    document.getElementById('spellModalName').textContent = spell.name;
+    const typeIcon = spell.type ? getSpellTypeIcon(spell.type) + ' ' : '';
+    document.getElementById('spellModalName').innerHTML = `${typeIcon}${spell.name}`;
     document.getElementById('spellModalMeta').textContent = `${spell.level} - ${spell.school}`;
     document.getElementById('spellCastingTime').textContent = spell.castingTime;
     document.getElementById('spellRange').textContent = spell.range;

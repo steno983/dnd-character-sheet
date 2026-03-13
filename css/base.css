@@ -999,6 +999,12 @@ body {
     border-style: dashed;
 }
 
+.spell-type-icon {
+    font-size: 0.75em;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+
 /* Attacks Section */
 .list-box {
     background: rgba(255,255,255,0.2);

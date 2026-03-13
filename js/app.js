@@ -843,6 +843,16 @@ function hideUnusedSpellLevels() {
     }
 }
 
+function getSpellTypeIcon(type) {
+    const icons = {
+        'damage': '⚔️',
+        'healing': '💚',
+        'buff': '🛡️',
+        'utility': '✨'
+    };
+    return icons[type] || '';
+}
+
 function renderSpellCategory(containerId, spellIds, extraClass) {
     const container = document.getElementById(containerId);
     if (!container || !spellIds) return;
@@ -857,8 +867,9 @@ function renderSpellCategory(containerId, spellIds, extraClass) {
         if (spell.racial) classes.push('racial');
 
         const suffix = spell.domain ? ' ✦' : (spell.racial ? ' ✦' : '');
+        const typeIcon = spell.type ? `<span class="spell-type-icon">${getSpellTypeIcon(spell.type)}</span>` : '';
 
-        return `<span class="${classes.join(' ')}" onclick="openSpell('${spellId}')">${spell.name}${suffix}</span>`;
+        return `<span class="${classes.join(' ')}" onclick="openSpell('${spellId}')">${typeIcon}${spell.name}${suffix}</span>`;
     }).join('');
 }
 

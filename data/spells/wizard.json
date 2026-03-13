@@ -8,7 +8,8 @@
     "components": "S, M (un pezzetto di vello)",
     "duration": "1 minuto",
     "description": "<p>Crei un suono o un'immagine di un oggetto entro gittata che dura per la durata. L'illusione termina anche se la congedi con un'azione o lanci di nuovo questo incantesimo.</p><p>Se crei un <strong>suono</strong>, il suo volume puo variare da un sussurro a un urlo. Puo essere la tua voce, quella di qualcun altro, il ruggito di un leone, un tamburo battente, o qualsiasi altro suono tu scelga. Il suono continua senza variazioni per tutta la durata, oppure puoi emettere suoni discreti in momenti diversi prima che l'incantesimo termini.</p><p>Se crei un'<strong>immagine</strong> di un oggetto—come una sedia, impronte fangose, o un piccolo forziere—non puo essere piu grande di un cubo di 1,5 metri. L'immagine non puo creare suono, luce, odore, o qualsiasi altro effetto sensoriale. L'interazione fisica con l'immagine rivela che e un'illusione, perche le cose la attraversano.</p><p>Una creatura che usa la sua azione per esaminare il suono o l'immagine puo determinare che e un'illusione con una prova di Intelligenza (Indagare) contro la tua CD di incantesimi. Se una creatura discerne l'illusione, l'illusione diventa debole per quella creatura.</p>",
-    "racial": false
+    "racial": false,
+    "type": "utility"
   },
   "mage-hand": {
     "name": "Mano Magica",
@@ -19,7 +20,8 @@
     "components": "V, S",
     "duration": "1 minuto",
     "description": "<p>Una mano spettrale e fluttuante appare in un punto che scegli entro gittata. La mano dura per la durata o fino a quando la congedi con un'azione. La mano svanisce se si trova a piu di 9 metri da te o se lanci di nuovo questo incantesimo.</p><p>Puoi usare la tua azione per controllare la mano. Puoi usare la mano per manipolare un oggetto, aprire una porta o un contenitore non chiuso a chiave, riporre o recuperare un oggetto da un contenitore aperto, o versare il contenuto di una fiala. Puoi muovere la mano fino a 9 metri ogni volta che la usi.</p><p>La mano non puo attaccare, attivare oggetti magici, o trasportare piu di 5 kg.</p>",
-    "racial": false
+    "racial": false,
+    "type": "utility"
   },
   "mind-sliver": {
     "name": "Scheggia Mente",
@@ -32,6 +34,7 @@
     "description": "<p>Guidi una lama di energia psichica dissonante nella mente di una creatura che puoi vedere entro gittata. Il bersaglio deve superare un <strong>TS Intelligenza</strong> o subire <strong>1d6 danni psichici</strong> e sottrarre <strong>1d4</strong> dal prossimo tiro salvezza che effettua prima della fine del tuo prossimo turno.</p>",
     "higherLevel": "I danni aumentano di 1d6 ai livelli 5 (2d6), 11 (3d6) e 17 (4d6).",
     "racial": false,
+    "type": "damage",
     "dice": { "save": "INT", "damage": "1d6", "damageType": "psichici" }
   },
   "fire-bolt": {
@@ -45,6 +48,7 @@
     "description": "<p>Scagli una scheggia di fuoco contro una creatura o un oggetto entro gittata. Effettua un <strong>attacco con incantesimo a distanza</strong> contro il bersaglio. Se colpisci, il bersaglio subisce <strong>1d10 danni da fuoco</strong>.</p><p>Un oggetto infiammabile colpito da questo incantesimo prende fuoco se non e indossato o trasportato.</p>",
     "higherLevel": "I danni aumentano di 1d10 ai livelli 5 (2d10), 11 (3d10) e 17 (4d10).",
     "racial": false,
+    "type": "damage",
     "dice": { "attack": true, "damage": "1d10", "damageType": "fuoco" }
   },
   "prestidigitation": {
@@ -56,7 +60,8 @@
     "components": "V, S",
     "duration": "Fino a 1 ora",
     "description": "<p>Questo incantesimo e un trucco magico minore che i maghi principianti usano per esercitarsi. Crei uno dei seguenti effetti magici entro gittata:</p><ul><li>Crei un effetto sensoriale innocuo e istantaneo, come una pioggia di scintille, un soffio di vento, deboli note musicali, o un odore strano.</li><li>Accendi o spegni istantaneamente una candela, una torcia o un piccolo fuoco da campo.</li><li>Pulisci o sporchi istantaneamente un oggetto non piu grande di 30 cm cubi.</li><li>Raffreddi, riscaldi o condisci fino a 30 cm cubi di materiale non vivente per 1 ora.</li><li>Fai apparire un colore, un piccolo marchio o un simbolo su un oggetto o una superficie per 1 ora.</li><li>Crei un ninnolo non magico o un'immagine illusoria che puo stare nel palmo della tua mano e che dura fino alla fine del tuo prossimo turno.</li></ul><p>Se lanci questo incantesimo piu volte, puoi avere fino a tre dei suoi effetti non istantanei attivi alla volta, e puoi congedare un tale effetto con un'azione.</p>",
-    "racial": true
+    "racial": true,
+    "type": "utility"
   },
   "toll-the-dead": {
     "name": "Rintocco dei Morti",
@@ -69,6 +74,7 @@
     "description": "<p>Indichi una creatura che puoi vedere entro gittata, e il suono di una campana funebre riempie l'aria intorno ad essa per un istante. Il bersaglio deve superare un <strong>TS Saggezza</strong> o subire <strong>1d8 danni necrotici</strong>. Se al bersaglio mancano punti ferita, subisce invece <strong>1d12 danni necrotici</strong>.</p>",
     "higherLevel": "I danni aumentano di un dado ai livelli 5 (2d8/2d12), 11 (3d8/3d12) e 17 (4d8/4d12).",
     "racial": false,
+    "type": "damage",
     "dice": { "save": "SAG", "damage": "1d8", "damageAlt": "1d12", "damageAltLabel": "Se ferito", "damageType": "necrotici" }
   },
   "disguise-self": {
@@ -80,7 +86,8 @@
     "components": "V, S",
     "duration": "1 ora",
     "description": "<p>Fai sembrare te stesso—inclusi vestiti, armatura, armi e altri oggetti sulla tua persona—diverso fino al termine dell'incantesimo o fino a quando usi la tua azione per congedarlo. Puoi sembrare fino a 30 cm piu alto o piu basso e puoi apparire magro, grasso, o nel mezzo. Non puoi cambiare il tuo tipo corporeo, quindi devi adottare una forma che abbia la stessa disposizione base degli arti. Per il resto, l'estensione dell'illusione dipende da te.</p><p>I cambiamenti prodotti da questo incantesimo non reggono all'ispezione fisica. Per esempio, se usi questo incantesimo per aggiungere un cappello al tuo abbigliamento, gli oggetti attraversano il cappello, e chiunque lo tocchi non sentirebbe nulla o sentirebbe la tua testa e i tuoi capelli. Se usi questo incantesimo per apparire piu magro di quanto sei, la mano di qualcuno che ti tocca urterebbe contro di te mentre sembra ancora nell'aria.</p><p>Per discernere che sei camuffato, una creatura puo usare la sua azione per ispezionarti e deve superare una prova di Intelligenza (Indagare) contro la tua CD di incantesimi.</p>",
-    "racial": false
+    "racial": false,
+    "type": "utility"
   },
   "silvery-barbs": {
     "name": "Silvery Barbs",
@@ -91,7 +98,8 @@
     "components": "V",
     "duration": "Istantaneo",
     "description": "<p>Usi parole magiche disturbanti per interrompere magicamente il successo di una creatura. La creatura deve <strong>ripetere il tiro d20</strong> e usare il risultato piu basso.</p><p>Puoi quindi scegliere una creatura diversa che puoi vedere entro gittata (puoi scegliere te stesso). La creatura scelta ha <strong>vantaggio</strong> al prossimo tiro per colpire, prova di caratteristica o tiro salvezza che effettua entro 1 minuto. Una creatura puo beneficiare di un solo uso di questo incantesimo alla volta.</p>",
-    "racial": false
+    "racial": false,
+    "type": "buff"
   },
   "mage-armor": {
     "name": "Armatura Magica",
@@ -102,7 +110,8 @@
     "components": "V, S, M (un pezzo di cuoio lavorato)",
     "duration": "8 ore",
     "description": "<p>Tocchi una creatura consenziente che non indossa armatura, e una forza magica protettiva la circonda fino al termine dell'incantesimo. La <strong>CA base</strong> del bersaglio diventa <strong>13 + il suo modificatore di Destrezza</strong>. L'incantesimo termina se il bersaglio indossa un'armatura o se lo congedi con un'azione.</p>",
-    "racial": false
+    "racial": false,
+    "type": "buff"
   },
   "grease": {
     "name": "Unto",
@@ -114,6 +123,7 @@
     "duration": "1 minuto",
     "description": "<p>Grasso scivoloso copre il terreno in un quadrato di 3 metri centrato su un punto entro gittata e lo trasforma in terreno difficile per la durata.</p><p>Quando il grasso appare, ogni creatura in piedi nell'area deve superare un <strong>TS Destrezza</strong> o cadere <strong>prona</strong>. Una creatura che entra nell'area o termina il suo turno li deve anch'essa superare un TS Destrezza o cadere prona.</p>",
     "racial": false,
+    "type": "utility",
     "dice": { "save": "DES" }
   },
   "detect-magic": {
@@ -125,7 +135,8 @@
     "components": "V, S",
     "duration": "Concentrazione, fino a 10 minuti",
     "description": "<p>Per la durata, percepisci la presenza di magia entro 9 metri da te. Se percepisci magia in questo modo, puoi usare la tua azione per vedere una debole aura attorno a qualsiasi creatura o oggetto visibile nell'area che porta magia, e impari la sua <strong>scuola di magia</strong>, se presente.</p><p>La visione puo penetrare la maggior parte delle barriere, ma e bloccata da 30 cm di pietra, 2,5 cm di metallo comune, una sottile lamina di piombo, o 90 cm di legno o terra.</p>",
-    "racial": true
+    "racial": true,
+    "type": "utility"
   },
   "pass-without-trace": {
     "name": "Passaggio Senza Tracce",
@@ -136,7 +147,8 @@
     "components": "V, S, M (ceneri di una foglia di vischio bruciata e un rametto di abete rosso)",
     "duration": "Concentrazione, fino a 1 ora",
     "description": "<p>Un velo di ombre e silenzio emana da te, mascherando te e i tuoi compagni dall'individuazione. Per la durata, ogni creatura che scegli entro 9 metri da te (incluso te) ha un <strong>bonus di +10</strong> alle prove di Destrezza (Furtivita) e non puo essere tracciata se non con mezzi magici. Una creatura che riceve questo bonus non lascia tracce ne odore al suo passaggio.</p>",
-    "racial": false
+    "racial": false,
+    "type": "buff"
   },
   "detect-thoughts": {
     "name": "Individuazione dei Pensieri",
@@ -148,6 +160,7 @@
     "duration": "Concentrazione, fino a 1 minuto",
     "description": "<p>Per la durata, puoi leggere i pensieri di certe creature. Quando lanci l'incantesimo e come tua azione in ogni turno fino al termine dell'incantesimo, puoi concentrare la tua mente su una creatura che puoi vedere entro 9 metri da te. Se la creatura che scegli ha un'Intelligenza di 3 o inferiore o non parla nessuna lingua, la creatura non e affetta.</p><p>Inizialmente impari i <strong>pensieri superficiali</strong> della creatura—cio che e piu presente nella sua mente in quel momento. Come azione, puoi spostare la tua attenzione sui pensieri di un'altra creatura o tentare di sondare piu in profondita la stessa creatura. Se sondi piu in profondita, il bersaglio deve effettuare un <strong>TS Saggezza</strong>. Se fallisce, ottieni informazioni sui suoi ragionamenti (se presenti), il suo stato emotivo, e qualcosa che incombe nella sua mente (come qualcosa di cui si preoccupa, che ama, o che odia). Se ha successo, l'incantesimo termina. In entrambi i casi, il bersaglio sa che stai sondando la sua mente.</p><p>Puoi anche usare questo incantesimo per individuare la presenza di creature pensanti che non puoi vedere. Quando lanci l'incantesimo o come tua azione durante la durata, puoi cercare pensieri entro 9 metri. L'incantesimo puo penetrare le barriere, ma 60 cm di roccia, 2,5 cm di qualsiasi metallo, o una sottile lamina di piombo lo bloccano.</p>",
     "racial": false,
+    "type": "utility",
     "dice": { "save": "SAG" }
   },
   "mind-spike": {
@@ -161,6 +174,7 @@
     "description": "<p>Raggiungi la mente di una creatura che puoi vedere entro gittata. Il bersaglio deve effettuare un <strong>TS Saggezza</strong>, subendo <strong>3d8 danni psichici</strong> con un fallimento, o meta danni con un successo. Con un fallimento, sai sempre la posizione del bersaglio fino al termine dell'incantesimo, ma solo mentre entrambi siete sullo stesso piano di esistenza. Mentre hai questa conoscenza, il bersaglio non puo diventare nascosto da te, e se e invisibile, non ottiene alcun beneficio da quella condizione contro di te.</p>",
     "higherLevel": "I danni aumentano di 1d8 per ogni slot di livello superiore al 2°.",
     "racial": false,
+    "type": "damage",
     "dice": { "save": "SAG", "damage": "3d8", "damageType": "psichici" }
   },
   "web": {
@@ -173,6 +187,7 @@
     "duration": "Concentrazione, fino a 1 ora",
     "description": "<p>Evochi una massa di ragnatele appiccicose e spesse in un punto a tua scelta entro gittata. Le ragnatele riempiono un <strong>cubo di 6 metri</strong> da quel punto per la durata. Le ragnatele sono terreno difficile e oscurano leggermente la loro area.</p><p>Se le ragnatele non sono ancorate tra due masse solide (come muri o alberi) o stratificate su un pavimento, muro o soffitto, la ragnatela evocata collassa su se stessa, e l'incantesimo termina all'inizio del tuo prossimo turno. Le ragnatele stratificate su una superficie piana hanno una profondita di 1,5 metri.</p><p>Ogni creatura che inizia il suo turno nelle ragnatele o vi entra durante il suo turno deve effettuare un <strong>TS Destrezza</strong>. Con un fallimento, la creatura e <strong>trattenuta</strong> finche rimane nelle ragnatele o finche non si libera.</p><p>Una creatura trattenuta dalle ragnatele puo usare la sua azione per effettuare una prova di Forza contro la tua CD di incantesimi. Se ha successo, non e piu trattenuta.</p><p>Le ragnatele sono <strong>infiammabili</strong>. Qualsiasi cubo di 1,5 metri di ragnatele esposto al fuoco brucia via in 1 round, infliggendo 2d4 danni da fuoco a qualsiasi creatura che inizia il suo turno nel fuoco.</p>",
     "racial": false,
+    "type": "utility",
     "dice": { "save": "DES" }
   },
   "misty-step": {
@@ -184,6 +199,7 @@
     "components": "V",
     "duration": "Istantaneo",
     "description": "<p>Avvolto brevemente da una nebbia argentea, ti <strong>teletrasporti</strong> fino a 9 metri in uno spazio non occupato che puoi vedere.</p>",
-    "racial": true
+    "racial": true,
+    "type": "utility"
   }
 }
