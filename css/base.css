@@ -133,6 +133,29 @@ body {
     text-transform: uppercase;
 }
 
+.reset-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+    letter-spacing: 1px;
+}
+
+.reset-btn:hover {
+    opacity: 1;
+    background: var(--primary);
+    color: white;
+}
+
 /* Main Grid - Cleric Layout */
 .main-grid.cleric-layout {
     display: grid;

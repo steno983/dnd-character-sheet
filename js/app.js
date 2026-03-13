@@ -247,6 +247,13 @@ function showSaveIndicator() {
     setTimeout(() => indicator.classList.remove('show'), 1500);
 }
 
+function resetCharacter() {
+    if (confirm('Sei sicuro? Tutti i dati salvati per questo personaggio verranno cancellati e ripristinati ai valori predefiniti.')) {
+        localStorage.removeItem(characterConfig.storageKey);
+        location.reload();
+    }
+}
+
 // ==================== STAT MANAGEMENT ====================
 
 function loadStatValues() {
