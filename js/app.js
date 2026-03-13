@@ -210,10 +210,10 @@ function initializeUI() {
     // Setup class-specific sections
     setupClassFeatures();
 
-    // Render inventory
-    renderInventory();
+    // Render magic items
+    renderMagicInventory();
 
-    // Render inventory
+    // Render generic inventory
     renderInventory();
 
     // Update all modifiers
@@ -589,7 +589,7 @@ function longRest(btn) {
                 }
             }
         });
-        renderInventory();
+        renderMagicInventory();
     }
 
     // Show Portent modal for wizard
@@ -601,9 +601,9 @@ function longRest(btn) {
     console.log('Long rest completed - All resources restored');
 }
 
-// ==================== INVENTORY MANAGEMENT ====================
+// ==================== MAGIC ITEMS MANAGEMENT ====================
 
-function renderInventory() {
+function renderMagicInventory() {
     const container = document.getElementById('magic-inventory-list');
     if (!container || !characterConfig.inventory) return;
 
@@ -669,7 +669,7 @@ function toggleInventoryPip(itemId, index, max) {
     event.stopPropagation();
     const current = character.inventoryCharges[itemId] || 0;
     character.inventoryCharges[itemId] = index < current ? index : index + 1;
-    renderInventory();
+    renderMagicInventory();
     // Reopen the body since we re-rendered
     const body = document.getElementById(`inv-body-${itemId}`);
     if (body) body.classList.add('open');
@@ -680,7 +680,7 @@ function toggleInventorySpell(itemId, index) {
     event.stopPropagation();
     if (!character.inventoryCharges[itemId]) return;
     character.inventoryCharges[itemId][index] = !character.inventoryCharges[itemId][index];
-    renderInventory();
+    renderMagicInventory();
     // Reopen the body since we re-rendered
     const body = document.getElementById(`inv-body-${itemId}`);
     if (body) body.classList.add('open');
