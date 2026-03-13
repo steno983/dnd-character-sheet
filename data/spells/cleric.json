@@ -274,6 +274,18 @@
     "type": "damage",
     "dice": { "save": "DES", "damage": "5d8", "damageType": "fuoco" }
   },
+  "guardian-of-faith": {
+    "name": "Guardian of Faith",
+    "level": "4° livello",
+    "school": "Evocazione",
+    "castingTime": "Azione",
+    "range": "9 metri",
+    "components": "V",
+    "duration": "8 ore",
+    "description": "<p>Un guardiano spettrale Grande appare e fluttua in uno spazio non occupato a tua scelta che puoi vedere entro gittata. Il guardiano occupa quello spazio ed è indistinto tranne che per la spada fiammeggiante e lo scudo decorato con il simbolo della tua divinità.</p><p>Qualsiasi creatura a te ostile che si muove in uno spazio entro <strong>3 metri</strong> dal guardiano per la prima volta in un turno deve superare un <strong>TS Destrezza</strong>. La creatura subisce <strong>20 danni radianti</strong> se fallisce, o metà danni se supera. Il guardiano svanisce quando ha inflitto un totale di <strong>60 danni</strong>.</p>",
+    "domain": false,
+    "dice": { "save": "DES", "damage": "20", "damageType": "radianti" }
+  },
   "banishment": {
     "name": "Banishment",
     "level": "4° livello",

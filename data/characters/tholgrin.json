@@ -117,6 +117,6 @@
     "level1": ["healing-word", "shield-of-faith", "cure-wounds", "guiding-bolt", "detect-magic", "burning-hands", "faerie-fire"],
     "level2": ["find-traps", "scorching-ray", "see-invisibility"],
     "level3": ["create-food-and-water", "dispel-magic", "spirit-guardians", "daylight", "fireball"],
-    "level4": ["banishment", "arcane-eye", "wall-of-fire"]
+    "level4": ["banishment", "arcane-eye", "wall-of-fire", "guardian-of-faith"]
   }
 }
