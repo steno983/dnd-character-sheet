@@ -25,7 +25,7 @@
       "charisma": 10
     },
     "hp": { "current": 88, "max": 88, "temp": 0 },
-    "armorClass": 19,
+    "armorClass": 22,
     "speed": 30,
     "hitDice": { "current": 8, "max": 8 },
     "attacks": [],
@@ -79,11 +79,19 @@
 
   "inventory": [
     {
-      "id": "shield-plus-1",
-      "name": "Scudo +1",
-      "rarity": "Non comune",
+      "id": "chainmail-plus-2",
+      "name": "Cotta di Maglia +2",
+      "rarity": "Raro",
       "attunement": true,
-      "description": "Questo scudo magico conferisce <strong>+2 alla CA</strong> (gia incluso nel valore). Funge anche da <strong>catalizzatore da chierico</strong> per il lancio di incantesimi.",
+      "description": "Questa cotta di maglia magica conferisce <strong>CA 18</strong> (16 base + 2 bonus magico). Non richiede requisito di Forza. Già inclusa nel valore di CA.",
+      "charges": null
+    },
+    {
+      "id": "shield-plus-2",
+      "name": "Scudo +2",
+      "rarity": "Raro",
+      "attunement": true,
+      "description": "Questo scudo magico conferisce <strong>+4 alla CA</strong> (+2 base + 2 incantamento, gia incluso nel valore). Funge anche da <strong>catalizzatore da chierico</strong> per il lancio di incantesimi.",
       "charges": null
     },
     {
