@@ -148,12 +148,24 @@ body {
     opacity: 0.6;
     transition: opacity 0.2s, background 0.2s;
     letter-spacing: 1px;
+    z-index: 10;
 }
 
 .reset-btn:hover {
     opacity: 1;
     background: var(--primary);
     color: white;
+}
+
+@media (max-width: 700px) {
+    .reset-btn {
+        position: static;
+        display: block;
+        margin: 10px auto 0;
+        opacity: 0.8;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
 }
 
 /* Main Grid - Cleric Layout */
