@@ -190,6 +190,9 @@ body {
 .stat-block.compact {
     border-radius: 6px;
     padding: 6px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .stat-block:hover {
@@ -253,6 +256,7 @@ body {
 
 .stat-score.compact {
     margin-top: 3px;
+    justify-content: center;
 }
 
 .stat-score input {
@@ -1089,6 +1093,170 @@ body {
 .add-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--primary-shadow);
+}
+
+/* Inventory Section */
+.inventory-section {
+    margin-top: 15px;
+}
+
+.inventory-section .list-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inventory-weight {
+    font-size: 0.7rem;
+    color: var(--ink-light);
+    font-weight: normal;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.item-row {
+    display: grid;
+    grid-template-columns: 2fr auto auto auto;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 10px;
+    background: var(--attack-bg, rgba(255,255,255,0.3));
+    border-radius: 6px;
+    border: 1px solid var(--primary);
+    align-items: center;
+}
+
+.item-row.expanded {
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.item-main {
+    display: grid;
+    grid-template-columns: 2fr auto auto auto;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.item-row input[type="text"] {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--ink-light);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: 'Crimson Text', serif;
+    font-size: 0.85rem;
+    color: var(--ink-brown);
+    outline: none;
+    min-width: 0;
+}
+
+.item-row input[type="text"]:focus {
+    border-color: var(--primary);
+}
+
+.item-row input[type="text"]::placeholder {
+    color: var(--ink-light);
+    opacity: 0.6;
+}
+
+.item-qty {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.item-qty input {
+    width: 45px;
+    text-align: center;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--ink-light);
+    border-radius: 4px;
+    padding: 6px 4px;
+    font-family: 'Crimson Text', serif;
+    font-size: 0.85rem;
+    color: var(--ink-brown);
+    outline: none;
+}
+
+.item-qty input:focus {
+    border-color: var(--primary);
+}
+
+.item-qty-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--parchment-dark);
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.item-qty-btn:hover {
+    background: var(--primary);
+    color: var(--parchment-light);
+}
+
+.item-expand-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    padding: 4px;
+}
+
+.item-expand-btn:hover {
+    opacity: 1;
+}
+
+.item-expand-btn.expanded {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+.item-notes {
+    width: 100%;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.4);
+    border: 1px dashed var(--ink-light);
+    border-radius: 4px;
+    font-family: 'Crimson Text', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ink-light);
+    resize: vertical;
+    min-height: 50px;
+    outline: none;
+}
+
+.item-notes:focus {
+    border-color: var(--primary);
+    border-style: solid;
+    color: var(--ink-brown);
+}
+
+.item-notes::placeholder {
+    color: var(--ink-light);
+    opacity: 0.6;
+}
+
+.inventory-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--ink-light);
+    font-style: italic;
+    font-size: 0.9rem;
 }
 
 /* Skills Section */

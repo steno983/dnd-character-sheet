@@ -5,8 +5,8 @@
   "level": 8,
   "subclass": "Dominio della Luce",
   "theme": "cleric",
-  "layout": "cleric-layout",
-  "statsLayout": "vertical",
+  "layout": "wizard-layout",
+  "statsLayout": "horizontal",
   "storageKey": "dnd-cleric-7-light",
   "spellsFile": "spells/cleric.json",
 

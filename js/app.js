@@ -125,6 +125,11 @@ function ensureRequiredFields() {
     if (!character.notes) {
         character.notes = [];
     }
+
+    // Inventory
+    if (!character.items) {
+        character.items = [];
+    }
 }
 
 function initializeUI() {
@@ -192,6 +197,9 @@ function initializeUI() {
 
     // Render attacks
     renderAttacks();
+
+    // Render inventory
+    renderInventory();
 
     // Update all modifiers
     updateModifiers();
@@ -871,6 +879,90 @@ function renderSpellCategory(containerId, spellIds, extraClass) {
 
         return `<span class="${classes.join(' ')}" onclick="openSpell('${spellId}')">${typeIcon}${spell.name}${suffix}</span>`;
     }).join('');
+}
+
+// ==================== INVENTORY MANAGEMENT ====================
+
+function renderInventory() {
+    const container = document.getElementById('inventory-list');
+    if (!container) return;
+
+    if (!character.items || character.items.length === 0) {
+        container.innerHTML = '<div class="inventory-empty">Nessun oggetto. Aggiungi il tuo primo oggetto!</div>';
+        return;
+    }
+
+    container.innerHTML = character.items.map((item, i) => {
+        const isExpanded = item.expanded || false;
+        return `
+            <div class="item-row ${isExpanded ? 'expanded' : ''}" data-index="${i}">
+                ${isExpanded ? `
+                    <div class="item-main">
+                        <input type="text" value="${escapeHtmlAttr(item.name || '')}"
+                            onchange="updateItem(${i}, 'name', this.value)"
+                            placeholder="Nome oggetto">
+                        <div class="item-qty">
+                            <button class="item-qty-btn" onclick="adjustItemQty(${i}, -1)">-</button>
+                            <input type="number" value="${item.qty || 1}" min="0"
+                                onchange="updateItem(${i}, 'qty', parseInt(this.value) || 1)">
+                            <button class="item-qty-btn" onclick="adjustItemQty(${i}, 1)">+</button>
+                        </div>
+                        <button class="item-expand-btn expanded" onclick="toggleItemExpand(${i})">&#9660;</button>
+                        <button class="remove-btn" onclick="removeItem(${i})">×</button>
+                    </div>
+                    <textarea class="item-notes"
+                        placeholder="Note sull'oggetto..."
+                        onchange="updateItem(${i}, 'notes', this.value)">${escapeHtml(item.notes || '')}</textarea>
+                ` : `
+                    <input type="text" value="${escapeHtmlAttr(item.name || '')}"
+                        onchange="updateItem(${i}, 'name', this.value)"
+                        placeholder="Nome oggetto">
+                    <div class="item-qty">
+                        <button class="item-qty-btn" onclick="adjustItemQty(${i}, -1)">-</button>
+                        <input type="number" value="${item.qty || 1}" min="0"
+                            onchange="updateItem(${i}, 'qty', parseInt(this.value) || 1)">
+                        <button class="item-qty-btn" onclick="adjustItemQty(${i}, 1)">+</button>
+                    </div>
+                    <button class="item-expand-btn ${item.notes ? 'has-notes' : ''}" onclick="toggleItemExpand(${i})">&#9660;</button>
+                    <button class="remove-btn" onclick="removeItem(${i})">×</button>
+                `}
+            </div>
+        `;
+    }).join('');
+}
+
+function addItem() {
+    character.items.push({ name: '', qty: 1, notes: '', expanded: false });
+    renderInventory();
+    saveCharacter();
+}
+
+function updateItem(index, field, value) {
+    character.items[index][field] = value;
+    saveCharacter();
+}
+
+function removeItem(index) {
+    character.items.splice(index, 1);
+    renderInventory();
+    saveCharacter();
+}
+
+function adjustItemQty(index, delta) {
+    const newQty = Math.max(0, (character.items[index].qty || 1) + delta);
+    character.items[index].qty = newQty;
+    renderInventory();
+    saveCharacter();
+}
+
+function toggleItemExpand(index) {
+    character.items[index].expanded = !character.items[index].expanded;
+    renderInventory();
+    saveCharacter();
+}
+
+function escapeHtmlAttr(text) {
+    return text.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 // ==================== NOTES MANAGEMENT ====================
