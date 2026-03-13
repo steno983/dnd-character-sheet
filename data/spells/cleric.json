@@ -248,6 +248,30 @@
     "type": "damage",
     "dice": { "save": "DES", "damage": "8d6", "damageType": "fuoco" }
   },
+  "arcane-eye": {
+    "name": "Arcane Eye",
+    "level": "4° livello",
+    "school": "Divinazione",
+    "castingTime": "Azione",
+    "range": "9 metri",
+    "components": "V, S, M (un po' di pelliccia di pipistrello)",
+    "duration": "Concentrazione, fino a 1 ora",
+    "description": "<p>Crei un occhio magico invisibile entro gittata che fluttua nell'aria per la durata. Ricevi mentalmente le informazioni visive dall'occhio, che ha <strong>visione normale e scurovisione</strong> entro 9 metri. L'occhio può guardare in ogni direzione.</p><p>Come azione, puoi muovere l'occhio fino a <strong>9 metri</strong> in qualsiasi direzione. L'occhio può passare attraverso aperture di 2,5 cm di diametro, ma non c'è limite alla distanza tra te e l'occhio.</p>",
+    "domain": true
+  },
+  "wall-of-fire": {
+    "name": "Wall of Fire",
+    "level": "4° livello",
+    "school": "Invocazione",
+    "castingTime": "Azione",
+    "range": "36 metri",
+    "components": "V, S, M (un piccolo pezzo di fosforo)",
+    "duration": "Concentrazione, fino a 1 minuto",
+    "description": "<p>Crei un muro di fuoco su una superficie solida entro gittata. Puoi rendere il muro lungo fino a <strong>18 metri, alto 6 metri e spesso 30 cm</strong>, oppure un anello con un diametro fino a 6 metri, alto 6 metri e spesso 30 cm. Il muro è opaco e dura per la durata.</p><p>Quando il muro appare, ogni creatura nella sua area deve effettuare un <strong>TS Destrezza</strong>. Una creatura subisce <strong>5d8 danni da fuoco</strong> se fallisce, o metà danni se supera.</p><p>Un lato del muro, scelto da te quando lanci l'incantesimo, infligge <strong>5d8 danni da fuoco</strong> a ogni creatura che termina il suo turno entro 3 metri da quel lato o dentro il muro. Una creatura subisce gli stessi danni quando entra nel muro per la prima volta in un turno.</p>",
+    "higherLevel": "I danni aumentano di 1d8 per ogni slot di livello superiore al 4°.",
+    "domain": true,
+    "dice": { "save": "DES", "damage": "5d8", "damageType": "fuoco" }
+  },
   "banishment": {
     "name": "Banishment",
     "level": "4° livello",

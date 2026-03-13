@@ -2,7 +2,7 @@
   "id": "tholgrin",
   "name": "Tholgrin",
   "class": "Chierico",
-  "level": 7,
+  "level": 8,
   "subclass": "Dominio della Luce",
   "theme": "cleric",
   "layout": "cleric-layout",
@@ -21,13 +21,13 @@
       "dexterity": 10,
       "constitution": 16,
       "intelligence": 10,
-      "wisdom": 16,
+      "wisdom": 18,
       "charisma": 10
     },
-    "hp": { "current": 77, "max": 77, "temp": 0 },
+    "hp": { "current": 88, "max": 88, "temp": 0 },
     "armorClass": 19,
     "speed": 30,
-    "hitDice": { "current": 7, "max": 7 },
+    "hitDice": { "current": 8, "max": 8 },
     "attacks": [],
     "skillProficiencies": ["persuasion", "religion", "arcana", "history", "insight"]
   },
@@ -36,7 +36,7 @@
     { "level": 1, "max": 4 },
     { "level": 2, "max": 3 },
     { "level": 3, "max": 3 },
-    { "level": 4, "max": 1 }
+    { "level": 4, "max": 2 }
   ],
 
   "classFeatures": {
@@ -77,6 +77,6 @@
     "level1": ["healing-word", "shield-of-faith", "cure-wounds", "guiding-bolt", "detect-magic", "burning-hands", "faerie-fire"],
     "level2": ["find-traps", "scorching-ray", "see-invisibility"],
     "level3": ["create-food-and-water", "dispel-magic", "spirit-guardians", "daylight", "fireball"],
-    "level4": ["banishment"]
+    "level4": ["banishment", "arcane-eye", "wall-of-fire"]
   }
 }
