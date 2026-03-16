@@ -201,5 +201,45 @@
     "description": "<p>Avvolto brevemente da una nebbia argentea, ti <strong>teletrasporti</strong> fino a 9 metri in uno spazio non occupato che puoi vedere.</p>",
     "racial": true,
     "type": "utility"
+  },
+  "chromatic-orb": {
+    "name": "Sfera Cromatica",
+    "level": "1° livello",
+    "school": "Invocazione",
+    "castingTime": "Azione",
+    "range": "27 metri",
+    "components": "V, S, M (un diamante del valore di almeno 50 mo)",
+    "duration": "Istantaneo",
+    "description": "<p>Scagli una sfera di energia di 10 cm di diametro contro una creatura che puoi vedere entro gittata. Scegli <strong>acido, freddo, fuoco, fulmine, tuono o veleno</strong> come tipo di danno della sfera. Effettua un <strong>attacco con incantesimo a distanza</strong> contro il bersaglio. Se colpisci, la creatura subisce <strong>3d8 danni</strong> del tipo scelto.</p><p>Se tiri lo stesso numero su almeno due dei dadi danno, la sfera rimbalza su un'altra creatura a tua scelta che puoi vedere entro 9 metri dal bersaglio originale. Effettua un nuovo tiro per colpire contro la nuova creatura e infliggi lo stesso danno in caso di colpo. La sfera puo rimbalzare di nuovo allo stesso modo.</p>",
+    "higherLevel": "I danni aumentano di 1d8 per ogni slot di livello superiore al 1°.",
+    "racial": false,
+    "type": "damage",
+    "dice": { "attack": true, "damage": "3d8", "damageType": "variabile" }
+  },
+  "fireball": {
+    "name": "Palla di Fuoco",
+    "level": "3° livello",
+    "school": "Invocazione",
+    "castingTime": "Azione",
+    "range": "45 metri",
+    "components": "V, S, M (una piccola palla di guano di pipistrello e zolfo)",
+    "duration": "Istantaneo",
+    "description": "<p>Un punto luminoso parte dalla punta del tuo dito verso un punto a tua scelta entro gittata e poi sboccia con un rombo basso in un'esplosione di fiamme. Ogni creatura in una <strong>sfera di 6 metri</strong> di raggio centrata su quel punto deve effettuare un <strong>TS Destrezza</strong>. Un bersaglio subisce <strong>8d6 danni da fuoco</strong> con un fallimento, o meta danni con un successo.</p><p>Il fuoco si diffonde oltre gli angoli. Incendia gli oggetti infiammabili nell'area che non sono indossati o trasportati.</p>",
+    "higherLevel": "I danni aumentano di 1d6 per ogni slot di livello superiore al 3°.",
+    "racial": false,
+    "type": "damage",
+    "dice": { "save": "DES", "damage": "8d6", "damageType": "fuoco" }
+  },
+  "haste": {
+    "name": "Velocita",
+    "level": "3° livello",
+    "school": "Trasmutazione",
+    "castingTime": "Azione",
+    "range": "9 metri",
+    "components": "V, S, M (un truciolo di radice di liquirizia)",
+    "duration": "Concentrazione, fino a 1 minuto",
+    "description": "<p>Scegli una creatura consenziente che puoi vedere entro gittata. Fino al termine dell'incantesimo, la <strong>velocita del bersaglio raddoppia</strong>, ottiene un <strong>bonus di +2 alla CA</strong>, ha <strong>vantaggio ai tiri salvezza su Destrezza</strong>, e ottiene un'<strong>azione aggiuntiva</strong> in ogni suo turno. Quell'azione puo essere usata solo per effettuare l'azione di Attacco (un solo attacco con arma), Scatto, Disimpegno, Nascondersi o Usare un Oggetto.</p><p>Quando l'incantesimo termina, il bersaglio non puo muoversi ne effettuare azioni fino alla fine del suo prossimo turno, poiche un'ondata di letargia lo travolge.</p>",
+    "racial": false,
+    "type": "buff"
   }
 }

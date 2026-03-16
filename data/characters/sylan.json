@@ -2,15 +2,15 @@
   "id": "sylan",
   "name": "Sylan D'Thuranni",
   "class": "Mago",
-  "level": 4,
+  "level": 5,
   "subclass": "Scuola di Divinazione",
   "theme": "wizard",
   "layout": "wizard-layout",
   "statsLayout": "horizontal",
-  "storageKey": "dnd-wizard-4-divination",
+  "storageKey": "dnd-wizard-5-divination",
   "spellsFile": "spells/wizard.json",
 
-  "proficiencyBonus": 2,
+  "proficiencyBonus": 3,
   "spellcastingAbility": "intelligence",
   "hitDiceType": "d6",
 
@@ -24,17 +24,18 @@
       "wisdom": 8,
       "charisma": 10
     },
-    "hp": { "current": 26, "max": 26, "temp": 0 },
+    "hp": { "current": 32, "max": 32, "temp": 0 },
     "armorClass": 13,
     "speed": 9,
-    "hitDice": { "current": 4, "max": 4 },
+    "hitDice": { "current": 5, "max": 5 },
     "attacks": [],
     "skillProficiencies": ["insight", "investigation", "history"]
   },
 
   "spellSlots": [
     { "level": 1, "max": 4 },
-    { "level": 2, "max": 3 }
+    { "level": 2, "max": 3 },
+    { "level": 3, "max": 2 }
   ],
 
   "classFeatures": {
@@ -76,13 +77,18 @@
       {
         "name": "Marchio dei Thuranni (Eberron)",
         "description": "Dragonmark della Casa Thuranni (Marchio dell'Ombra). <strong>+1d4</strong> alle prove di Furtivita e Performance. Conosci il trucchetto <strong>Illusione Minore</strong>. Puoi lanciare <strong>Invisibilita</strong> 1/riposo lungo."
+      },
+      {
+        "name": "Memorizzare Incantesimi (Lv.5)",
+        "description": "Ogni volta che completi un <strong>riposo breve</strong>, puoi sostituire <strong>un incantesimo preparato</strong> con un altro dal tuo libro degli incantesimi. Il nuovo incantesimo deve essere di un livello per cui hai slot disponibili."
       }
     ]
   },
 
   "spells": {
     "cantrips": ["minor-illusion", "mage-hand", "mind-sliver", "fire-bolt", "prestidigitation", "toll-the-dead"],
-    "level1": ["disguise-self", "silvery-barbs", "mage-armor", "grease", "detect-magic"],
-    "level2": ["pass-without-trace", "detect-thoughts", "mind-spike", "web", "misty-step"]
+    "level1": ["disguise-self", "silvery-barbs", "mage-armor", "chromatic-orb", "detect-magic"],
+    "level2": ["pass-without-trace", "detect-thoughts", "mind-spike", "web", "misty-step"],
+    "level3": ["fireball", "haste"]
   }
 }
