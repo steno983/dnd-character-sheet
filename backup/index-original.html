@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheda Personaggio D&D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+    <div class="character-sheet">
+        <!-- Corner Flourishes -->
+        <div class="corner corner-tl">
+            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
+        </div>
+        <div class="corner corner-tr">
+            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
+        </div>
+        <div class="corner corner-bl">
+            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
+        </div>
+        <div class="corner corner-br">
+            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
+        </div>
+
+        <!-- Backup Buttons -->
+        <div class="backup-buttons">
+            <button class="backup-btn" onclick="downloadBackup()" title="Esporta Backup">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 4h14v2H5V4zm7 18l6.67-7h-4.17V9h-5v6H5.33L12 22z"/></svg>
+            </button>
+            <button class="backup-btn" onclick="document.getElementById('importFile').click()" title="Importa Backup">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 20h14v-2H5v2zm7-18L5.33 9h4.17v6h5v-6h4.17L12 2z"/></svg>
+            </button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(event)">
+        </div>
+
+        <!-- Page Toggle -->
+        <div class="page-toggle">
+            <button class="toggle-btn active" id="toggleSheet" onclick="showSheet()">Scheda</button>
+            <button class="toggle-btn" id="toggleNotes" onclick="showNotes()">Note</button>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-decoration">
+                <div class="header-line"></div>
+                <svg class="header-symbol" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="3"/>
+                    <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M75 25 L25 75" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <div class="header-line"></div>
+            </div>
+            <div class="character-name">
+                <input type="text" id="charName" placeholder="Nome del Personaggio">
+            </div>
+            <div class="class-level" id="classLevelText">Classe · Livello · Sottoclasse</div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-grid" id="mainGrid">
+            <!-- Stats Column -->
+            <div class="stats-column" id="statsColumn">
+                <div class="stat-block" data-stat="strength">
+                    <div class="stat-name">Forza</div>
+                    <div class="stat-modifier" id="str-mod">+0</div>
+                    <div class="stat-score">
+                        <input type="number" id="str-score" value="10" min="1" max="30">
+                    </div>
+                </div>
+                <div class="stat-block" data-stat="dexterity">
+                    <div class="stat-name">Destrezza</div>
+                    <div class="stat-modifier" id="dex-mod">+0</div>
+                    <div class="stat-score">
+                        <input type="number" id="dex-score" value="10" min="1" max="30">
+                    </div>
+                </div>
+                <div class="stat-block" data-stat="constitution">
+                    <div class="stat-name">Costituzione</div>
+                    <div class="stat-modifier" id="con-mod">+0</div>
+                    <div class="stat-score">
+                        <input type="number" id="con-score" value="10" min="1" max="30">
+                    </div>
+                </div>
+                <div class="stat-block" data-stat="intelligence">
+                    <div class="stat-name">Intelligenza</div>
+                    <div class="stat-modifier" id="int-mod">+0</div>
+                    <div class="stat-score">
+                        <input type="number" id="int-score" value="10" min="1" max="30">
+                    </div>
+                </div>
+                <div class="stat-block" data-stat="wisdom">
+                    <div class="stat-name">Saggezza</div>
+                    <div class="stat-modifier" id="wis-mod">+0</div>
+                    <div class="stat-score">
+                        <input type="number" id="wis-score" value="10" min="1" max="30">
+                    </div>
+                </div>
+                <div class="stat-block" data-stat="charisma">
+                    <div class="stat-name">Carisma</div>
+                    <div class="stat-modifier" id="cha-mod">+0</div>
+                    <div class="stat-score">
+                        <input type="number" id="cha-score" value="10" min="1" max="30">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Combat Column -->
+            <div class="combat-column">
+                <!-- HP Section -->
+                <div class="hp-section">
+                    <div class="hp-title">PUNTI FERITA</div>
+                    <div class="hp-grid">
+                        <div class="hp-box">
+                            <div class="hp-box-label">Attuali</div>
+                            <div class="hp-box-value">
+                                <input type="number" id="hp-current" value="0">
+                            </div>
+                        </div>
+                        <div class="hp-box">
+                            <div class="hp-box-label">Massimi</div>
+                            <div class="hp-box-value">
+                                <input type="number" id="hp-max" value="0">
+                            </div>
+                        </div>
+                        <div class="hp-box">
+                            <div class="hp-box-label">Temporanei</div>
+                            <div class="hp-box-value">
+                                <input type="number" id="hp-temp" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Combat Stats Row -->
+                <div class="combat-stats-row">
+                    <div class="combat-stat">
+                        <div class="combat-stat-label">Classe Armatura</div>
+                        <div class="combat-stat-value" id="armor-class-display">10</div>
+                    </div>
+                    <div class="combat-stat">
+                        <div class="combat-stat-label">Iniziativa</div>
+                        <div class="combat-stat-value" id="initiative">+0</div>
+                    </div>
+                    <div class="combat-stat">
+                        <div class="combat-stat-label">Velocita</div>
+                        <div class="combat-stat-value">
+                            <input type="number" id="speed" value="30">m
+                        </div>
+                    </div>
+                    <div class="combat-stat">
+                        <div class="combat-stat-label">Competenza</div>
+                        <div class="combat-stat-value" id="proficiency-bonus">+2</div>
+                    </div>
+                </div>
+
+                <!-- Skills Section (Wizard) -->
+                <div class="skills-section class-feature-section hidden" id="skills-section">
+                    <div class="skills-title">Abilita</div>
+                    <div class="skills-grid" id="skills-grid"></div>
+                </div>
+
+                <!-- Resources -->
+                <div class="resources-section">
+                    <div class="resource-box">
+                        <div class="resource-title" id="hit-dice-title">Dadi Vita (d8)</div>
+                        <div class="resource-pips" id="hit-dice-pips"></div>
+                    </div>
+                    <div class="resource-box" id="channel-divinity-box">
+                        <div class="resource-title">Channel Divinity</div>
+                        <div class="resource-pips" id="channel-divinity-pips"></div>
+                    </div>
+                    <div class="resource-box hidden" id="detect-magic-box">
+                        <div class="resource-title">Individuazione Magico</div>
+                        <div class="resource-pips" id="detect-magic-pips"></div>
+                        <div style="font-size: 0.7rem; color: var(--ink-light); margin-top: 5px;">1/giorno (razza)</div>
+                    </div>
+                </div>
+
+                <!-- Warding Flare Section (Cleric) -->
+                <div class="class-feature-section warding-flare-section hidden" id="warding-flare-section">
+                    <div class="wf-header">
+                        <div class="wf-title">BAGLIORE PROTETTIVO</div>
+                        <div class="wf-uses">
+                            <div class="resource-pips" id="warding-flare-pips"></div>
+                        </div>
+                    </div>
+                    <div class="wf-desc" id="warding-flare-desc"></div>
+                </div>
+
+                <!-- Channel Divinity Section (Cleric) -->
+                <div class="class-feature-section channel-divinity-section hidden" id="channel-divinity-section">
+                    <div class="cd-title">INCANALARE DIVINITA</div>
+                    <div id="channel-divinity-abilities"></div>
+                </div>
+
+                <!-- Mage Armor Section (Wizard) -->
+                <div class="class-feature-section mage-armor-section hidden" id="mage-armor-section">
+                    <div class="ma-header">
+                        <div class="ma-title">Armatura Magica</div>
+                        <div class="ma-toggle">
+                            <div class="toggle-switch" id="mageArmorToggle" onclick="toggleMageArmor()"></div>
+                            <span class="ma-label" id="mageArmorLabel">Inattiva</span>
+                        </div>
+                    </div>
+                    <div class="ma-desc" id="mage-armor-desc"></div>
+                </div>
+
+                <!-- Portent Section (Wizard) -->
+                <div class="class-feature-section portent-section hidden" id="portent-section">
+                    <div class="portent-header">
+                        <div class="portent-title">Portento</div>
+                    </div>
+                    <div class="portent-dice" id="portentDice">
+                        <div class="portent-die">
+                            <div class="portent-die-label">Dado 1</div>
+                            <input type="number" class="portent-die-input" id="portent1" min="1" max="20" value="0">
+                            <button class="portent-use-btn" id="portent1Btn" onclick="usePortent(0)">Usa</button>
+                        </div>
+                        <div class="portent-die">
+                            <div class="portent-die-label">Dado 2</div>
+                            <input type="number" class="portent-die-input" id="portent2" min="1" max="20" value="0">
+                            <button class="portent-use-btn" id="portent2Btn" onclick="usePortent(1)">Usa</button>
+                        </div>
+                    </div>
+                    <div class="portent-desc" id="portent-desc"></div>
+                </div>
+
+                <!-- Special Abilities Section -->
+                <div class="class-feature-section abilities-section hidden" id="abilities-section">
+                    <div class="abilities-title">Abilita Speciali</div>
+                    <div id="abilities-list"></div>
+
+                    <!-- Rest Buttons -->
+                    <div class="rest-buttons">
+                        <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Riposo Breve">
+                            &#9790; Riposo Breve
+                        </button>
+                        <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Riposo Lungo">
+                            &#9728; Riposo Lungo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rest Buttons (if no abilities section) -->
+                <div class="rest-buttons" id="rest-buttons-standalone">
+                    <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Riposo Breve">
+                        &#9790; Riposo Breve
+                    </button>
+                    <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Riposo Lungo">
+                        &#9728; Riposo Lungo
+                    </button>
+                </div>
+
+                <!-- Spell Slots -->
+                <div class="spell-slots-section">
+                    <div class="spell-slots-title">&#10022; Slot Incantesimi &#10022;</div>
+                    <div id="spell-slots-container"></div>
+                    <div class="spellcasting-stats">
+                        <div class="spell-stat">
+                            <div class="spell-stat-label">CD Incantesimi</div>
+                            <div class="spell-stat-value" id="spell-dc">10</div>
+                        </div>
+                        <div class="spell-stat">
+                            <div class="spell-stat-label">Bonus Attacco</div>
+                            <div class="spell-stat-value" id="spell-attack">+0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spellbook Section -->
+                <div class="spellbook-section">
+                    <div class="spellbook-title">Libro degli Incantesimi</div>
+
+                    <!-- Cantrips -->
+                    <div class="spell-category">
+                        <div class="spell-category-title">Trucchetti</div>
+                        <div class="spells-grid" id="cantrips-grid"></div>
+                    </div>
+
+                    <!-- Level 1 -->
+                    <div class="spell-category">
+                        <div class="spell-category-title">1° Livello</div>
+                        <div class="spells-grid" id="level1-grid"></div>
+                    </div>
+
+                    <!-- Level 2 -->
+                    <div class="spell-category">
+                        <div class="spell-category-title">2° Livello</div>
+                        <div class="spells-grid" id="level2-grid"></div>
+                    </div>
+
+                    <!-- Level 3 -->
+                    <div class="spell-category" id="level3-category">
+                        <div class="spell-category-title">3° Livello</div>
+                        <div class="spells-grid" id="level3-grid"></div>
+                    </div>
+
+                    <!-- Level 4 -->
+                    <div class="spell-category" id="level4-category">
+                        <div class="spell-category-title">4° Livello</div>
+                        <div class="spells-grid" id="level4-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Magic Items Section -->
+                <div class="magic-inventory-section" id="magic-inventory-section">
+                    <div class="inventory-title">Oggetti Magici</div>
+                    <div id="magic-inventory-list"></div>
+                </div>
+
+                <!-- Generic Inventory Section -->
+                <div class="list-box generic-inventory-section">
+                    <div class="list-title">
+                        <span>Inventario</span>
+                        <span class="inventory-weight" id="inventoryWeight"></span>
+                    </div>
+                    <div id="inventory-list"></div>
+                    <button class="add-btn" onclick="addItem()">+ Aggiungi Oggetto</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Page (hidden by default) -->
+        <div id="notesPage" class="notes-page hidden">
+            <div class="notes-header">
+                <h2 class="notes-title">Note della Sessione</h2>
+            </div>
+            <div class="note-form">
+                <textarea id="noteInput" class="note-textarea" placeholder="Scrivi una nuova nota..." rows="3"></textarea>
+                <button class="note-add-btn" onclick="addNote()">Aggiungi Nota</button>
+            </div>
+            <div class="notes-list" id="notesList"></div>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">&#10003; Salvato</div>
+
+    <!-- Skill Roll Toast -->
+    <div class="skill-toast" id="skillToast" onclick="closeSkillToast()">
+        <div class="skill-toast-name" id="skillToastName">Abilita</div>
+        <div class="skill-toast-result" id="skillToastResult">0</div>
+        <div class="skill-toast-breakdown" id="skillToastBreakdown"></div>
+        <div class="skill-toast-close">Tocca per chiudere</div>
+    </div>
+
+    <!-- Spell Modal -->
+    <div class="spell-modal-overlay" id="spellModal" onclick="closeSpellModal(event)">
+        <div class="spell-modal" onclick="event.stopPropagation()">
+            <div class="spell-modal-header" id="spellModalHeader">
+                <button class="spell-modal-close" onclick="closeSpellModal()">&times;</button>
+                <div class="spell-modal-name" id="spellModalName">Spell Name</div>
+                <div class="spell-modal-meta" id="spellModalMeta">Level School</div>
+            </div>
+            <div class="spell-modal-body">
+                <div class="spell-stat-row">
+                    <div class="spell-stat-item">
+                        <div class="spell-stat-label">Tempo di Lancio</div>
+                        <div class="spell-stat-value" id="spellCastingTime">1 Action</div>
+                    </div>
+                    <div class="spell-stat-item">
+                        <div class="spell-stat-label">Gittata</div>
+                        <div class="spell-stat-value" id="spellRange">Touch</div>
+                    </div>
+                    <div class="spell-stat-item">
+                        <div class="spell-stat-label">Componenti</div>
+                        <div class="spell-stat-value" id="spellComponents">V, S</div>
+                    </div>
+                    <div class="spell-stat-item">
+                        <div class="spell-stat-label">Durata</div>
+                        <div class="spell-stat-value" id="spellDuration">Instantaneous</div>
+                    </div>
+                </div>
+                <div class="spell-description" id="spellDescription">
+                    Description here...
+                </div>
+                <div class="spell-higher-level" id="spellHigherLevel" style="display: none;">
+                    <div class="spell-higher-level-title">A Livelli Superiori</div>
+                    <div id="spellHigherLevelText"></div>
+                </div>
+                <div class="dice-section" id="diceSection" style="display: none;">
+                    <div class="dice-buttons" id="diceButtons"></div>
+                    <div class="dice-result" id="diceResult">
+                        <div class="dice-result-label" id="diceResultLabel">Risultato</div>
+                        <div class="dice-result-total" id="diceResultTotal">0</div>
+                        <div class="dice-result-breakdown" id="diceResultBreakdown"></div>
+                        <div class="dice-result-type" id="diceResultType"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portent Modal (for Long Rest) -->
+    <div class="portent-modal-overlay" id="portentModal">
+        <div class="portent-modal">
+            <h3>Nuovo Giorno - Portento</h3>
+            <p>Tira 2d20 e inserisci i risultati per i tuoi dadi Portento:</p>
+            <div class="portent-modal-dice">
+                <input type="number" class="portent-modal-input" id="portentModal1" min="1" max="20" placeholder="?">
+                <input type="number" class="portent-modal-input" id="portentModal2" min="1" max="20" placeholder="?">
+            </div>
+            <button class="portent-modal-btn" onclick="confirmPortent()">Conferma</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/spells.js"></script>
+    <script src="js/skills.js"></script>
+</body>
+</html>

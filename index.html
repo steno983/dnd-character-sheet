@@ -4,339 +4,559 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scheda Personaggio D&D</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/base.css">
-</head>
-<body>
-    <div class="character-sheet">
-        <!-- Corner Flourishes -->
-        <div class="corner corner-tl">
-            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
-        </div>
-        <div class="corner corner-tr">
-            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
-        </div>
-        <div class="corner corner-bl">
-            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
-        </div>
-        <div class="corner corner-br">
-            <svg viewBox="0 0 60 60"><path d="M5 55 Q5 5 55 5 L55 10 Q12 10 10 53 L5 55 Z M15 55 Q15 20 50 15 L50 20 Q22 22 20 50 L15 55 Z"/></svg>
-        </div>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/v2-bridge.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        headline: ['Newsreader', 'serif'],
+                        body: ['Manrope', 'sans-serif'],
+                        label: ['Manrope', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+        }
+        body {
+            background-color: var(--md-surface, #0b0d14);
+            color: var(--md-on-surface, #f1f5f9);
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Grain texture overlay */
+        .grain-texture {
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD9nrQs0GT21ZIbGMO-yve_L4LeztY1nuf3u8oTF6t51JH2wyqEc0vkXRFUyT3xwlzLNv-0sxz6laXAzQ3Rk43nImdnhyNpFSXIzS4n1BBpL8WW91yx5gz7f3naaNgSEOXIUPZwXxzsABNAsL3huNeado63w1M405Sa-lMs3FtakR9C1HwZZ0frw20dyxg2LHAEU9YAAIQK7DPnsu0mkFPUrMeh6LFV6HMOpHeX7ABU38ZxDkYG6kkkjUqCL4o4rDGdFiyCTw);
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--md-outline, #475569); border-radius: 4px; }
+    </style>
 
-        <!-- Backup Buttons -->
-        <div class="backup-buttons">
-            <button class="backup-btn" onclick="downloadBackup()" title="Esporta Backup">
-                <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 4h14v2H5V4zm7 18l6.67-7h-4.17V9h-5v6H5.33L12 22z"/></svg>
+    <!--
+        Strategy: We can't override loadTheme via window assignment because app.js
+        uses a function declaration which hoists. Instead, we intercept after the fact:
+        app.js will load css/themes/cleric.css (old theme). We use a MutationObserver
+        to detect when it's added and replace it with the v2 version.
+    -->
+    <script>
+        (function() {
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(m) {
+                    m.addedNodes.forEach(function(node) {
+                        if (node.tagName === 'LINK' && node.href && node.href.indexOf('css/themes/') !== -1 && node.href.indexOf('v2-') === -1) {
+                            // Replace old theme with v2 version
+                            var oldHref = node.getAttribute('href');
+                            var themeName = oldHref.replace('css/themes/', '').replace('.css', '');
+                            node.href = 'css/themes/v2-' + themeName + '.css';
+                            node.id = 'theme-stylesheet';
+                            observer.disconnect();
+                        }
+                    });
+                });
+            });
+            observer.observe(document.head, { childList: true });
+        })();
+    </script>
+</head>
+<body class="font-body min-h-screen pb-32 selection:bg-[var(--md-primary)]/20">
+    <!-- Grain Overlay -->
+    <div class="fixed inset-0 grain-texture z-50"></div>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="header sticky top-0 z-40 backdrop-blur-md flex justify-between items-center w-full px-5 py-3 border-b"
+            style="background: color-mix(in srgb, var(--md-surface) 90%, transparent); border-color: var(--md-outline-variant);">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-2xl" style="color: var(--md-primary);">menu</span>
+            <div>
+                <input type="text" id="charName" placeholder="Nome del Personaggio"
+                       class="bg-transparent border-none text-xl font-headline font-bold p-0 focus:ring-0 focus:outline-none"
+                       style="color: var(--md-primary); width: 180px;">
+                <div class="text-[11px] font-label font-bold uppercase tracking-wider opacity-60" id="classLevelText">
+                    Classe · Livello · Sottoclasse
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button class="backup-btn p-2 rounded-lg opacity-60 hover:opacity-100 transition-opacity" onclick="downloadBackup()" title="Esporta Backup">
+                <span class="material-symbols-outlined text-lg">download</span>
             </button>
-            <button class="backup-btn" onclick="document.getElementById('importFile').click()" title="Importa Backup">
-                <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 20h14v-2H5v2zm7-18L5.33 9h4.17v6h5v-6h4.17L12 2z"/></svg>
+            <button class="backup-btn p-2 rounded-lg opacity-60 hover:opacity-100 transition-opacity" onclick="document.getElementById('importFile').click()" title="Importa Backup">
+                <span class="material-symbols-outlined text-lg">upload</span>
             </button>
             <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(event)">
         </div>
+    </header>
 
-        <!-- Page Toggle -->
-        <div class="page-toggle">
-            <button class="toggle-btn active" id="toggleSheet" onclick="showSheet()">Scheda</button>
-            <button class="toggle-btn" id="toggleNotes" onclick="showNotes()">Note</button>
-        </div>
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="px-4 pt-4 relative">
+        <div id="mainGrid">
 
-        <!-- Header -->
-        <header class="header">
-            <div class="header-decoration">
-                <div class="header-line"></div>
-                <svg class="header-symbol" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="3"/>
-                    <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M75 25 L25 75" stroke="currentColor" stroke-width="2"/>
-                </svg>
-                <div class="header-line"></div>
-            </div>
-            <div class="character-name">
-                <input type="text" id="charName" placeholder="Nome del Personaggio">
-            </div>
-            <div class="class-level" id="classLevelText">Classe · Livello · Sottoclasse</div>
-            <button class="reset-btn" onclick="resetCharacter()" title="Reset dati personaggio">🔄 Reset</button>
-        </header>
+        <!-- ==================== TAB: SCHEDA ==================== -->
+        <div id="tab-scheda">
 
-        <!-- Main Content -->
-        <div class="main-grid" id="mainGrid">
-            <!-- Stats Column -->
-            <div class="stats-column" id="statsColumn">
-                <div class="stat-block" data-stat="strength">
-                    <div class="stat-name">Forza</div>
-                    <div class="stat-modifier" id="str-mod">+0</div>
-                    <div class="stat-score">
-                        <input type="number" id="str-score" value="10" min="1" max="30">
+            <!-- HP + AC Cards -->
+            <section class="grid grid-cols-2 gap-3 mb-6">
+                <!-- HP Card -->
+                <div class="p-4 rounded-2xl relative overflow-hidden"
+                     style="background: var(--md-primary-container); color: var(--md-on-primary-container);">
+                    <div class="absolute -right-4 -bottom-4 opacity-10">
+                        <span class="material-symbols-outlined text-8xl">favorite</span>
+                    </div>
+                    <span class="font-label text-[10px] font-extrabold uppercase tracking-widest opacity-80">Punti Ferita</span>
+                    <div class="flex items-baseline gap-1 mt-1">
+                        <input type="number" id="hp-current" value="0"
+                               class="bg-transparent border-none text-4xl font-headline font-bold w-16 p-0 focus:ring-0 focus:outline-none"
+                               style="color: var(--md-on-primary-container);">
+                        <span class="text-lg opacity-60">/ </span>
+                        <input type="number" id="hp-max" value="0"
+                               class="bg-transparent border-none text-lg opacity-60 w-10 p-0 focus:ring-0 focus:outline-none"
+                               style="color: var(--md-on-primary-container);">
+                    </div>
+                    <div class="flex items-center gap-1 mt-2 opacity-70">
+                        <span class="text-[10px] font-bold uppercase">Temp:</span>
+                        <input type="number" id="hp-temp" value="0"
+                               class="bg-transparent border-none text-sm w-8 p-0 focus:ring-0 focus:outline-none"
+                               style="color: var(--md-on-primary-container);">
                     </div>
                 </div>
-                <div class="stat-block" data-stat="dexterity">
-                    <div class="stat-name">Destrezza</div>
-                    <div class="stat-modifier" id="dex-mod">+0</div>
-                    <div class="stat-score">
-                        <input type="number" id="dex-score" value="10" min="1" max="30">
-                    </div>
-                </div>
-                <div class="stat-block" data-stat="constitution">
-                    <div class="stat-name">Costituzione</div>
-                    <div class="stat-modifier" id="con-mod">+0</div>
-                    <div class="stat-score">
-                        <input type="number" id="con-score" value="10" min="1" max="30">
-                    </div>
-                </div>
-                <div class="stat-block" data-stat="intelligence">
-                    <div class="stat-name">Intelligenza</div>
-                    <div class="stat-modifier" id="int-mod">+0</div>
-                    <div class="stat-score">
-                        <input type="number" id="int-score" value="10" min="1" max="30">
-                    </div>
-                </div>
-                <div class="stat-block" data-stat="wisdom">
-                    <div class="stat-name">Saggezza</div>
-                    <div class="stat-modifier" id="wis-mod">+0</div>
-                    <div class="stat-score">
-                        <input type="number" id="wis-score" value="10" min="1" max="30">
-                    </div>
-                </div>
-                <div class="stat-block" data-stat="charisma">
-                    <div class="stat-name">Carisma</div>
-                    <div class="stat-modifier" id="cha-mod">+0</div>
-                    <div class="stat-score">
-                        <input type="number" id="cha-score" value="10" min="1" max="30">
-                    </div>
-                </div>
-            </div>
 
-            <!-- Combat Column -->
-            <div class="combat-column">
-                <!-- HP Section -->
-                <div class="hp-section">
-                    <div class="hp-title">PUNTI FERITA</div>
-                    <div class="hp-grid">
-                        <div class="hp-box">
-                            <div class="hp-box-label">Attuali</div>
-                            <div class="hp-box-value">
-                                <input type="number" id="hp-current" value="0">
+                <!-- AC + Combat Stats Card -->
+                <div class="p-4 rounded-2xl relative overflow-hidden border-b-2"
+                     style="background: var(--md-surface-container-high); border-color: color-mix(in srgb, var(--md-primary) 20%, transparent);">
+                    <div class="absolute -right-4 -bottom-4 opacity-10" style="color: var(--md-primary);">
+                        <span class="material-symbols-outlined text-8xl">shield</span>
+                    </div>
+                    <span class="font-label text-[10px] font-extrabold uppercase tracking-widest" style="color: var(--md-secondary);">Classe Armatura</span>
+                    <div class="text-5xl font-headline font-bold mt-1" id="armor-class-display">10</div>
+                    <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+                        <div>
+                            <div class="text-[9px] font-bold uppercase opacity-50">Iniz.</div>
+                            <div class="text-sm font-bold" id="initiative">+0</div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] font-bold uppercase opacity-50">Vel.</div>
+                            <div class="text-sm font-bold flex items-center justify-center">
+                                <input type="number" id="speed" value="30"
+                                       class="bg-transparent border-none w-8 p-0 text-center text-sm font-bold focus:ring-0 focus:outline-none"
+                                       style="color: var(--md-on-surface);">
+                                <span class="text-[10px] opacity-50">m</span>
                             </div>
                         </div>
-                        <div class="hp-box">
-                            <div class="hp-box-label">Massimi</div>
-                            <div class="hp-box-value">
-                                <input type="number" id="hp-max" value="0">
-                            </div>
-                        </div>
-                        <div class="hp-box">
-                            <div class="hp-box-label">Temporanei</div>
-                            <div class="hp-box-value">
-                                <input type="number" id="hp-temp" value="0">
-                            </div>
+                        <div>
+                            <div class="text-[9px] font-bold uppercase opacity-50">Comp.</div>
+                            <div class="text-sm font-bold" id="proficiency-bonus">+2</div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <!-- Combat Stats Row -->
-                <div class="combat-stats-row">
-                    <div class="combat-stat">
-                        <div class="combat-stat-label">Classe Armatura</div>
-                        <div class="combat-stat-value" id="armor-class-display">10</div>
-                    </div>
-                    <div class="combat-stat">
-                        <div class="combat-stat-label">Iniziativa</div>
-                        <div class="combat-stat-value" id="initiative">+0</div>
-                    </div>
-                    <div class="combat-stat">
-                        <div class="combat-stat-label">Velocita</div>
-                        <div class="combat-stat-value">
-                            <input type="number" id="speed" value="30">m
+            <!-- Ability Scores -->
+            <section class="mb-6">
+                <h3 class="font-label text-[11px] font-extrabold uppercase tracking-[0.2em] mb-3 px-1"
+                    style="color: var(--md-on-surface-variant);">Caratteristiche</h3>
+                <div id="statsColumn" class="grid grid-cols-3 gap-2">
+                    <!-- STR -->
+                    <div class="stat-block p-3 rounded-xl flex flex-col items-center"
+                         style="background: var(--md-surface-container-low);" data-stat="strength">
+                        <span class="stat-name font-label text-[9px] font-bold uppercase mb-1"
+                              style="color: var(--md-on-surface-variant);">FOR</span>
+                        <span class="stat-modifier text-3xl font-headline font-bold" id="str-mod">+0</span>
+                        <div class="mt-2 w-7 h-7 rounded-full flex items-center justify-center border"
+                             style="background: var(--md-surface-container-low); border-color: var(--md-outline);">
+                            <input type="number" id="str-score" value="10" min="1" max="30"
+                                   class="stat-score bg-transparent border-none w-6 text-center text-[11px] font-bold p-0 focus:ring-0 focus:outline-none"
+                                   style="color: var(--md-on-surface);">
                         </div>
                     </div>
-                    <div class="combat-stat">
-                        <div class="combat-stat-label">Competenza</div>
-                        <div class="combat-stat-value" id="proficiency-bonus">+2</div>
+                    <!-- DEX -->
+                    <div class="stat-block p-3 rounded-xl flex flex-col items-center"
+                         style="background: var(--md-surface-container-low);" data-stat="dexterity">
+                        <span class="stat-name font-label text-[9px] font-bold uppercase mb-1"
+                              style="color: var(--md-on-surface-variant);">DES</span>
+                        <span class="stat-modifier text-3xl font-headline font-bold" id="dex-mod">+0</span>
+                        <div class="mt-2 w-7 h-7 rounded-full flex items-center justify-center border"
+                             style="background: var(--md-surface-container-low); border-color: var(--md-outline);">
+                            <input type="number" id="dex-score" value="10" min="1" max="30"
+                                   class="stat-score bg-transparent border-none w-6 text-center text-[11px] font-bold p-0 focus:ring-0 focus:outline-none"
+                                   style="color: var(--md-on-surface);">
+                        </div>
+                    </div>
+                    <!-- CON -->
+                    <div class="stat-block p-3 rounded-xl flex flex-col items-center"
+                         style="background: var(--md-surface-container-low);" data-stat="constitution">
+                        <span class="stat-name font-label text-[9px] font-bold uppercase mb-1"
+                              style="color: var(--md-on-surface-variant);">COS</span>
+                        <span class="stat-modifier text-3xl font-headline font-bold" id="con-mod">+0</span>
+                        <div class="mt-2 w-7 h-7 rounded-full flex items-center justify-center border"
+                             style="background: var(--md-surface-container-low); border-color: var(--md-outline);">
+                            <input type="number" id="con-score" value="10" min="1" max="30"
+                                   class="stat-score bg-transparent border-none w-6 text-center text-[11px] font-bold p-0 focus:ring-0 focus:outline-none"
+                                   style="color: var(--md-on-surface);">
+                        </div>
+                    </div>
+                    <!-- INT -->
+                    <div class="stat-block p-3 rounded-xl flex flex-col items-center"
+                         style="background: var(--md-surface-container-low);" data-stat="intelligence">
+                        <span class="stat-name font-label text-[9px] font-bold uppercase mb-1"
+                              style="color: var(--md-on-surface-variant);">INT</span>
+                        <span class="stat-modifier text-3xl font-headline font-bold" id="int-mod">+0</span>
+                        <div class="mt-2 w-7 h-7 rounded-full flex items-center justify-center border"
+                             style="background: var(--md-surface-container-low); border-color: var(--md-outline);">
+                            <input type="number" id="int-score" value="10" min="1" max="30"
+                                   class="stat-score bg-transparent border-none w-6 text-center text-[11px] font-bold p-0 focus:ring-0 focus:outline-none"
+                                   style="color: var(--md-on-surface);">
+                        </div>
+                    </div>
+                    <!-- WIS -->
+                    <div class="stat-block p-3 rounded-xl flex flex-col items-center"
+                         style="background: var(--md-surface-container-low);" data-stat="wisdom">
+                        <span class="stat-name font-label text-[9px] font-bold uppercase mb-1"
+                              style="color: var(--md-on-surface-variant);">SAG</span>
+                        <span class="stat-modifier text-3xl font-headline font-bold" id="wis-mod">+0</span>
+                        <div class="mt-2 w-7 h-7 rounded-full flex items-center justify-center border"
+                             style="background: var(--md-surface-container-low); border-color: var(--md-outline);">
+                            <input type="number" id="wis-score" value="10" min="1" max="30"
+                                   class="stat-score bg-transparent border-none w-6 text-center text-[11px] font-bold p-0 focus:ring-0 focus:outline-none"
+                                   style="color: var(--md-on-surface);">
+                        </div>
+                    </div>
+                    <!-- CHA -->
+                    <div class="stat-block p-3 rounded-xl flex flex-col items-center"
+                         style="background: var(--md-surface-container-low);" data-stat="charisma">
+                        <span class="stat-name font-label text-[9px] font-bold uppercase mb-1"
+                              style="color: var(--md-on-surface-variant);">CAR</span>
+                        <span class="stat-modifier text-3xl font-headline font-bold" id="cha-mod">+0</span>
+                        <div class="mt-2 w-7 h-7 rounded-full flex items-center justify-center border"
+                             style="background: var(--md-surface-container-low); border-color: var(--md-outline);">
+                            <input type="number" id="cha-score" value="10" min="1" max="30"
+                                   class="stat-score bg-transparent border-none w-6 text-center text-[11px] font-bold p-0 focus:ring-0 focus:outline-none"
+                                   style="color: var(--md-on-surface);">
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                <!-- Skills Section (Wizard) -->
-                <div class="skills-section class-feature-section hidden" id="skills-section">
-                    <div class="skills-title">Abilita</div>
+            <!-- Skills + Class Features -->
+            <div class="grid grid-cols-12 gap-4 mb-6">
+                <!-- Skills -->
+                <section class="col-span-5 class-feature-section hidden" id="skills-section">
+                    <h3 class="font-label text-[11px] font-extrabold uppercase tracking-[0.2em] mb-3 px-1"
+                        style="color: var(--md-on-surface-variant);">Abilita</h3>
                     <div class="skills-grid" id="skills-grid"></div>
-                </div>
+                </section>
 
-                <!-- Resources -->
-                <div class="resources-section">
-                    <div class="resource-box">
-                        <div class="resource-title" id="hit-dice-title">Dadi Vita (d8)</div>
-                        <div class="resource-pips" id="hit-dice-pips"></div>
-                    </div>
-                    <div class="resource-box" id="channel-divinity-box">
-                        <div class="resource-title">Channel Divinity</div>
-                        <div class="resource-pips" id="channel-divinity-pips"></div>
-                    </div>
-                    <div class="resource-box hidden" id="detect-magic-box">
-                        <div class="resource-title">Individuazione Magico</div>
-                        <div class="resource-pips" id="detect-magic-pips"></div>
-                        <div style="font-size: 0.7rem; color: var(--ink-light); margin-top: 5px;">1/giorno (razza)</div>
-                    </div>
-                </div>
+                <!-- Class Features Column -->
+                <section class="col-span-7 space-y-3" id="class-features-column">
+                    <h3 class="font-label text-[11px] font-extrabold uppercase tracking-[0.2em] px-1"
+                        style="color: var(--md-on-surface-variant);">Privilegi</h3>
 
-                <!-- Warding Flare Section (Cleric) -->
-                <div class="class-feature-section warding-flare-section hidden" id="warding-flare-section">
-                    <div class="wf-header">
-                        <div class="wf-title">BAGLIORE PROTETTIVO</div>
-                        <div class="wf-uses">
-                            <div class="resource-pips" id="warding-flare-pips"></div>
+                    <!-- Warding Flare -->
+                    <div class="class-feature-section hidden" id="warding-flare-section">
+                        <div class="p-3 rounded-lg transition-colors border"
+                             style="background: var(--md-surface-container); border-color: color-mix(in srgb, var(--md-primary) 10%, transparent);">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-[13px] font-bold font-headline" style="color: color-mix(in srgb, var(--md-primary) 80%, white);">Bagliore Protettivo</p>
+                            </div>
+                            <div class="resource-pips flex gap-1 mb-1" id="warding-flare-pips"></div>
+                            <p class="text-[10px] mt-1 leading-tight" id="warding-flare-desc"
+                               style="color: var(--md-on-surface-variant);"></p>
                         </div>
                     </div>
-                    <div class="wf-desc" id="warding-flare-desc"></div>
-                </div>
 
-                <!-- Channel Divinity Section (Cleric) -->
-                <div class="class-feature-section channel-divinity-section hidden" id="channel-divinity-section">
-                    <div class="cd-title">INCANALARE DIVINITA</div>
-                    <div id="channel-divinity-abilities"></div>
-                </div>
+                    <!-- Channel Divinity Section -->
+                    <div class="class-feature-section hidden" id="channel-divinity-section">
+                        <div class="space-y-2" id="channel-divinity-abilities"></div>
+                    </div>
 
-                <!-- Mage Armor Section (Wizard) -->
-                <div class="class-feature-section mage-armor-section hidden" id="mage-armor-section">
-                    <div class="ma-header">
-                        <div class="ma-title">Armatura Magica</div>
-                        <div class="ma-toggle">
-                            <div class="toggle-switch" id="mageArmorToggle" onclick="toggleMageArmor()"></div>
-                            <span class="ma-label" id="mageArmorLabel">Inattiva</span>
+                    <!-- Mage Armor -->
+                    <div class="class-feature-section hidden" id="mage-armor-section">
+                        <div class="p-3 rounded-lg transition-colors border"
+                             style="background: var(--md-surface-container); border-color: color-mix(in srgb, var(--md-primary) 10%, transparent);">
+                            <div class="flex items-center justify-between">
+                                <p class="text-[13px] font-bold font-headline" style="color: color-mix(in srgb, var(--md-primary) 80%, white);">Armatura Magica</p>
+                                <div class="flex items-center gap-2">
+                                    <div class="toggle-switch w-10 h-5 rounded-full cursor-pointer relative transition-colors"
+                                         id="mageArmorToggle" onclick="toggleMageArmor()"
+                                         style="background: var(--md-outline-variant);">
+                                        <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full transition-transform"
+                                             style="background: var(--md-on-surface);"></div>
+                                    </div>
+                                    <span class="text-[10px] font-bold uppercase" id="mageArmorLabel"
+                                          style="color: var(--md-on-surface-variant);">Inattiva</span>
+                                </div>
+                            </div>
+                            <p class="text-[10px] mt-1 leading-tight" id="mage-armor-desc"
+                               style="color: var(--md-on-surface-variant);"></p>
                         </div>
                     </div>
-                    <div class="ma-desc" id="mage-armor-desc"></div>
+
+                    <!-- Portent -->
+                    <div class="class-feature-section hidden" id="portent-section">
+                        <div class="p-3 rounded-lg transition-colors border"
+                             style="background: var(--md-surface-container); border-color: color-mix(in srgb, var(--md-tertiary) 20%, transparent);">
+                            <p class="text-[13px] font-bold font-headline mb-2" style="color: var(--md-tertiary);">Portento</p>
+                            <div class="portent-dice flex gap-3" id="portentDice">
+                                <div class="flex items-center gap-2">
+                                    <div class="text-[10px] font-bold opacity-60">D1</div>
+                                    <input type="number" class="portent-die-input w-12 h-10 text-center text-lg font-bold rounded-lg border focus:ring-1 focus:outline-none"
+                                           id="portent1" min="1" max="20" value="0"
+                                           style="background: var(--md-surface-container-low); border-color: var(--md-outline); color: var(--md-on-surface); --tw-ring-color: var(--md-primary);">
+                                    <button class="portent-use-btn text-[10px] font-bold uppercase px-2 py-1 rounded"
+                                            id="portent1Btn" onclick="usePortent(0)"
+                                            style="background: var(--md-tertiary); color: var(--md-on-tertiary);">Usa</button>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="text-[10px] font-bold opacity-60">D2</div>
+                                    <input type="number" class="portent-die-input w-12 h-10 text-center text-lg font-bold rounded-lg border focus:ring-1 focus:outline-none"
+                                           id="portent2" min="1" max="20" value="0"
+                                           style="background: var(--md-surface-container-low); border-color: var(--md-outline); color: var(--md-on-surface); --tw-ring-color: var(--md-primary);">
+                                    <button class="portent-use-btn text-[10px] font-bold uppercase px-2 py-1 rounded"
+                                            id="portent2Btn" onclick="usePortent(1)"
+                                            style="background: var(--md-tertiary); color: var(--md-on-tertiary);">Usa</button>
+                                </div>
+                            </div>
+                            <p class="text-[10px] mt-2 leading-tight" id="portent-desc"
+                               style="color: var(--md-on-surface-variant);"></p>
+                        </div>
+                    </div>
+
+                    <!-- Special Abilities -->
+                    <div class="class-feature-section hidden" id="abilities-section">
+                        <div id="abilities-list" class="space-y-2"></div>
+                        <!-- Rest Buttons (inside abilities section) -->
+                        <div class="flex gap-2 mt-3">
+                            <button class="rest-btn flex-1 py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all"
+                                    onclick="shortRest(this)"
+                                    style="background: var(--md-surface-container-high); color: var(--md-on-surface); border: 1px solid var(--md-outline-variant);">
+                                &#9790; Riposo Breve
+                            </button>
+                            <button class="rest-btn flex-1 py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all"
+                                    onclick="longRest(this)"
+                                    style="background: var(--md-primary-container); color: var(--md-on-primary-container);">
+                                &#9728; Riposo Lungo
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Resources -->
+            <section class="mb-6 space-y-3">
+                <h3 class="font-label text-[11px] font-extrabold uppercase tracking-[0.2em] px-1"
+                    style="color: var(--md-on-surface-variant);">Risorse</h3>
+
+                <!-- Hit Dice -->
+                <div class="p-3 rounded-xl flex items-center justify-between"
+                     style="background: var(--md-surface-container);">
+                    <span class="text-xs font-bold font-label" id="hit-dice-title">Dadi Vita (d8)</span>
+                    <div class="resource-pips flex gap-1.5" id="hit-dice-pips"></div>
                 </div>
 
-                <!-- Portent Section (Wizard) -->
-                <div class="class-feature-section portent-section hidden" id="portent-section">
-                    <div class="portent-header">
-                        <div class="portent-title">Portento</div>
-                    </div>
-                    <div class="portent-dice" id="portentDice">
-                        <div class="portent-die">
-                            <div class="portent-die-label">Dado 1</div>
-                            <input type="number" class="portent-die-input" id="portent1" min="1" max="20" value="0">
-                            <button class="portent-use-btn" id="portent1Btn" onclick="usePortent(0)">Usa</button>
-                        </div>
-                        <div class="portent-die">
-                            <div class="portent-die-label">Dado 2</div>
-                            <input type="number" class="portent-die-input" id="portent2" min="1" max="20" value="0">
-                            <button class="portent-use-btn" id="portent2Btn" onclick="usePortent(1)">Usa</button>
-                        </div>
-                    </div>
-                    <div class="portent-desc" id="portent-desc"></div>
+                <!-- Channel Divinity Resource -->
+                <div class="p-3 rounded-xl flex items-center justify-between hidden"
+                     id="channel-divinity-box"
+                     style="background: var(--md-surface-container);">
+                    <span class="text-xs font-bold font-label">Channel Divinity</span>
+                    <div class="resource-pips flex gap-1.5" id="channel-divinity-pips"></div>
                 </div>
 
-                <!-- Special Abilities Section -->
-                <div class="class-feature-section abilities-section hidden" id="abilities-section">
-                    <div class="abilities-title">Abilita Speciali</div>
-                    <div id="abilities-list"></div>
+                <!-- Detect Magic -->
+                <div class="p-3 rounded-xl flex items-center justify-between hidden"
+                     id="detect-magic-box"
+                     style="background: var(--md-surface-container);">
+                    <div>
+                        <span class="text-xs font-bold font-label">Individuazione Magico</span>
+                        <span class="text-[10px] opacity-50 ml-1">1/giorno (razza)</span>
+                    </div>
+                    <div class="resource-pips flex gap-1.5" id="detect-magic-pips"></div>
+                </div>
+            </section>
 
-                    <!-- Rest Buttons -->
-                    <div class="rest-buttons">
-                        <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Riposo Breve">
-                            &#9790; Riposo Breve
+            <!-- Standalone Rest Buttons (shown when abilities section is hidden) -->
+            <div class="flex gap-2 mb-6" id="rest-buttons-standalone">
+                <button class="rest-btn flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all"
+                        onclick="shortRest(this)"
+                        style="background: var(--md-surface-container-high); color: var(--md-on-surface); border: 1px solid var(--md-outline-variant);">
+                    &#9790; Riposo Breve
+                </button>
+                <button class="rest-btn flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all"
+                        onclick="longRest(this)"
+                        style="background: var(--md-primary-container); color: var(--md-on-primary-container);">
+                    &#9728; Riposo Lungo
+                </button>
+            </div>
+
+            <!-- Spell Slots -->
+            <section class="p-5 rounded-2xl border-t mb-6"
+                     style="background: var(--md-surface-container-high); border-color: color-mix(in srgb, var(--md-primary) 10%, transparent);">
+                <h3 class="font-label text-[11px] font-extrabold uppercase tracking-[0.2em] mb-4 text-center"
+                    style="color: var(--md-on-surface-variant);">Slot Incantesimi</h3>
+                <div id="spell-slots-container" class="flex justify-center gap-4 flex-wrap"></div>
+                <div class="flex justify-center gap-8 mt-4 pt-3 border-t"
+                     style="border-color: var(--md-outline-variant);">
+                    <div class="text-center">
+                        <div class="text-[10px] font-bold uppercase opacity-50">CD Incantesimi</div>
+                        <div class="text-xl font-headline font-bold" id="spell-dc">10</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[10px] font-bold uppercase opacity-50">Bonus Attacco</div>
+                        <div class="text-xl font-headline font-bold" id="spell-attack">+0</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spellbook -->
+            <section class="space-y-4 mb-6">
+                <div class="flex items-center justify-between px-1">
+                    <h3 class="font-label text-[11px] font-extrabold uppercase tracking-[0.2em]"
+                        style="color: var(--md-on-surface-variant);">Libro degli Incantesimi</h3>
+                </div>
+
+                <!-- Cantrips -->
+                <div class="spell-category">
+                    <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1"
+                         style="color: var(--md-secondary);">Trucchetti</div>
+                    <div class="spells-grid flex flex-wrap gap-2" id="cantrips-grid"></div>
+                </div>
+
+                <!-- Level 1 -->
+                <div class="spell-category">
+                    <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1"
+                         style="color: var(--md-secondary);">1° Livello</div>
+                    <div class="spells-grid flex flex-wrap gap-2" id="level1-grid"></div>
+                </div>
+
+                <!-- Level 2 -->
+                <div class="spell-category">
+                    <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1"
+                         style="color: var(--md-secondary);">2° Livello</div>
+                    <div class="spells-grid flex flex-wrap gap-2" id="level2-grid"></div>
+                </div>
+
+                <!-- Level 3 -->
+                <div class="spell-category" id="level3-category">
+                    <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1"
+                         style="color: var(--md-secondary);">3° Livello</div>
+                    <div class="spells-grid flex flex-wrap gap-2" id="level3-grid"></div>
+                </div>
+
+                <!-- Level 4 -->
+                <div class="spell-category" id="level4-category">
+                    <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1"
+                         style="color: var(--md-secondary);">4° Livello</div>
+                    <div class="spells-grid flex flex-wrap gap-2" id="level4-grid"></div>
+                </div>
+            </section>
+
+        </div><!-- /tab-scheda -->
+
+        <!-- ==================== TAB: NOTE ==================== -->
+        <div id="tab-note" class="hidden">
+            <div id="notesPage">
+                <div class="py-4">
+                    <h2 class="text-lg font-headline font-bold mb-4" style="color: var(--md-primary);">
+                        <span class="material-symbols-outlined align-middle mr-1">edit_note</span>
+                        Note della Sessione
+                    </h2>
+                    <div class="mb-4">
+                        <textarea id="noteInput"
+                                  class="w-full rounded-xl p-4 text-sm resize-none focus:ring-1 focus:outline-none border"
+                                  style="background: var(--md-surface-container); border-color: var(--md-outline-variant); color: var(--md-on-surface); --tw-ring-color: var(--md-primary);"
+                                  placeholder="Scrivi una nuova nota..." rows="3"></textarea>
+                        <button class="mt-2 w-full py-3 rounded-xl text-sm font-bold uppercase tracking-wider transition-all"
+                                onclick="addNote()"
+                                style="background: var(--md-primary); color: var(--md-on-primary);">
+                            Aggiungi Nota
                         </button>
-                        <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Riposo Lungo">
-                            &#9728; Riposo Lungo
-                        </button>
                     </div>
+                    <div id="notesList" class="space-y-2"></div>
+                </div>
+            </div>
+        </div><!-- /tab-note -->
+
+        <!-- ==================== TAB: INVENTARIO ==================== -->
+        <div id="tab-inventario" class="hidden">
+            <div class="py-4">
+                <!-- Magic Inventory -->
+                <div id="magic-inventory-section">
+                    <h2 class="text-lg font-headline font-bold mb-4" style="color: var(--md-primary);">
+                        <span class="material-symbols-outlined align-middle mr-1" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                        Oggetti Magici
+                    </h2>
+                    <div id="magic-inventory-list" class="space-y-2 mb-6"></div>
                 </div>
 
-                <!-- Rest Buttons (if no abilities section) -->
-                <div class="rest-buttons" id="rest-buttons-standalone">
-                    <button class="rest-btn rest-btn-short" onclick="shortRest(this)" title="Riposo Breve">
-                        &#9790; Riposo Breve
+                <!-- Generic Inventory -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-headline font-bold" style="color: var(--md-on-surface);">
+                            <span class="material-symbols-outlined align-middle mr-1">inventory_2</span>
+                            Inventario
+                        </h2>
+                        <span class="text-[11px] font-bold opacity-50" id="inventoryWeight"></span>
+                    </div>
+                    <div id="inventory-list" class="space-y-1 mb-3"></div>
+                    <button class="w-full py-3 flex items-center justify-center gap-2 font-bold font-label text-sm rounded-xl border border-dashed transition-colors"
+                            onclick="addItem()"
+                            style="color: var(--md-primary); border-color: color-mix(in srgb, var(--md-primary) 40%, transparent);">
+                        <span class="material-symbols-outlined text-lg">add</span>
+                        Aggiungi Oggetto
                     </button>
-                    <button class="rest-btn rest-btn-long" onclick="longRest(this)" title="Riposo Lungo">
-                        &#9728; Riposo Lungo
-                    </button>
-                </div>
-
-                <!-- Spell Slots -->
-                <div class="spell-slots-section">
-                    <div class="spell-slots-title">&#10022; Slot Incantesimi &#10022;</div>
-                    <div id="spell-slots-container"></div>
-                    <div class="spellcasting-stats">
-                        <div class="spell-stat">
-                            <div class="spell-stat-label">CD Incantesimi</div>
-                            <div class="spell-stat-value" id="spell-dc">10</div>
-                        </div>
-                        <div class="spell-stat">
-                            <div class="spell-stat-label">Bonus Attacco</div>
-                            <div class="spell-stat-value" id="spell-attack">+0</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Spellbook Section -->
-                <div class="spellbook-section">
-                    <div class="spellbook-title">Libro degli Incantesimi</div>
-
-                    <!-- Cantrips -->
-                    <div class="spell-category">
-                        <div class="spell-category-title">Trucchetti</div>
-                        <div class="spells-grid" id="cantrips-grid"></div>
-                    </div>
-
-                    <!-- Level 1 -->
-                    <div class="spell-category">
-                        <div class="spell-category-title">1° Livello</div>
-                        <div class="spells-grid" id="level1-grid"></div>
-                    </div>
-
-                    <!-- Level 2 -->
-                    <div class="spell-category">
-                        <div class="spell-category-title">2° Livello</div>
-                        <div class="spells-grid" id="level2-grid"></div>
-                    </div>
-
-                    <!-- Level 3 -->
-                    <div class="spell-category" id="level3-category">
-                        <div class="spell-category-title">3° Livello</div>
-                        <div class="spells-grid" id="level3-grid"></div>
-                    </div>
-
-                    <!-- Level 4 -->
-                    <div class="spell-category" id="level4-category">
-                        <div class="spell-category-title">4° Livello</div>
-                        <div class="spells-grid" id="level4-grid"></div>
-                    </div>
-                </div>
-
-                <!-- Magic Items Section -->
-                <div class="magic-inventory-section" id="magic-inventory-section">
-                    <div class="inventory-title">Oggetti Magici</div>
-                    <div id="magic-inventory-list"></div>
-                </div>
-
-                <!-- Generic Inventory Section -->
-                <div class="list-box generic-inventory-section">
-                    <div class="list-title">
-                        <span>Inventario</span>
-                        <span class="inventory-weight" id="inventoryWeight"></span>
-                    </div>
-                    <div id="inventory-list"></div>
-                    <button class="add-btn" onclick="addItem()">+ Aggiungi Oggetto</button>
                 </div>
             </div>
-        </div>
+        </div><!-- /tab-inventario -->
 
-        <!-- Notes Page (hidden by default) -->
-        <div id="notesPage" class="notes-page hidden">
-            <div class="notes-header">
-                <h2 class="notes-title">Note della Sessione</h2>
-            </div>
-            <div class="note-form">
-                <textarea id="noteInput" class="note-textarea" placeholder="Scrivi una nuova nota..." rows="3"></textarea>
-                <button class="note-add-btn" onclick="addNote()">Aggiungi Nota</button>
-            </div>
-            <div class="notes-list" id="notesList"></div>
-        </div>
+        </div><!-- /mainGrid -->
+    </main>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 z-50 border-t shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
+         style="background: color-mix(in srgb, var(--md-surface) 95%, transparent); backdrop-filter: blur(16px); border-color: var(--md-outline-variant);">
+        <button id="nav-scheda" onclick="switchTab('scheda')"
+                class="flex flex-col items-center justify-center rounded-xl px-5 py-1.5 transition-all"
+                style="background: var(--md-primary-container); color: var(--md-on-primary-container);">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider mt-0.5">Scheda</span>
+        </button>
+        <button id="nav-note" onclick="switchTab('note')"
+                class="flex flex-col items-center justify-center px-5 py-1.5 transition-all"
+                style="color: var(--md-on-surface-variant);">
+            <span class="material-symbols-outlined">description</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider mt-0.5">Note</span>
+        </button>
+        <button id="nav-inventario" onclick="switchTab('inventario')"
+                class="flex flex-col items-center justify-center px-5 py-1.5 transition-all"
+                style="color: var(--md-on-surface-variant);">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider mt-0.5">Inventario</span>
+        </button>
+    </nav>
+
+    <!-- ==================== FAB - Dice Roll ==================== -->
+    <div class="fixed bottom-24 right-5 z-50">
+        <button class="w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-150"
+                style="background: var(--md-primary); color: var(--md-on-primary); box-shadow: 0 0 20px color-mix(in srgb, var(--md-primary) 50%, transparent);">
+            <span class="material-symbols-outlined text-2xl">casino</span>
+        </button>
     </div>
 
-    <div class="save-indicator" id="saveIndicator">&#10003; Salvato</div>
+    <!-- ==================== SAVE INDICATOR ==================== -->
+    <div class="save-indicator" id="saveIndicator">
+        <span class="material-symbols-outlined text-sm align-middle mr-1">check_circle</span>
+        Salvato
+    </div>
 
-    <!-- Skill Roll Toast -->
+    <!-- ==================== SKILL TOAST ==================== -->
     <div class="skill-toast" id="skillToast" onclick="closeSkillToast()">
         <div class="skill-toast-name" id="skillToastName">Abilita</div>
         <div class="skill-toast-result" id="skillToastResult">0</div>
@@ -344,7 +564,7 @@
         <div class="skill-toast-close">Tocca per chiudere</div>
     </div>
 
-    <!-- Spell Modal -->
+    <!-- ==================== SPELL MODAL ==================== -->
     <div class="spell-modal-overlay" id="spellModal" onclick="closeSpellModal(event)">
         <div class="spell-modal" onclick="event.stopPropagation()">
             <div class="spell-modal-header" id="spellModalHeader">
@@ -356,11 +576,11 @@
                 <div class="spell-stat-row">
                     <div class="spell-stat-item">
                         <div class="spell-stat-label">Tempo di Lancio</div>
-                        <div class="spell-stat-value" id="spellCastingTime">1 Action</div>
+                        <div class="spell-stat-value" id="spellCastingTime">1 Azione</div>
                     </div>
                     <div class="spell-stat-item">
                         <div class="spell-stat-label">Gittata</div>
-                        <div class="spell-stat-value" id="spellRange">Touch</div>
+                        <div class="spell-stat-value" id="spellRange">Contatto</div>
                     </div>
                     <div class="spell-stat-item">
                         <div class="spell-stat-label">Componenti</div>
@@ -368,11 +588,11 @@
                     </div>
                     <div class="spell-stat-item">
                         <div class="spell-stat-label">Durata</div>
-                        <div class="spell-stat-value" id="spellDuration">Instantaneous</div>
+                        <div class="spell-stat-value" id="spellDuration">Istantaneo</div>
                     </div>
                 </div>
                 <div class="spell-description" id="spellDescription">
-                    Description here...
+                    Descrizione incantesimo...
                 </div>
                 <div class="spell-higher-level" id="spellHigherLevel" style="display: none;">
                     <div class="spell-higher-level-title">A Livelli Superiori</div>
@@ -391,22 +611,31 @@
         </div>
     </div>
 
-    <!-- Portent Modal (for Long Rest) -->
+    <!-- ==================== PORTENT MODAL ==================== -->
     <div class="portent-modal-overlay" id="portentModal">
         <div class="portent-modal">
-            <h3>Nuovo Giorno - Portento</h3>
-            <p>Tira 2d20 e inserisci i risultati per i tuoi dadi Portento:</p>
-            <div class="portent-modal-dice">
-                <input type="number" class="portent-modal-input" id="portentModal1" min="1" max="20" placeholder="?">
-                <input type="number" class="portent-modal-input" id="portentModal2" min="1" max="20" placeholder="?">
+            <h3 class="text-lg font-headline font-bold mb-2" style="color: var(--md-tertiary);">Nuovo Giorno - Portento</h3>
+            <p class="text-sm opacity-70 mb-4">Tira 2d20 e inserisci i risultati per i tuoi dadi Portento:</p>
+            <div class="flex gap-4 justify-center mb-4">
+                <input type="number" class="portent-modal-input w-16 h-14 text-center text-2xl font-bold rounded-xl border focus:ring-1 focus:outline-none"
+                       id="portentModal1" min="1" max="20" placeholder="?"
+                       style="background: var(--md-surface-container); border-color: var(--md-outline); color: var(--md-on-surface); --tw-ring-color: var(--md-tertiary);">
+                <input type="number" class="portent-modal-input w-16 h-14 text-center text-2xl font-bold rounded-xl border focus:ring-1 focus:outline-none"
+                       id="portentModal2" min="1" max="20" placeholder="?"
+                       style="background: var(--md-surface-container); border-color: var(--md-outline); color: var(--md-on-surface); --tw-ring-color: var(--md-tertiary);">
             </div>
-            <button class="portent-modal-btn" onclick="confirmPortent()">Conferma</button>
+            <button class="w-full py-3 rounded-xl font-bold uppercase tracking-wider transition-all"
+                    onclick="confirmPortent()"
+                    style="background: var(--md-tertiary); color: var(--md-on-tertiary);">
+                Conferma
+            </button>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- ==================== SCRIPTS ==================== -->
     <script src="js/app.js"></script>
     <script src="js/spells.js"></script>
     <script src="js/skills.js"></script>
+    <script src="js/v2-nav.js"></script>
 </body>
 </html>

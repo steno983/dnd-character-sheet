@@ -1,0 +1,122 @@
+/* Wizard v2 Theme - Material Design 3 Dark, Indigo/Purple Arcane */
+
+:root {
+    /* =============================================
+       MD3 COLOR TOKENS
+       ============================================= */
+
+    /* Primary - Indigo */
+    --md-primary: #6366f1;
+    --md-on-primary: #ffffff;
+    --md-primary-container: #1e1b4b;
+    --md-on-primary-container: #c7d2fe;
+
+    /* Secondary - Teal */
+    --md-secondary: #2dd4bf;
+    --md-on-secondary: #003733;
+    --md-secondary-container: #004f4a;
+    --md-on-secondary-container: #99f6e4;
+
+    /* Tertiary - Purple */
+    --md-tertiary: #a855f7;
+    --md-on-tertiary: #ffffff;
+    --md-tertiary-container: #2e1065;
+    --md-on-tertiary-container: #e9d5ff;
+
+    /* Surface Hierarchy */
+    --md-surface: #0f1117;
+    --md-on-surface: #e2e0f0;
+    --md-surface-variant: #1e1b2e;
+    --md-on-surface-variant: #c4bfe0;
+
+    --md-surface-container-lowest: #09090f;
+    --md-surface-container-low: #13111f;
+    --md-surface-container: #171526;
+    --md-surface-container-high: #1e1b30;
+    --md-surface-container-highest: #26233c;
+
+    /* Outline */
+    --md-outline: #4a4570;
+    --md-outline-variant: #2e2a48;
+
+    /* Error */
+    --md-error: #ffb4ab;
+    --md-on-error: #690005;
+
+    /* Inverse */
+    --md-inverse-surface: #e2e0f0;
+    --md-inverse-on-surface: #1a1828;
+
+    /* =============================================
+       LEGACY VARIABLE MAPPING
+       (backwards compatibility with base.css)
+       ============================================= */
+
+    /* Parchment - mapped to dark arcane surfaces */
+    --parchment-light: var(--md-surface-container-high);
+    --parchment-mid: var(--md-surface-container);
+    --parchment-dark: var(--md-surface-container-low);
+
+    /* Ink - mapped to on-surface tokens */
+    --ink-brown: var(--md-on-surface);
+    --ink-light: var(--md-on-surface-variant);
+
+    /* Primary Colors (Indigo as primary) */
+    --primary: #6366f1;
+    --primary-dark: #1e1b4b;
+    --primary-light: #818cf8;
+    --primary-tint: rgba(99, 102, 241, 0.12);
+    --primary-tint-light: rgba(99, 102, 241, 0.06);
+    --primary-shadow: rgba(99, 102, 241, 0.25);
+    --primary-hover: rgba(99, 102, 241, 0.22);
+    --primary-hover-light: rgba(99, 102, 241, 0.12);
+    --primary-border: rgba(99, 102, 241, 0.28);
+
+    /* Accent Colors (Purple) */
+    --gold: #a855f7;
+    --gold-light: #e9d5ff;
+    --accent: #a855f7;
+    --accent-light: #d8b4fe;
+    --accent-glow: rgba(168, 85, 247, 0.45);
+
+    /* Background */
+    --bg-dark: #09090f;
+    --bg-gradient: #12102b;
+
+    /* Sheet */
+    --sheet-shadow: rgba(99, 102, 241, 0.08);
+
+    /* Resource Colors (Teal for spell slots / resources) */
+    --resource-color: #2dd4bf;
+    --resource-color-light: #5eead4;
+    --resource-tint: rgba(45, 212, 191, 0.1);
+    --resource-tint-light: rgba(45, 212, 191, 0.05);
+    --resource-filled: #14b8a6;
+
+    /* Spell Slots */
+    --slot-empty: #2e2a48;
+    --slot-filled: #a855f7;
+    --slot-filled-dark: #7c3aed;
+    --slot-glow: rgba(168, 85, 247, 0.5);
+
+    /* HP Pattern - arcane rune on dark */
+    --hp-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z' fill='%236366f1' opacity='0.07'/%3E%3C/svg%3E");
+
+    /* Spell Modal */
+    --spell-border: rgba(45, 212, 191, 0.2);
+    --spell-stat-bg: rgba(45, 212, 191, 0.07);
+
+    /* Attack Background */
+    --attack-bg: rgba(99, 102, 241, 0.08);
+
+    /* Dice */
+    --dice-btn-shadow: rgba(45, 212, 191, 0.3);
+    --dice-result-glow: rgba(168, 85, 247, 0.55);
+    --die-max-bg: rgba(168, 85, 247, 0.18);
+
+    /* Skills */
+    --skill-hover: rgba(99, 102, 241, 0.1);
+    --skill-proficient: rgba(168, 85, 247, 0.13);
+    --skill-proficient-hover: rgba(168, 85, 247, 0.22);
+    --skill-toast-glow: rgba(168, 85, 247, 0.35);
+}
