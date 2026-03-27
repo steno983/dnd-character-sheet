@@ -55,6 +55,18 @@
     // Expose switchTab globally for onclick handlers in HTML
     window.switchTab = switchTab;
 
+    // Override spell type icons with colored Material Symbols
+    var SPELL_ICON_MAP = {
+        'damage':  '<span class="material-symbols-outlined spell-icon-damage" style="font-size:14px; color:#ef4444; font-variation-settings:\'FILL\' 1; vertical-align:-2px;">swords</span>',
+        'healing': '<span class="material-symbols-outlined spell-icon-healing" style="font-size:14px; color:#34d399; font-variation-settings:\'FILL\' 1; vertical-align:-2px;">cardiology</span>',
+        'buff':    '<span class="material-symbols-outlined spell-icon-buff" style="font-size:14px; color:#60a5fa; font-variation-settings:\'FILL\' 1; vertical-align:-2px;">shield_with_heart</span>',
+        'utility': '<span class="material-symbols-outlined spell-icon-utility" style="font-size:14px; color:#a78bfa; font-variation-settings:\'FILL\' 1; vertical-align:-2px;">auto_awesome</span>'
+    };
+
+    window.getSpellTypeIcon = function (type) {
+        return SPELL_ICON_MAP[type] || '';
+    };
+
     // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', function () {
         switchTab('scheda');

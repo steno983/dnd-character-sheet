@@ -109,8 +109,8 @@
                 <!-- HP Card -->
                 <div class="p-4 rounded-2xl relative overflow-hidden"
                      style="background: var(--md-primary-container); color: var(--md-on-primary-container);">
-                    <div class="absolute -right-4 -bottom-4 opacity-10">
-                        <span class="material-symbols-outlined text-8xl">favorite</span>
+                    <div class="absolute -right-4 -bottom-4 opacity-20">
+                        <span class="material-symbols-outlined text-8xl" style="color: #ef4444; font-variation-settings: 'FILL' 1;">favorite</span>
                     </div>
                     <span class="font-label text-[10px] font-extrabold uppercase tracking-widest opacity-80">Punti Ferita</span>
                     <div class="flex items-baseline gap-1 mt-1">
@@ -133,8 +133,8 @@
                 <!-- AC + Combat Stats Card -->
                 <div class="p-4 rounded-2xl relative overflow-hidden border-b-2"
                      style="background: var(--md-surface-container-high); border-color: color-mix(in srgb, var(--md-primary) 20%, transparent);">
-                    <div class="absolute -right-4 -bottom-4 opacity-10" style="color: var(--md-primary);">
-                        <span class="material-symbols-outlined text-8xl">shield</span>
+                    <div class="absolute -right-4 -bottom-4 opacity-20" style="color: var(--md-secondary);">
+                        <span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">shield</span>
                     </div>
                     <span class="font-label text-[10px] font-extrabold uppercase tracking-widest" style="color: var(--md-secondary);">Classe Armatura</span>
                     <div class="text-5xl font-headline font-bold mt-1" id="armor-class-display">10</div>
@@ -525,19 +525,19 @@
         <button id="nav-scheda" onclick="switchTab('scheda')"
                 class="flex flex-col items-center justify-center rounded-xl px-5 py-1.5 transition-all"
                 style="background: var(--md-primary-container); color: var(--md-on-primary-container);">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; color: var(--md-primary);">auto_stories</span>
             <span class="text-[11px] font-bold uppercase tracking-wider mt-0.5">Scheda</span>
         </button>
         <button id="nav-note" onclick="switchTab('note')"
                 class="flex flex-col items-center justify-center px-5 py-1.5 transition-all"
                 style="color: var(--md-on-surface-variant);">
-            <span class="material-symbols-outlined">description</span>
+            <span class="material-symbols-outlined" style="color: var(--md-tertiary);">edit_note</span>
             <span class="text-[11px] font-bold uppercase tracking-wider mt-0.5">Note</span>
         </button>
         <button id="nav-inventario" onclick="switchTab('inventario')"
                 class="flex flex-col items-center justify-center px-5 py-1.5 transition-all"
                 style="color: var(--md-on-surface-variant);">
-            <span class="material-symbols-outlined">inventory_2</span>
+            <span class="material-symbols-outlined" style="color: var(--md-secondary);">inventory_2</span>
             <span class="text-[11px] font-bold uppercase tracking-wider mt-0.5">Inventario</span>
         </button>
     </nav>
